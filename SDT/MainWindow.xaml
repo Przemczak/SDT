@@ -49,7 +49,7 @@
             <Grid Background="#FF252525">
                 <Controls:ProgressRing IsActive="False" x:Name="WaitRingUzytkownik" Foreground="{DynamicResource AccentColorBrush}" Margin="802,0,10,560" Width="72" Height="62"/>
 
-                <Button x:Name="Button_UserCheck" Content="Sprawdź" HorizontalAlignment="Left" Margin="542,10,0,0" VerticalAlignment="Top" Width="90" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="50" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC" Click="Button_UserCheck_Click"/>
+                <Button x:Name="Button_UserCheck" IsDefault="True" Content="Sprawdź" HorizontalAlignment="Left" Margin="542,10,0,0" VerticalAlignment="Top" Width="90" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="50" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC" Click="Button_UserCheck_Click"/>
 
                 <Label Content="Status konta:" HorizontalAlignment="Left" Margin="10,93,0,0" VerticalAlignment="Top" Height="30" Width="166" FontSize="15" Foreground="#FFCCCCCC"/>
                 <Label Content="Ostatnia zmiana hasła:" HorizontalAlignment="Left" Margin="10,247,0,0" VerticalAlignment="Top" Height="30" Width="166" FontSize="15" Foreground="#FFCCCCCC"/>
@@ -68,7 +68,7 @@
                 <Label Content="BPTP:" HorizontalAlignment="Left" Margin="10,573,0,0" VerticalAlignment="Top" Height="30" Width="52" FontSize="15" Foreground="#FFCCCCCC"/>
 
                 <TextBox x:Name="TextBox_UserLocked" HorizontalAlignment="Left" Height="36" Margin="10,123,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="190" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
-                <TextBox x:Name="TextBox_UserLoginIn" HorizontalAlignment="Left" Height="50" Margin="240,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="280" FontSize="28" TextAlignment="Center" AcceptsTab="True" Controls:TextBoxHelper.Watermark="Login..." RenderTransformOrigin="0.484,0.525" Background="#FF252525" CaretBrush="#FFCCCCCC" Foreground="#FFCCCCCC" />
+                <TextBox x:Name="TextBox_UserLoginIn" HorizontalAlignment="Left" Height="50" Margin="240,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="280" FontSize="30" TextAlignment="Center" AcceptsTab="True" Controls:TextBoxHelper.Watermark="Login..." RenderTransformOrigin="0.484,0.525" Background="#FF252525" CaretBrush="#FFCCCCCC" Foreground="#FFCCCCCC" />
                 <TextBox x:Name="TextBox_UserMailAdr" HorizontalAlignment="Left" Height="36" Margin="10,440,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="360" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
                 <TextBox x:Name="TextBox_UserSIP" HorizontalAlignment="Left" Height="36" Margin="10,521,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="360" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
                 <TextBox x:Name="TextBox_UserMailBoxClass" HorizontalAlignment="Left" Height="36" Margin="412,521,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="130" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
@@ -104,6 +104,35 @@
                 <CheckBox x:Name="CheckBox_UserDev" Content=" :Developer" HorizontalAlignment="Left" Margin="732,206,0,0" VerticalAlignment="Top" Height="30" Width="102" IsHitTestVisible="False" Focusable="False" FlowDirection="RightToLeft" FontSize="15" Foreground="#FFCCCCCC" Background="#FF252525" />
                 <CheckBox x:Name="CheckBox_UserDevices" Content=" :.Nośniki zew" HorizontalAlignment="Left" Margin="647,102,0,0" VerticalAlignment="Top" Height="30" Width="116" IsHitTestVisible="False" Focusable="False" FlowDirection="RightToLeft" FontSize="15" Foreground="#FFCCCCCC" Background="#FF252525" />
                 <CheckBox x:Name="CheckBox_UserAirnet" Content=" :AirNet" HorizontalAlignment="Left" Margin="835,137,0,0" VerticalAlignment="Top" Height="30" Width="86" IsHitTestVisible="False" Focusable="False" FlowDirection="RightToLeft" ToolTip="Jeśli zaznaczone to przekroczono 130% limitu - zablokowany dostęp do urządzeń Xerox" FontSize="15" Foreground="#FFCCCCCC" Background="#FF252525" />
+            </Grid>
+        </TabItem>
+
+        <TabItem x:Name="Tab_PC" Header="Stacja" Background="#FF252525" Foreground="{x:Null}" Visibility="Visible">
+            <Grid Background="#FF252525" Grid.IsSharedSizeScope="True">
+                <TextBox x:Name="TextBox_PCin" HorizontalAlignment="Left" Height="50" Margin="240,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="280" FontSize="28" TextAlignment="Center" AcceptsTab="True" Controls:TextBoxHelper.Watermark="IP/Netbios..." RenderTransformOrigin="0.484,0.525" Background="#FF252525" CaretBrush="#FFCCCCCC" Foreground="#FFCCCCCC" BorderThickness="1" />
+
+
+
+
+                <Button x:Name="Button_PCping" IsDefault="True" Content="Ping" HorizontalAlignment="Left" Margin="542,10,0,0" VerticalAlignment="Top" Width="90" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="50" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC" Click="Button_PCping_Click"/>
+
+                <Button x:Name="Button_Sharing" IsDefault="False" Content="Sharing (C:\)" HorizontalAlignment="Left" Margin="10,112,0,0" VerticalAlignment="Top" Width="118" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="50" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC" Click="Button_Sharing_Click"/>
+
+
+                <Button x:Name="Button_Insta" IsDefault="False" Content="Instalator" HorizontalAlignment="Left" Margin="10,184,0,0" VerticalAlignment="Top" Width="118" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="50" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC"/>
+                <Button x:Name="Button_PsExec" IsDefault="False" Content="PsExec" HorizontalAlignment="Left" Margin="170,112,0,0" VerticalAlignment="Top" Width="118" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="50" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC"/>
+                <Button x:Name="Button_PsExecTools" IsDefault="False" Content="PsExec Narzędzia" HorizontalAlignment="Left" Margin="330,112,0,0" VerticalAlignment="Top" Width="168" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="50" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC"/>
+                
+                
+                
+                
+                <ProgressBar Visibility="Hidden" x:Name="WaitBar" IsIndeterminate="True" Foreground="{DynamicResource AccentColorBrush}" HorizontalAlignment="Left" Height="3" Margin="240,65,0,0" VerticalAlignment="Top" Width="280"/>
+                
+
+
+
+
+
             </Grid>
         </TabItem>
     </TabControl>

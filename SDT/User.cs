@@ -1,6 +1,7 @@
 ﻿using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System;
+using System.Collections.ObjectModel;
 using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
 using System.Linq;
@@ -27,11 +28,27 @@ namespace SDT
         {
             try
             {
+                using (var ctx = new PrincipalContext(ContextType.Domain))
+                using (var user = UserPrincipal.FindByIdentity(ctx, TextBox_UserLoginIn.Text))
+                {
+                    if (user != null)
+                    {
+                        user.Dispose();
+                    }
+                    else
+                    {
+                        var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
+                        if (window != null)
+                            window.ShowMessageAsync("Błąd!", "Brak użytkownika o takim loginie.");
+                        return;
+                    }
+                }
+                
                 DirectoryEnt(TextBox_UserLoginIn);
 
                 PrincipalCon(TextBox_UserLoginIn);
 
-                //PowerS(TextBox_UserLoginIn);
+                PowerS(TextBox_UserLoginIn);
             }
             catch (Exception a)
             {
@@ -41,8 +58,6 @@ namespace SDT
                     window.ShowMessageAsync("Błąd!", a.Message);
                 return;
             }
-
-            //PowerS(TextBox_UserLoginIn);
         }
 
         /// <summary>
@@ -77,18 +92,6 @@ namespace SDT
                 _MetroWindow.TextBox_UserLastPassChange.Text = pwdLastSet.ToString();
             }
 
-            var value5 = (rs.GetDirectoryEntry().Properties["extensionAttribute12"].Value ?? "BRAK").ToString();
-            if (value5.Contains("BRAK"))
-            {
-
-                _MetroWindow.TextBox_User_Manager.Text = "BRAK";
-            }
-            else
-            {
-                _MetroWindow.TextBox_User_Manager.Text = value5;
-            }
-
-
             var value6 = (rs.GetDirectoryEntry().Properties["employeePTKID"].Value ?? "BRAK").ToString();
             if (value6.Contains("BRAK"))
             {
@@ -98,22 +101,49 @@ namespace SDT
             {
                 _MetroWindow.TextBox_UserIFS.Text = value6;
             }
-
-            //TODO: Zamienić login na pełną nazwę
+            //TODO: DISPLAY NAME - SPRAWDZIC
             var value7 = (rs.GetDirectoryEntry().Properties["manager"].Value ?? "BRAK").ToString();
-            if (value7.Contains("BRAK"))
+            var value5 = (rs.GetDirectoryEntry().Properties["extensionAttribute12"].Value ?? "BRAK").ToString();
+            string value7a = value7.Remove(value7.IndexOf(",")).Substring(value7.IndexOf("=") + 1);
+
+            using (var ctx = new PrincipalContext(ContextType.Domain))
+            using (UserPrincipal fullmanag = UserPrincipal.FindByIdentity(ctx, value7a))
             {
-                _MetroWindow.TextBox_User_FunctManag.Text = "BRAK";
+                if (value5.Contains("BRAK"))
+                {
+                    _MetroWindow.TextBox_User_Manager.Text = fullmanag.DisplayName;
+                    _MetroWindow.TextBox_User_FunctManag.Text = "BRAK";
+                }
+                else
+                {
+                    _MetroWindow.TextBox_User_Manager.Text = value5;
+                    _MetroWindow.TextBox_User_FunctManag.Text = fullmanag.DisplayName;
+                }
             }
-            else
-            {
-                _MetroWindow.TextBox_User_FunctManag.Text = value7.Remove(value7.IndexOf(",")).Substring(value7.IndexOf("=") + 1);
-            }
+
+
+
+            //if (value5.Contains("BRAK"))
+            //{
+            //    _MetroWindow.TextBox_User_Manager.Text = value7.Remove(value7.IndexOf(",")).Substring(value7.IndexOf("=") + 1);
+            //    _MetroWindow.TextBox_User_FunctManag.Text = "BRAK";
+            //}
+            //else
+            //{
+            //    _MetroWindow.TextBox_User_Manager.Text = value5;
+            //    _MetroWindow.TextBox_User_FunctManag.Text = value7.Remove(value7.IndexOf(",")).Substring(value7.IndexOf("=") + 1);
+            //}
+            //using (var ctx = new PrincipalContext(ContextType.Domain))
+            //using (UserPrincipal fullmanag = UserPrincipal.FindByIdentity(ctx, value7clear));
+
+
+
+
 
             var value8 = (rs.GetDirectoryEntry().Properties["businessCategory"].Value ?? "BRAK").ToString();
             if (value8.Contains("BRAK"))
             {
-                _MetroWindow.TextBox_UserEmploy.Text = "BRAK";
+                _MetroWindow.TextBox_UserEmploy.Text = value5.Remove(value5.IndexOf(",")).Substring(value5.IndexOf("=") + 1);
             }
             else
             {
@@ -212,7 +242,7 @@ namespace SDT
                     _MetroWindow.TextBox_UserLocked.Text = "AKTYWNE";
                 }
 
-                if (user.AccountLockoutTime.HasValue)
+                if (user.AccountExpirationDate.HasValue)
                 {
                     DateTime expiration = user.AccountExpirationDate.Value.ToLocalTime();
                     _MetroWindow.TextBox_UserAccExpire.Text = expiration.ToString();
@@ -381,7 +411,7 @@ namespace SDT
                     _MetroWindow.CheckBox_UserLWMW10.IsChecked = false;
                 }
 
-                if (output.Contains("BYOD-Pulpit-Standard-Test5"))
+                if (output.Contains("BYOD-Pulpit-Standard-Test"))
                 {
                     _MetroWindow.CheckBox_UserByodCitrixTest.IsChecked = true;
                 }
@@ -417,23 +447,27 @@ namespace SDT
         {
             using (PowerShell PS = PowerShell.Create())
             {
-                PS.AddCommand("Import-Module").AddParameter("Name", "activedirectory");
-                PS.AddScript("Get-ADUser");
-                PS.AddParameter("Identity", TextBox_UserLoginIn.Text);
-                PS.AddParameter("Properties", "msDS-UserPasswordExpiryTimeComputed");
-                PS.AddStatement();
-                PS.AddCommand("Select");
-                PS.AddParameter("ExpandProperty", "msDS-UserPasswordExpiryTimeComputed");
-
-
-                var result = PS.Invoke();
-
-                long result2 = long.Parse(result.ToString());
-
-                DateTime psdata = DateTime.FromFileTimeUtc(result2);
-                _MetroWindow.TextBox_UserPassExpire.Text = psdata.ToString();
+                //PS.AddScript("Get-ADUser wojtcpr1 -Properties msDS-UserPasswordExpiryTimeComputed | Select @{ Name = \"ExpiryDate\"; Expression ={ ([datetime]::fromfiletime($_.\"msDS-UserPasswordExpiryTimeComputed\")).DateTime} }");
+                // @{ ExpiryDate = niedziela, 5 sierpnia 2018 07:39:22}
+                //PS.AddScript("Get-ADUser " + TextBox_UserLoginIn.Text + " -Properties msDS-UserPasswordExpiryTimeComputed | Select -Expand \"msDS-UserPasswordExpiryTimeComputed\"");
+                PS.AddScript("Get-ADUser " + TextBox_UserLoginIn.Text + " -Properties msDS-UserPasswordExpiryTimeComputed | Select @{ Name = \"ExpiryDate\"; Expression ={ ([datetime]::fromfiletime($_.\"msDS-UserPasswordExpiryTimeComputed\")).DateTime} }");
+                Collection<PSObject> psObjects;
+                psObjects = PS.Invoke();
+                string result = psObjects.FirstOrDefault().ToString();
+                if (!string.IsNullOrEmpty(result))
+                {
+                    _MetroWindow.TextBox_UserPassExpire.Text = result.ToString();
+                }
+                else
+                {
+                    var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
+                    if (window != null)
+                        window.ShowMessageAsync("Błąd!", "Brak danych");
+                    return;
+                }
             }
-        }
+    }
+        
 
     }
 }

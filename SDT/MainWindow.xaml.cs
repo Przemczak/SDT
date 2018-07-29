@@ -25,14 +25,17 @@ namespace SDT
 
         private void Button_Info_Click(object sender, RoutedEventArgs e)
         {
-            Information sh = new Information();
-            sh.Owner = this;
-            sh.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            Information sh = new Information
+            {
+                Owner = this,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
             sh.ShowDialog();
         }
 
         private void Button_UserCheck_Click(object sender, RoutedEventArgs e)
         {
+            TextBox_UserLoginIn.Text = string.Join("", TextBox_UserLoginIn.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
             if (string.IsNullOrWhiteSpace(TextBox_UserLoginIn.Text))
             {
                 var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
@@ -43,6 +46,27 @@ namespace SDT
 
             User us = new User(this);
             us.CheckAD(TextBox_UserLoginIn);
+        }
+
+        private async void Button_PCping_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox_PCin.Text = string.Join("", TextBox_PCin.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
+            if (string.IsNullOrWhiteSpace(TextBox_PCin.Text))
+            {
+                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
+                if (window != null)
+                    await window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
+                return;
+            }
+
+            PC pec = new PC(this);
+            await pec.Ping(TextBox_PCin, WaitBar);
+
+        }
+
+        private void Button_Sharing_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
