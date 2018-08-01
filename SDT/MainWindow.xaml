@@ -3,30 +3,27 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     Title="SDT - Service Desk Tool"
     ShowMaxRestoreButton="True"
     GlowBrush="{DynamicResource AccentColorBrush}"
     BorderThickness="1" MinWidth="950" MinHeight="800"
     TitleCaps="False" Height="800" Width="950" HorizontalAlignment="Left" VerticalAlignment="Top" ResizeMode="CanMinimize" Background="#FF252525">
 
-    <Controls:MetroWindow.RightWindowCommands>
+    <!--<Controls:MetroWindow.Flyouts>
+        <Controls:FlyoutsControl>
+            <Controls:Flyout x:Name="Flyout_Pomoc" Header="Pomoc" Position="Right" Width="200" IsOpen="{Binding OpenFlyOut, Mode=TwoWay}" IsPinned="False" >
+                <TextBox x:Name="TextBox_Flyout_Version" Width="160" Height="20" BorderThickness="0,0,0,0" IsReadOnly="True" Margin="40,-320,0,0" />
+            </Controls:Flyout>
+        </Controls:FlyoutsControl>
+    </Controls:MetroWindow.Flyouts>-->
 
+    <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
-            <Button x:Name="Button_Title_Ustawienia" ToolTip="Ustawienia" Visibility="Hidden">
+            <Button x:Name="Button_Settings" ToolTip="Ustawienia" Visibility="Hidden">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20" Height="20" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
                         <Rectangle.OpacityMask>
                             <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_settings}" />
-                        </Rectangle.OpacityMask>
-                    </Rectangle>
-                </StackPanel>
-            </Button>
-            <Button x:Name="Button_Title_Zglos" ToolTip="Zgłoś Błąd" Visibility="Hidden">
-                <StackPanel Orientation="Horizontal">
-                    <Rectangle Width="25" Height="20" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
-                        <Rectangle.OpacityMask>
-                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_email}" />
                         </Rectangle.OpacityMask>
                     </Rectangle>
                 </StackPanel>
@@ -46,19 +43,19 @@
 
     <TabControl x:Name="TBC" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" Margin="1,1,1,1" Foreground="{x:Null}">
         <TabItem x:Name="Tab_User" Header="Użytkownik" HorizontalAlignment="Left" Height="39" VerticalAlignment="Top" Width="150" Margin="0,0,-45,0" Background="#FF252525">
-            <Grid Background="#FF252525">
-                <Controls:ProgressRing IsActive="False" x:Name="WaitRingUzytkownik" Foreground="{DynamicResource AccentColorBrush}" Margin="802,0,10,560" Width="72" Height="62"/>
-
+            <Grid Background="#FF252525" x:Name="test1">
+                <ProgressBar Visibility="Hidden" x:Name="WaitBarUser" IsIndeterminate="True" Foreground="{DynamicResource AccentColorBrush}" HorizontalAlignment="Left" Height="3" Margin="240,65,0,0" VerticalAlignment="Top" Width="280"/>
+                
                 <Button x:Name="Button_UserCheck" IsDefault="True" Content="Sprawdź" HorizontalAlignment="Left" Margin="542,10,0,0" VerticalAlignment="Top" Width="90" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="50" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC" Click="Button_UserCheck_Click"/>
 
-                <Label Content="Status konta:" HorizontalAlignment="Left" Margin="10,93,0,0" VerticalAlignment="Top" Height="30" Width="166" FontSize="15" Foreground="#FFCCCCCC"/>
+                <Label Content="Status konta:" HorizontalAlignment="Left" Margin="10,93,0,0" VerticalAlignment="Top" Height="30" Width="108" FontSize="15" Foreground="#FFCCCCCC"/>
                 <Label Content="Ostatnia zmiana hasła:" HorizontalAlignment="Left" Margin="10,247,0,0" VerticalAlignment="Top" Height="30" Width="166" FontSize="15" Foreground="#FFCCCCCC"/>
                 <Label Content="Hasło wygasa:" HorizontalAlignment="Left" Margin="10,170,0,0" VerticalAlignment="Top" Height="30" Width="108" FontSize="15" Foreground="#FFCCCCCC"/>
                 <Label Content="Konto wygasa:" HorizontalAlignment="Left" Margin="10,325,0,0" VerticalAlignment="Top" Height="30" Width="119" FontSize="15" Foreground="#FFCCCCCC"/>
-                <Label Content="Przełożony kadrowy:" HorizontalAlignment="Left" Margin="240,93,0,0" VerticalAlignment="Top" Height="30" Width="163" FontSize="15" Foreground="#FFCCCCCC"/>
-                <Label Content="Przełożony funkcyjny:" HorizontalAlignment="Left" Margin="240,170,0,0" VerticalAlignment="Top" Height="30" Width="163" FontSize="15" Foreground="#FFCCCCCC"/>
-                <Label Content="Numer IFS:" HorizontalAlignment="Left" Margin="240,247,0,0" VerticalAlignment="Top" Height="30" Width="87" FontSize="15" Foreground="#FFCCCCCC"/>
-                <Label Content="Zatrudnienie:" HorizontalAlignment="Left" Margin="430,247,0,0" VerticalAlignment="Top" Height="30" Width="112" FontSize="15" Foreground="#FFCCCCCC"/>
+                <Label Content="Przełożony kadrowy:" HorizontalAlignment="Left" Margin="240,247,0,0" VerticalAlignment="Top" Height="30" Width="163" FontSize="15" Foreground="#FFCCCCCC"/>
+                <Label Content="Przełożony funkcyjny:" HorizontalAlignment="Left" Margin="240,325,0,0" VerticalAlignment="Top" Height="30" Width="163" FontSize="15" Foreground="#FFCCCCCC"/>
+                <Label Content="Numer IFS:" HorizontalAlignment="Left" Margin="333,93,0,0" VerticalAlignment="Top" Height="30" Width="87" FontSize="15" Foreground="#FFCCCCCC"/>
+                <Label Content="Zatrudnienie:" HorizontalAlignment="Left" Margin="330,170,0,0" VerticalAlignment="Top" Height="30" Width="112" FontSize="15" Foreground="#FFCCCCCC"/>
                 <Label Content="Adres e-mail:" HorizontalAlignment="Left" Margin="10,410,0,0" VerticalAlignment="Top" Height="30" Width="110" FontSize="15" Foreground="#FFCCCCCC"/>
                 <Label Content="SIP:" HorizontalAlignment="Left" Margin="10,491,0,0" VerticalAlignment="Top" Height="30" Width="38" FontSize="15" Foreground="#FFCCCCCC"/>
                 <Label Content="Klasa skrzynki:" HorizontalAlignment="Left" Margin="412,491,0,0" VerticalAlignment="Top" Height="30" Width="110" FontSize="15" Foreground="#FFCCCCCC"/>
@@ -68,19 +65,19 @@
                 <Label Content="BPTP:" HorizontalAlignment="Left" Margin="10,573,0,0" VerticalAlignment="Top" Height="30" Width="52" FontSize="15" Foreground="#FFCCCCCC"/>
 
                 <TextBox x:Name="TextBox_UserLocked" HorizontalAlignment="Left" Height="36" Margin="10,123,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="190" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
-                <TextBox x:Name="TextBox_UserLoginIn" HorizontalAlignment="Left" Height="50" Margin="240,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="280" FontSize="30" TextAlignment="Center" AcceptsTab="True" Controls:TextBoxHelper.Watermark="Login..." RenderTransformOrigin="0.484,0.525" Background="#FF252525" CaretBrush="#FFCCCCCC" Foreground="#FFCCCCCC" />
+                <TextBox x:Name="TextBox_UserLoginIn" HorizontalAlignment="Left" Height="50" Margin="240,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="280" FontSize="30" TextAlignment="Center" AcceptsTab="True" Controls:TextBoxHelper.Watermark="Login..." Background="#FF252525" CaretBrush="#FFCCCCCC" Foreground="#FFCCCCCC" />
                 <TextBox x:Name="TextBox_UserMailAdr" HorizontalAlignment="Left" Height="36" Margin="10,440,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="360" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
                 <TextBox x:Name="TextBox_UserSIP" HorizontalAlignment="Left" Height="36" Margin="10,521,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="360" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
                 <TextBox x:Name="TextBox_UserMailBoxClass" HorizontalAlignment="Left" Height="36" Margin="412,521,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="130" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
                 <TextBox x:Name="TextBox_UserMailQuota" HorizontalAlignment="Left" Height="36" Margin="412,440,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="130" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
                 <TextBox x:Name="TextBox_UserDevPC" HorizontalAlignment="Left" Height="72" Margin="654,241,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="242" TextAlignment="Center" IsReadOnly="True" FontSize="18" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Background="#FF252525"/>
-                <TextBox x:Name="TextBox_UserPassExpire" HorizontalAlignment="Left" Height="36" Margin="10,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="190" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
+                <TextBox x:Name="TextBox_UserPassExpire" HorizontalAlignment="Left" Height="36" Margin="10,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="270" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
                 <TextBox x:Name="TextBox_UserAccExpire" HorizontalAlignment="Left" Height="36" Margin="10,355,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="190" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
                 <TextBox x:Name="TextBox_UserLastPassChange" HorizontalAlignment="Left" Height="36" Margin="10,277,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="190" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
-                <TextBox x:Name="TextBox_UserIFS" HorizontalAlignment="Left" Height="36" Margin="240,277,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
-                <TextBox x:Name="TextBox_UserEmploy" HorizontalAlignment="Left" Height="36" Margin="430,277,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
-                <TextBox x:Name="TextBox_User_Manager" HorizontalAlignment="Left" Height="36" Margin="240,123,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="360" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
-                <TextBox x:Name="TextBox_User_FunctManag" HorizontalAlignment="Left" Height="36" Margin="240,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="360" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
+                <TextBox x:Name="TextBox_UserIFS" HorizontalAlignment="Left" Height="36" Margin="330,123,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
+                <TextBox x:Name="TextBox_UserEmploy" HorizontalAlignment="Left" Height="36" Margin="330,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
+                <TextBox x:Name="TextBox_User_Manager" HorizontalAlignment="Left" Height="36" Margin="240,277,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="360" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
+                <TextBox x:Name="TextBox_User_FunctManag" HorizontalAlignment="Left" Height="36" Margin="240,355,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="360" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
                 <TextBox x:Name="TextBox_UserBPTP" HorizontalAlignment="Left" Height="36" Margin="10,603,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="360" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
 
                 <CheckBox x:Name="CheckBox_UserLyncPC" Content=" :Lync na PC" HorizontalAlignment="Left" Margin="820,102,0,0" VerticalAlignment="Top" Height="30" Width="101" IsHitTestVisible="False" Focusable="False" FlowDirection="RightToLeft" FontSize="15" Foreground="#FFCCCCCC" Background="#FF252525" />
@@ -109,29 +106,36 @@
 
         <TabItem x:Name="Tab_PC" Header="Stacja" Background="#FF252525" Foreground="{x:Null}" Visibility="Visible">
             <Grid Background="#FF252525" Grid.IsSharedSizeScope="True">
-                <TextBox x:Name="TextBox_PCin" HorizontalAlignment="Left" Height="50" Margin="240,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="280" FontSize="28" TextAlignment="Center" AcceptsTab="True" Controls:TextBoxHelper.Watermark="IP/Netbios..." RenderTransformOrigin="0.484,0.525" Background="#FF252525" CaretBrush="#FFCCCCCC" Foreground="#FFCCCCCC" BorderThickness="1" />
-
-
-
+                <TextBox x:Name="TextBox_PCin" HorizontalAlignment="Left" Height="50" Margin="240,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="280" FontSize="28" TextAlignment="Center" AcceptsTab="True" Controls:TextBoxHelper.Watermark="IP/Netbios..." Background="#FF252525" CaretBrush="#FFCCCCCC" Foreground="#FFCCCCCC" BorderThickness="1" />
+                <TextBox x:Name="TextBox_PCip" HorizontalAlignment="Left" Height="36" Margin="10,136,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
+                <TextBox x:Name="TextBox_PCnetbios" HorizontalAlignment="Left" Height="36" Margin="212,136,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
+                <TextBox x:Name="TextBox_PCspace" HorizontalAlignment="Left" Height="36" Margin="212,228,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
+                <TextBox x:Name="TextBox_PCmac" HorizontalAlignment="Left" Height="36" Margin="414,136,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
+                <TextBox x:Name="TextBox_PCns" HorizontalAlignment="Left" Height="36" Margin="10,228,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="171" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
+                <TextBox x:Name="TextBox_PCloguser" HorizontalAlignment="Left" Height="36" Margin="414,228,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
 
                 <Button x:Name="Button_PCping" IsDefault="True" Content="Ping" HorizontalAlignment="Left" Margin="542,10,0,0" VerticalAlignment="Top" Width="90" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="50" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC" Click="Button_PCping_Click"/>
+                <Button x:Name="Button_Sharing" IsDefault="False" Content="Sharing (C:\)" HorizontalAlignment="Left" Margin="342,333,0,0" VerticalAlignment="Top" Width="118" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="50" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC" Click="Button_Sharing_Click"/>
+                <Button x:Name="Button_PCinfo" IsDefault="False" Content="Sprawdź" HorizontalAlignment="Left" Margin="637,10,0,0" VerticalAlignment="Top" Width="90" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="50" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC" Click="Button_PCinfo_Click"/>
+                <Button x:Name="Button_Insta" IsDefault="False" Content="Instalator" HorizontalAlignment="Left" Margin="480,333,0,0" VerticalAlignment="Top" Width="118" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="50" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC" Click="Button_Insta_Click"/>
+                <Button x:Name="Button_PsExec" IsDefault="False" Content="PsExec" HorizontalAlignment="Left" Margin="10,333,0,0" VerticalAlignment="Top" Width="118" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="50" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC" Click="Button_PsExec_Click"/>
+                <Button x:Name="Button_PsExecTools" IsDefault="False" Content="PsExec Narzędzia" HorizontalAlignment="Left" Margin="152,333,0,0" VerticalAlignment="Top" Width="168" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="50" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC" Click="Button_PsExecTools_Click">
+                    <Button.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Spooler Reset" x:Name="x" ToolTip="x" />
+                            <MenuItem Header="Spooler Reset" x:Name="x2" ToolTip="x" />
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                </Button>
 
-                <Button x:Name="Button_Sharing" IsDefault="False" Content="Sharing (C:\)" HorizontalAlignment="Left" Margin="10,112,0,0" VerticalAlignment="Top" Width="118" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="50" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC" Click="Button_Sharing_Click"/>
+                <ProgressBar Visibility="Hidden" x:Name="WaitBarPC" IsIndeterminate="True" Foreground="{DynamicResource AccentColorBrush}" HorizontalAlignment="Left" Height="3" Margin="240,65,0,0" VerticalAlignment="Top" Width="280"/>
 
-
-                <Button x:Name="Button_Insta" IsDefault="False" Content="Instalator" HorizontalAlignment="Left" Margin="10,184,0,0" VerticalAlignment="Top" Width="118" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="50" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC"/>
-                <Button x:Name="Button_PsExec" IsDefault="False" Content="PsExec" HorizontalAlignment="Left" Margin="170,112,0,0" VerticalAlignment="Top" Width="118" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="50" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC"/>
-                <Button x:Name="Button_PsExecTools" IsDefault="False" Content="PsExec Narzędzia" HorizontalAlignment="Left" Margin="330,112,0,0" VerticalAlignment="Top" Width="168" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="50" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC"/>
-                
-                
-                
-                
-                <ProgressBar Visibility="Hidden" x:Name="WaitBar" IsIndeterminate="True" Foreground="{DynamicResource AccentColorBrush}" HorizontalAlignment="Left" Height="3" Margin="240,65,0,0" VerticalAlignment="Top" Width="280"/>
-                
-
-
-
-
+                <Label Content="Adres IP:" HorizontalAlignment="Left" Margin="10,106,0,0" VerticalAlignment="Top" Height="30" Width="108" FontSize="15" Foreground="#FFCCCCCC"/>
+                <Label Content="Netbios:" HorizontalAlignment="Left" Margin="212,106,0,0" VerticalAlignment="Top" Height="30" Width="108" FontSize="15" Foreground="#FFCCCCCC"/>
+                <Label Content="Mac adres:" HorizontalAlignment="Left" Margin="414,106,0,0" VerticalAlignment="Top" Height="30" Width="108" FontSize="15" Foreground="#FFCCCCCC"/>
+                <Label Content="Numer seryjny:" HorizontalAlignment="Left" Margin="10,198,0,0" VerticalAlignment="Top" Height="30" Width="108" FontSize="15" Foreground="#FFCCCCCC"/>
+                <Label Content="Wolne miejsce:" HorizontalAlignment="Left" Margin="212,198,0,0" VerticalAlignment="Top" Height="30" Width="108" FontSize="15" Foreground="#FFCCCCCC"/>
+                <Label Content="Zalogowany:" HorizontalAlignment="Left" Margin="414,198,0,0" VerticalAlignment="Top" Height="30" Width="108" FontSize="15" Foreground="#FFCCCCCC"/>
 
             </Grid>
         </TabItem>
