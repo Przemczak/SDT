@@ -26,10 +26,9 @@
     <MapFileExtensions>true</MapFileExtensions>
     <UpdateUrl>\\dsb192\%24SDT\App\</UpdateUrl>
     <PublisherName>Wojtczak Przemysław 2 - Partner Hurt</PublisherName>
-    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>SDT.htm</WebPage>
-    <ApplicationRevision>2</ApplicationRevision>
-    <ApplicationVersion>0.9.7.2</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -67,7 +66,7 @@
     <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
+    <GenerateManifests>false</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
@@ -122,6 +121,10 @@
       <DependentUpon>Information.xaml</DependentUpon>
     </Compile>
     <Compile Include="PC.cs" />
+    <Compile Include="PC_Installer.xaml.cs">
+      <DependentUpon>PC_Installer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PC_Scripts.cs" />
     <Compile Include="User.cs" />
     <Page Include="Information.xaml">
       <SubType>Designer</SubType>
@@ -139,6 +142,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="PC_Installer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Icons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -198,6 +205,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PsExec64.exe" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PsExec.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

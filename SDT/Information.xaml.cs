@@ -19,8 +19,6 @@ namespace SDT
             InfoVer.Text = "Version:" + " " + version.Major + "." + version.Minor + "." + version.Build;
         }
 
-
-
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));

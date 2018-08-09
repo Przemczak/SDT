@@ -31,9 +31,13 @@ namespace SDT
                 Owner = this,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner
             };
-            sh.ShowDialog();
+            sh.Show();
         }
 
+
+        /// <summary>
+        /// User (User TAB)
+        /// </summary>
         private void Button_UserCheck_Click(object sender, RoutedEventArgs e)
         {
             foreach (Control c in test1.Children)
@@ -60,6 +64,11 @@ namespace SDT
             us.CheckAD(TextBox_UserLoginIn, WaitBarUser);
         }
 
+
+        /// <summary>
+        /// PC (PC TAB)
+        /// </summary>
+
         private async void Button_PCping_Click(object sender, RoutedEventArgs e)
         {
             TextBox_PCin.Text = string.Join("", TextBox_PCin.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
@@ -70,7 +79,6 @@ namespace SDT
                     await window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
                 return;
             }
-
             PC pec = new PC(this);
             await pec.Ping(TextBox_PCin, WaitBarPC);
         }
@@ -87,9 +95,24 @@ namespace SDT
             }
 
             PC pec = new PC(this);
-            pec.Sharing(TextBox_PCin);
+            pec.Sharing(TextBox_PCin, WaitBarPC);
         }
 
+        private void Button_RCV_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox_PCin.Text = string.Join("", TextBox_PCin.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
+            if (string.IsNullOrWhiteSpace(TextBox_PCin.Text))
+            {
+                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
+                if (window != null)
+                    window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
+                return;
+            }
+
+            PC pec = new PC(this);
+            pec.Cmrcviewer(TextBox_PCin, WaitBarPC);
+        }
+        
         private void Button_PCinfo_Click(object sender, RoutedEventArgs e)
         {
             TextBox_PCin.Text = string.Join("", TextBox_PCin.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
@@ -105,7 +128,7 @@ namespace SDT
             pec.PCinfo(TextBox_PCin, WaitBarPC);
         }
 
-        private void Button_PsExecTools_Click(object sender, RoutedEventArgs e)
+        private void Button_Scripts_Click(object sender, RoutedEventArgs e)
         {
             (sender as Button).ContextMenu.IsEnabled = true;
             (sender as Button).ContextMenu.PlacementTarget = (sender as Button);
@@ -113,15 +136,61 @@ namespace SDT
             (sender as Button).ContextMenu.IsOpen = true;
         }
 
-        private void Button_PsExec_Click(object sender, RoutedEventArgs e)
+        private async void Button_PsExec_Click(object sender, RoutedEventArgs e)
         {
+            TextBox_PCin.Text = string.Join("", TextBox_PCin.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
+            if (string.IsNullOrWhiteSpace(TextBox_PCin.Text))
+            {
+                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
+                if (window != null)
+                    await window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
+                return;
+            }
+
             PC pec = new PC(this);
-            pec.PsExecInstall();
+            pec.PsExecRUN(TextBox_PCin, WaitBarPC);
         }
 
         private void Button_Insta_Click(object sender, RoutedEventArgs e)
         {
+            PC_Installer PI = new PC_Installer
+            {
+                Owner = this,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+            PI.Show();
+        }
 
+
+        /// <summary>
+        /// Scripts (List in Button_Scripts_Click)
+        /// </summary>
+        private void Button_GP_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox_PCin.Text = string.Join("", TextBox_PCin.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
+            if (string.IsNullOrWhiteSpace(TextBox_PCin.Text))
+            {
+                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
+                if (window != null)
+                    window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
+                return;
+            }
+            PC_Scripts pecs = new PC_Scripts(this);
+            pecs.GPUpdate(TextBox_PCin, WaitBarPC);
+        }
+
+        private void Button_BitLocker_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox_PCin.Text = string.Join("", TextBox_PCin.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
+            if (string.IsNullOrWhiteSpace(TextBox_PCin.Text))
+            {
+                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
+                if (window != null)
+                    window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
+                return;
+            }
+            PC_Scripts pecs = new PC_Scripts(this);
+            pecs.BitLocker(TextBox_PCin, WaitBarPC);
         }
     }
 }

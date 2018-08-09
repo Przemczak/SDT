@@ -114,16 +114,17 @@
                 <TextBox x:Name="TextBox_PCns" HorizontalAlignment="Left" Height="36" Margin="10,228,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="171" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
                 <TextBox x:Name="TextBox_PCloguser" HorizontalAlignment="Left" Height="36" Margin="414,228,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
 
+                <Button x:Name="Button_RCV" IsDefault="False" Content="RCV" HorizontalAlignment="Left" Margin="537,333,0,0" VerticalAlignment="Top" Width="118" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="50" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC" Click="Button_RCV_Click" ToolTip="Remote Control Viewer"/>
                 <Button x:Name="Button_PCping" IsDefault="True" Content="Ping" HorizontalAlignment="Left" Margin="542,10,0,0" VerticalAlignment="Top" Width="90" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="50" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC" Click="Button_PCping_Click"/>
-                <Button x:Name="Button_Sharing" IsDefault="False" Content="Sharing (C:\)" HorizontalAlignment="Left" Margin="342,333,0,0" VerticalAlignment="Top" Width="118" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="50" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC" Click="Button_Sharing_Click"/>
+                <Button x:Name="Button_Sharing" IsDefault="False" Content="Sharing (C:\)" HorizontalAlignment="Left" Margin="414,333,0,0" VerticalAlignment="Top" Width="118" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="50" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC" Click="Button_Sharing_Click"/>
                 <Button x:Name="Button_PCinfo" IsDefault="False" Content="Sprawdź" HorizontalAlignment="Left" Margin="637,10,0,0" VerticalAlignment="Top" Width="90" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="50" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC" Click="Button_PCinfo_Click"/>
-                <Button x:Name="Button_Insta" IsDefault="False" Content="Instalator" HorizontalAlignment="Left" Margin="480,333,0,0" VerticalAlignment="Top" Width="118" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="50" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC" Click="Button_Insta_Click"/>
+                <Button x:Name="Button_Insta" IsDefault="False" Content="Instalator" HorizontalAlignment="Left" Margin="256,333,0,0" VerticalAlignment="Top" Width="118" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="50" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC" Click="Button_Insta_Click"/>
                 <Button x:Name="Button_PsExec" IsDefault="False" Content="PsExec" HorizontalAlignment="Left" Margin="10,333,0,0" VerticalAlignment="Top" Width="118" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="50" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC" Click="Button_PsExec_Click"/>
-                <Button x:Name="Button_PsExecTools" IsDefault="False" Content="PsExec Narzędzia" HorizontalAlignment="Left" Margin="152,333,0,0" VerticalAlignment="Top" Width="168" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="50" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC" Click="Button_PsExecTools_Click">
+                <Button x:Name="Button_Scripts" IsDefault="False" Content="Skrypty" HorizontalAlignment="Left" Margin="133,333,0,0" VerticalAlignment="Top" Width="118" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="50" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC" Click="Button_Scripts_Click">
                     <Button.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Header="Spooler Reset" x:Name="x" ToolTip="x" />
-                            <MenuItem Header="Spooler Reset" x:Name="x2" ToolTip="x" />
+                            <MenuItem Header="GPUpdate" x:Name="Button_GP" ToolTip="Odświeżenie uprawnień na stacji" Click="Button_GP_Click" />
+                            <MenuItem Header="BitLocker" x:Name="Button_BitLocker" ToolTip="Sprawdzenie statusu szyfrowania" Click="Button_BitLocker_Click"/>
                         </ContextMenu>
                     </Button.ContextMenu>
                 </Button>
@@ -136,6 +137,7 @@
                 <Label Content="Numer seryjny:" HorizontalAlignment="Left" Margin="10,198,0,0" VerticalAlignment="Top" Height="30" Width="108" FontSize="15" Foreground="#FFCCCCCC"/>
                 <Label Content="Wolne miejsce:" HorizontalAlignment="Left" Margin="212,198,0,0" VerticalAlignment="Top" Height="30" Width="108" FontSize="15" Foreground="#FFCCCCCC"/>
                 <Label Content="Zalogowany:" HorizontalAlignment="Left" Margin="414,198,0,0" VerticalAlignment="Top" Height="30" Width="108" FontSize="15" Foreground="#FFCCCCCC"/>
+                
 
             </Grid>
         </TabItem>
