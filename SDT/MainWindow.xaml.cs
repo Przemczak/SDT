@@ -34,7 +34,6 @@ namespace SDT
             sh.Show();
         }
 
-
         /// <summary>
         /// User (User TAB)
         /// </summary>
@@ -68,7 +67,6 @@ namespace SDT
         /// <summary>
         /// PC (PC TAB)
         /// </summary>
-
         private async void Button_PCping_Click(object sender, RoutedEventArgs e)
         {
             TextBox_PCin.Text = string.Join("", TextBox_PCin.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
@@ -153,12 +151,28 @@ namespace SDT
 
         private void Button_Insta_Click(object sender, RoutedEventArgs e)
         {
-            PC_Installer PI = new PC_Installer
+            TextBox_PCin.Text = string.Join("", TextBox_PCin.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
+            if (string.IsNullOrWhiteSpace(TextBox_PCin.Text))
             {
-                Owner = this,
-                WindowStartupLocation = WindowStartupLocation.CenterOwner
-            };
-            PI.Show();
+                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
+                if (window != null)
+                    window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
+                return;
+            }
+            else
+            {
+                PC_Installer PI = new PC_Installer(TextBox_PCin)
+                {
+                    Owner = this,
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner
+                };
+                PI.Show();
+            }
+        }
+
+        private void TextBox_PCin_TextChanged(object sender, RoutedEventArgs e)
+        {
+
         }
 
 
@@ -192,5 +206,19 @@ namespace SDT
             PC_Scripts pecs = new PC_Scripts(this);
             pecs.BitLocker(TextBox_PCin, WaitBarPC);
         }
+
+        //private async void TextBox_PCin_TextChanged(object sender, TextChangedEventArgs e)
+        //{
+        //    TextBox_PCin.Text = string.Join("", TextBox_PCin.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
+        //    if (string.IsNullOrWhiteSpace(TextBox_PCin.Text))
+        //    {
+        //        var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
+        //        if (window != null)
+        //            await window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
+        //        return;
+        //    }
+        //    PC pec = new PC(this);
+        //    await pec.Ping(TextBox_PCin, WaitBarPC);
+        //}
     }
 }

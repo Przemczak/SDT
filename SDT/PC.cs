@@ -68,6 +68,40 @@ namespace SDT
         }
 
         /// <summary>
+        /// Check PC ping for PC_Installer
+        /// </summary>
+        public async Task<bool> Ping(TextBox TextBox_PCadress)
+        {
+            try
+            {
+                var ipa = TextBox_PCadress.Text;
+
+                var PingOdp = await Task.Run(() =>
+                {
+                    Ping PingZapytanie = new Ping();
+                    return PingZapytanie.Send(ipa);
+                });
+                if (PingOdp.Status == IPStatus.Success)
+                {
+                    TextBox_PCadress.Background = new SolidColorBrush(Colors.Green);
+                    return true;
+                }
+                else
+                {
+                    TextBox_PCadress.Background = new SolidColorBrush(Colors.Red);
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
+                if (window != null)
+                    await window.ShowMessageAsync("Błąd!", e.Message);
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Run > Sharing
         /// </summary>
         public async void Sharing(TextBox TextBox_PCin, ProgressBar WaitBarPC)
@@ -151,7 +185,14 @@ namespace SDT
                     foreach (ManagementObject WmiObject in Searcher4.Get())
                     {
                         var zalo = (WmiObject["UserName"].ToString());
-                        _MetroWindow.TextBox_PCloguser.Text = zalo.Substring(zalo.IndexOf("\\") + 1);
+                        if (string.IsNullOrWhiteSpace(zalo))
+                        {
+                            _MetroWindow.TextBox_PCloguser.Text = "Nikt nie jest zalogowany na stacji";
+                        }
+                        else
+                        {
+                            _MetroWindow.TextBox_PCloguser.Text = zalo.Substring(zalo.IndexOf("\\") + 1);
+                        }
                     }
                     WaitBarPC.Visibility = Visibility.Hidden;
                 }
@@ -186,7 +227,7 @@ namespace SDT
                 if (pscheck)
                 {
                     Process process = new Process();
-                    process.StartInfo.FileName = @"C:\Windows\SysWoW64\PsExec64.exe";
+                    process.StartInfo.FileName = @"C:\My Program Files\PsExec64.exe";
                     process.StartInfo.Arguments = String.Format(@"\\{0} CMD", TextBox_PCin.Text);
                     process.Start();
                     process.WaitForExit();
@@ -213,7 +254,7 @@ namespace SDT
         /// </summary>
         public bool PsExecCheck()
         {
-            if (!File.Exists(@"C:\Windows\SysWOW64\PsExec64.exe"))
+            if (!File.Exists(@"C:\My Program Files\PsExec64.exe"))
             {
                 MessageBoxResult messageBoxResult = MessageBox.Show("Czy chcesz zainstalować?", "Brak PsExec na stacji.", MessageBoxButton.YesNo);
                 if (messageBoxResult == MessageBoxResult.Yes)
@@ -233,9 +274,12 @@ namespace SDT
         {
             try
             {
-                File.WriteAllBytes(@"C:\Windows\SysWOW64\PsExec64.exe", Resources.PsExec64);
+                //File.WriteAllBytes(@"C:\Windows\SysWOW64\PsExec64.exe", Resources.PsExec64);
+                //Process.Start("cmd", @"/c ""C:\Windows\SysWOW64\PsExec64.exe""");
 
-                Process.Start("cmd", @"/c ""C:\Windows\SysWOW64\PsExec64.exe""");
+                File.WriteAllBytes(@"C:\My Program Files\PsExec64.exe", Resources.PsExec64);
+
+                Process.Start("cmd", @"/c ""C:\My Program Files\PsExec64.exe""");
 
                 var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
                 if (window != null)

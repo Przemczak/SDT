@@ -106,7 +106,7 @@
 
         <TabItem x:Name="Tab_PC" Header="Stacja" Background="#FF252525" Foreground="{x:Null}" Visibility="Visible">
             <Grid Background="#FF252525" Grid.IsSharedSizeScope="True">
-                <TextBox x:Name="TextBox_PCin" HorizontalAlignment="Left" Height="50" Margin="240,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="280" FontSize="28" TextAlignment="Center" AcceptsTab="True" Controls:TextBoxHelper.Watermark="IP/Netbios..." Background="#FF252525" CaretBrush="#FFCCCCCC" Foreground="#FFCCCCCC" BorderThickness="1" />
+                <TextBox x:Name="TextBox_PCin" HorizontalAlignment="Left" Height="50" Margin="240,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="280" FontSize="28" TextAlignment="Center" AcceptsTab="True" Controls:TextBoxHelper.Watermark="IP/Netbios..." Background="#FF252525" CaretBrush="#FFCCCCCC" Foreground="#FFCCCCCC" BorderThickness="1"/>
                 <TextBox x:Name="TextBox_PCip" HorizontalAlignment="Left" Height="36" Margin="10,136,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
                 <TextBox x:Name="TextBox_PCnetbios" HorizontalAlignment="Left" Height="36" Margin="212,136,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
                 <TextBox x:Name="TextBox_PCspace" HorizontalAlignment="Left" Height="36" Margin="212,228,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170" TextAlignment="Center" IsReadOnly="True" FontSize="18" Background="#FF252525"/>
@@ -137,8 +137,6 @@
                 <Label Content="Numer seryjny:" HorizontalAlignment="Left" Margin="10,198,0,0" VerticalAlignment="Top" Height="30" Width="108" FontSize="15" Foreground="#FFCCCCCC"/>
                 <Label Content="Wolne miejsce:" HorizontalAlignment="Left" Margin="212,198,0,0" VerticalAlignment="Top" Height="30" Width="108" FontSize="15" Foreground="#FFCCCCCC"/>
                 <Label Content="Zalogowany:" HorizontalAlignment="Left" Margin="414,198,0,0" VerticalAlignment="Top" Height="30" Width="108" FontSize="15" Foreground="#FFCCCCCC"/>
-                
-
             </Grid>
         </TabItem>
     </TabControl>
