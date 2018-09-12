@@ -16,7 +16,7 @@ namespace SDT
             InitializeComponent();
 
             Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            InfoVer.Text = "Version:" + " " + version.Major + "." + version.Minor + "." + version.Build;
+            InfoVer.Text = "Wersja:" + " " + version.Major + "." + version.Minor + "." + version.Build;
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)

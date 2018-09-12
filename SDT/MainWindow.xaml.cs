@@ -1,4 +1,5 @@
-﻿using MahApps.Metro.Controls;
+﻿using MahApps.Metro;
+using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Linq;
@@ -16,6 +17,23 @@ namespace SDT
         public MainWindow()
         {
             InitializeComponent();
+
+            try
+            {
+                var newAccent = Properties.Settings.Default.AccentC;
+                var newTheme = Properties.Settings.Default.ThemeC;
+
+                ThemeManager.ChangeAppStyle(Application.Current,
+                    ThemeManager.GetAccent(newAccent),
+                    ThemeManager.GetAppTheme(newTheme));
+            }
+            catch (Exception ex)
+            {
+                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
+                if (window != null)
+                    window.ShowMessageAsync("Błąd!", ex.Message);
+                return;
+            }
         }
 
         protected override void OnClosed(EventArgs e)
@@ -24,14 +42,29 @@ namespace SDT
             Application.Current.Shutdown();
         }
 
+        private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Properties.Settings.Default.Save();
+        }
+
+
+
         private void Button_Info_Click(object sender, RoutedEventArgs e)
         {
             Information sh = new Information
             {
-                Owner = this,
-                WindowStartupLocation = WindowStartupLocation.CenterOwner
+                Owner = this, WindowStartupLocation = WindowStartupLocation.CenterOwner
             };
             sh.Show();
+        }
+
+        private void Click_Button_Settings(object sender, RoutedEventArgs e)
+        {
+            SettingsPage sp = new SettingsPage
+            {
+                Owner = this, WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+            sp.Show();
         }
 
         /// <summary>
@@ -39,16 +72,16 @@ namespace SDT
         /// </summary>
         private void Button_UserCheck_Click(object sender, RoutedEventArgs e)
         {
-            foreach (Control c in test1.Children)
-            {
-                if (c is TextBox && c != null)
-                {
-                    if (c.Name != "TextBox_UserLoginIn")
-                        ((TextBox)c).Text = String.Empty;
-                    CheckBox_UserPrintDeny.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFCCCCCC"));
-                    CheckBox_UserMailAct.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFCCCCCC"));
-                }
-            }
+            //foreach (Control c in Grid_User.Children)
+            //{
+            //    if (c is TextBox && c != null)
+            //    {
+            //        if (c.Name != "TextBox_UserLoginIn")
+            //            ((TextBox)c).Text = String.Empty;
+            //        CheckBox_UserPrintDeny.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFCCCCCC"));
+            //        CheckBox_UserMailAct.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFCCCCCC"));
+            //    }
+            //}
 
             TextBox_UserLoginIn.Text = string.Join("", TextBox_UserLoginIn.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
             if (string.IsNullOrWhiteSpace(TextBox_UserLoginIn.Text))
@@ -62,7 +95,6 @@ namespace SDT
             User us = new User(this);
             us.CheckAD(TextBox_UserLoginIn, WaitBarUser);
         }
-
 
         /// <summary>
         /// PC (PC TAB)
@@ -149,32 +181,53 @@ namespace SDT
             pec.PsExecRUN(TextBox_PCin, WaitBarPC);
         }
 
-        private void Button_Insta_Click(object sender, RoutedEventArgs e)
+        private async void Button_Insta_Click(object sender, RoutedEventArgs e)
         {
             TextBox_PCin.Text = string.Join("", TextBox_PCin.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
             if (string.IsNullOrWhiteSpace(TextBox_PCin.Text))
             {
                 var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
                 if (window != null)
-                    window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
+                    await window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
                 return;
             }
             else
             {
-                PC_Installer PI = new PC_Installer(TextBox_PCin)
+                PC pec = new PC();
+                var pscheck = pec.PsExecCheck();
+                if (pscheck)
                 {
-                    Owner = this,
-                    WindowStartupLocation = WindowStartupLocation.CenterOwner
-                };
-                PI.Show();
+                    PC_Installer PI = new PC_Installer(TextBox_PCin)
+                    {
+                        Owner = this,
+                        WindowStartupLocation = WindowStartupLocation.CenterOwner
+                    };
+                    PI.Show();
+                }
             }
         }
 
-        private void TextBox_PCin_TextChanged(object sender, RoutedEventArgs e)
+        private async void Button_PCPorts_Click(object sender, RoutedEventArgs e)
         {
+            CheckBox_PC135.IsChecked = false;
+            CheckBox_PC445.IsChecked = false;
+            CheckBox_PC2701.IsChecked = false;
+            CheckBox_PC8081.IsChecked = false;
 
+            TextBox_PCin.Text = string.Join("", TextBox_PCin.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
+            if (string.IsNullOrWhiteSpace(TextBox_PCin.Text))
+            {
+                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
+                if (window != null)
+                    await window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
+                return;
+            }
+            else
+            {
+                PC pec = new PC(this);
+                await pec.PortCheck(TextBox_PCin, WaitBarPC);
+            }
         }
-
 
         /// <summary>
         /// Scripts (List in Button_Scripts_Click)
@@ -207,18 +260,18 @@ namespace SDT
             pecs.BitLocker(TextBox_PCin, WaitBarPC);
         }
 
-        //private async void TextBox_PCin_TextChanged(object sender, TextChangedEventArgs e)
-        //{
-        //    TextBox_PCin.Text = string.Join("", TextBox_PCin.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
-        //    if (string.IsNullOrWhiteSpace(TextBox_PCin.Text))
-        //    {
-        //        var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
-        //        if (window != null)
-        //            await window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
-        //        return;
-        //    }
-        //    PC pec = new PC(this);
-        //    await pec.Ping(TextBox_PCin, WaitBarPC);
-        //}
+        private void Button_IEFix_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox_PCin.Text = string.Join("", TextBox_PCin.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
+            if (string.IsNullOrWhiteSpace(TextBox_PCin.Text))
+            {
+                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
+                if (window != null)
+                    window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
+                return;
+            }
+            PC_Scripts pecs = new PC_Scripts(this);
+            pecs.IEFix(TextBox_PCin);
+        }
     }
 }

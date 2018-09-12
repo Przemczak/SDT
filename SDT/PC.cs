@@ -8,6 +8,8 @@ using System.Linq;
 using System.Management;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -274,9 +276,6 @@ namespace SDT
         {
             try
             {
-                //File.WriteAllBytes(@"C:\Windows\SysWOW64\PsExec64.exe", Resources.PsExec64);
-                //Process.Start("cmd", @"/c ""C:\Windows\SysWOW64\PsExec64.exe""");
-
                 File.WriteAllBytes(@"C:\My Program Files\PsExec64.exe", Resources.PsExec64);
 
                 Process.Start("cmd", @"/c ""C:\My Program Files\PsExec64.exe""");
@@ -317,13 +316,117 @@ namespace SDT
             }
             else
             {
-                TextBox_PCin.Text = string.Join("", TextBox_PCin.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
-                if (string.IsNullOrWhiteSpace(TextBox_PCin.Text))
+                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
+                if (window != null)
+                    await window.ShowMessageAsync("Błąd!", "Brak zainstalowanego narzędzia RCV.");
+                return;
+            }
+        }
+
+        /// <summary>
+        ///  Remote check ports
+        /// </summary>
+        public async Task PortCheck(TextBox TextBox_PCin, ProgressBar WaitBarPC)
+        {
+            var pingcheck = await Ping(TextBox_PCin, WaitBarPC);
+            if (pingcheck)
+            {
+                try
+                {
+                    WaitBarPC.Visibility = Visibility.Visible;
+                    await Port135(TextBox_PCin);
+                    await Port445(TextBox_PCin);
+                    await Port2701(TextBox_PCin);
+                    await Port8081(TextBox_PCin);
+                    WaitBarPC.Visibility = Visibility.Hidden;
+                }
+                catch (Exception ex)
                 {
                     var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
                     if (window != null)
-                        await window.ShowMessageAsync("Błąd!", "Brak zainstalowanego narzędzia RCV.");
+                        await window.ShowMessageAsync("Błąd!", ex.Message);
+                    WaitBarPC.Visibility = Visibility.Hidden;
                     return;
+                }
+            }
+            else
+            {
+                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
+                if (window != null)
+                    await window.ShowMessageAsync("Bład!", "Stacja nie odpowiada w sieci.");
+                return;
+            }
+        }
+
+        async Task Port135(TextBox TextBox_PCin)
+        {
+            var cancel = new TaskCompletionSource<bool>();
+            using (var cts = new CancellationTokenSource(5000))
+            {
+                using (var client = new TcpClient())
+                {
+                    var task = client.ConnectAsync(TextBox_PCin.Text, 135);
+                    using (cts.Token.Register(() => cancel.TrySetResult(true)))
+                    {
+                        if (task != await Task.WhenAny(task, cancel.Task))
+                            _MetroWindow.CheckBox_PC135.IsChecked = false;
+                        else
+                            _MetroWindow.CheckBox_PC135.IsChecked = true;
+                    }
+                }
+            }
+        }
+        async Task Port445(TextBox TextBox_PCin)
+        {
+            var cancel = new TaskCompletionSource<bool>();
+            using (var cts = new CancellationTokenSource(5000))
+            {
+                using (var client = new TcpClient())
+                {
+                    var task = client.ConnectAsync(TextBox_PCin.Text, 445);
+                    using (cts.Token.Register(() => cancel.TrySetResult(true)))
+                    {
+                        if (task != await Task.WhenAny(task, cancel.Task))
+                            _MetroWindow.CheckBox_PC445.IsChecked = false;
+                        else
+                            _MetroWindow.CheckBox_PC445.IsChecked = true;
+                    }
+                }
+            }
+        }
+        async Task Port2701(TextBox TextBox_PCin)
+        {
+            var cancel = new TaskCompletionSource<bool>();
+            using (var cts = new CancellationTokenSource(5000))
+            {
+                using (var client = new TcpClient())
+                {
+                    var task = client.ConnectAsync(TextBox_PCin.Text, 2701);
+                    using (cts.Token.Register(() => cancel.TrySetResult(true)))
+                    {
+                        if (task != await Task.WhenAny(task, cancel.Task))
+                            _MetroWindow.CheckBox_PC2701.IsChecked = false;
+                        else
+                            _MetroWindow.CheckBox_PC2701.IsChecked = true;
+                    }
+                }
+            }
+        }
+        async Task Port8081(TextBox TextBox_PCin)
+        {
+            var cancel = new TaskCompletionSource<bool>();
+            using (var cts = new CancellationTokenSource(5000))
+            {
+                using (var client = new TcpClient())
+                {
+                    var task = client.ConnectAsync(TextBox_PCin.Text, 8081);
+                    using (cts.Token.Register(() => cancel.TrySetResult(true)))
+                    {
+                        if (task != await Task.WhenAny(task, cancel.Task))
+                            _MetroWindow.CheckBox_PC8081.IsChecked = false;
+                        else
+                            _MetroWindow.CheckBox_PC8081.IsChecked = true;
+                    }
                 }
             }
         }

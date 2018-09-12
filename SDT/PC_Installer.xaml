@@ -1,43 +1,81 @@
 ﻿<Controls:MetroWindow x:Class="SDT.PC_Installer"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-        Title="Instalator aplikacji" 
-        ShowMaxRestoreButton="False"
-        GlowBrush="{DynamicResource AccentColorBrush}"
-        BorderThickness="1" MinWidth="200" MinHeight="200" HorizontalAlignment="Left" VerticalAlignment="Top" ResizeMode="CanMinimize"
-        TitleCaps="False" Height="250" Width="550" WindowStartupLocation="CenterOwner">
+                        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                        xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+                        RenderOptions.ClearTypeHint="Enabled"
+                        TextOptions.TextFormattingMode="Display"
+                        Title="Instalator"
+                        TitleCaps="False"
+                        SizeToContent="WidthAndHeight"
+                        ShowMaxRestoreButton="False" ResizeMode="CanMinimize" Width="550" Height="450"
+                        GlowBrush="{DynamicResource AccentColorBrush}"
+                        WindowStartupLocation="CenterOwner">
 
-    <Grid Background="#FF252525">
-        <TextBox x:Name="TextBox_Instapath" IsReadOnly="True" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="524" Foreground="#FFCCCCCC" Background="#FF252525" HorizontalScrollBarVisibility="Auto"/>
-        <TextBox x:Name="TextBox_PCadress" HorizontalAlignment="Left" Height="30" Margin="171,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="205" FontSize="18" TextAlignment="Center" AcceptsTab="True" Background="#FF252525" CaretBrush="#FFCCCCCC" Foreground="#FFCCCCCC" IsReadOnly="True" FontWeight="Bold" Text="126.109.11.16" />
-        <Button x:Name="Button_InstaCopy" IsDefault="True" Content="Kopiuj" HorizontalAlignment="Left" Margin="301,76,0,0" VerticalAlignment="Top" Width="75" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="35" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC" ToolTip="Kopiuję paczkę instalacyjną na stację." Click="Button_InstaCopy_Click"/>
-        <Button x:Name="Button_Insta" IsDefault="True" Content="Instaluj" HorizontalAlignment="Left" Margin="171,76,0,0" VerticalAlignment="Top" Width="75" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="35" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC" ToolTip="Instaluje aplikację na stacji." Click="Button_Insta_Click"/>
-        <Button x:Name="Button_InstaExplo" IsDefault="True" Content="Explorator" HorizontalAlignment="Left" Margin="10,76,0,0" VerticalAlignment="Top" Width="110" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="35" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC" ToolTip="Otwiera Explorator Windows" Click="Button_InstaExplo_Click"/>
-        <Button x:Name="Button_InstaTemp" IsDefault="True" Content="Temp" HorizontalAlignment="Left" Margin="430,76,0,0" VerticalAlignment="Top" Width="104" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="35" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC" ToolTip="Otwiera folder temp na stacji zdalnej." Click="Button_InstaTemp_Click"/>
-        <Button x:Name="Button_InstaClearTemp" IsDefault="True" Content="Usuń Temp" HorizontalAlignment="Left" Margin="430,113,0,0" VerticalAlignment="Top" Width="104" Controls:ButtonHelper.PreserveTextCase="True" Controls:ButtonHelper.CornerRadius="0" Height="35" FontSize="18" Style="{StaticResource AccentedSquareButtonStyle}" Foreground="White" BorderBrush="#FFCCCCCC" ToolTip="Czyści folder temp na stacji zdalnej." Click="Button_InstaClearTemp_Click" />
-        <Button x:Name="Button_InstaServ" Width="41" Height="38" Style="{DynamicResource MetroCircleButtonStyle}" Margin="121,138,0,0" ToolTip="Wybór zasobu z aplikacjami." Background="{DynamicResource AccentColorBrush}" BorderBrush="#FFCCCCCC" HorizontalAlignment="Left" VerticalAlignment="Top" Click="Button_InstaServ_Click">
-            <Rectangle Width="20" Height="20" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" RenderTransformOrigin="-2.1,1.25">
-                <Rectangle.OpacityMask>
-                    <VisualBrush Stretch="Fill" Visual="{iconPacks:Octicons Kind=Database}"/>
-                </Rectangle.OpacityMask>
-            </Rectangle>
-        </Button>
-        <ComboBox x:Name="Combo_Instal" HorizontalAlignment="Left" Margin="10,143,0,0" VerticalAlignment="Top" Width="110">
-            <ComboBoxItem>OPSCCM2012BY1</ComboBoxItem>
-            <ComboBoxItem>OPSCCM2012GD1</ComboBoxItem>
-            <ComboBoxItem>OPSCCM2012KA1</ComboBoxItem>
-            <ComboBoxItem>OPSCCM2012KR1</ComboBoxItem>
-            <ComboBoxItem>OPSCCM2012OL1</ComboBoxItem>
-            <ComboBoxItem>OPSCCM2012PO1</ComboBoxItem>
-            <ComboBoxItem>OPSCCM2012WA1</ComboBoxItem>
-            <ComboBoxItem>OPSCCM2012WA2</ComboBoxItem>
-            <ComboBoxItem>OPSCCM2012WR1</ComboBoxItem>
-            <ComboBoxItem>OPSCCM2012SZ1</ComboBoxItem>
-        </ComboBox>
-        <Label Content="Kopiowanie:" HorizontalAlignment="Left" Margin="230,118,0,0" VerticalAlignment="Top" Height="30" Width="90" Foreground="#FFCCCCCC" FontSize="14"/>
-        <Label Content="Zasoby:" HorizontalAlignment="Left" Margin="31,116,0,0" VerticalAlignment="Top" Height="30" Width="65" FontSize="15" Foreground="#FFCCCCCC"/>
-        <ProgressBar Visibility="Visible" x:Name="WaitBarCopy" Foreground="{DynamicResource AccentColorBrush}" HorizontalAlignment="Left" Height="10" Margin="171,143,0,0" VerticalAlignment="Top" Width="205"/>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Label Content="Instalator dla stacji:" FontSize="16" Height="30" Width="160" Grid.Row="0" FontWeight="Bold"/>
+            <TextBox x:Name="TextBox_PCadress" Height="35" BorderThickness="2" Margin="1,0,5,1" IsReadOnly="True" Grid.Row="1"
+                                    TextAlignment="Center" FontSize="17"/>
+        </Grid>
+
+        <GroupBox Header="Instalacja" Grid.Row="1" Margin="3">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <TextBox x:Name="TextBox_Instapath" Height="35" Width="250" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="1"
+                                     TextAlignment="Center" FontSize="17"/>
+                <ComboBox x:Name="Combo_Instal" Margin="2" FontSize="15" BorderThickness="2"
+                                    SelectionChanged="ServerSelectOnSelectionChanged"
+                                    ItemsSource="{Binding servs}"
+                                    DisplayMemberPath="Key"
+                                    SelectedValue="Value">
+                </ComboBox>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Name="Button_Insta" Content="Instalacja" Height="35" Width="250" Margin="2" BorderThickness="2" Grid.Column="0"
+                            FontSize="15" Controls:ButtonHelper.PreserveTextCase="True" Background="{DynamicResource AccentColorBrush}" Click="Button_Insta_Click"/>
+                    <Button x:Name="Button_InstaCopy" Content="Kopiowanie" Height="35" Width="250" Margin="2" BorderThickness="2" Grid.Column="1"
+                            FontSize="15" Controls:ButtonHelper.PreserveTextCase="True" Background="{DynamicResource AccentColorBrush}" Click="Button_InstaCopy_Click"/>
+                </Grid>
+                <Grid Grid.Row="3">
+                    <ProgressBar x:Name="WaitBarCopy" Height="15" Margin="5" Visibility="Visible" IsIndeterminate="False"
+                                 Foreground="{DynamicResource AccentColorBrush}"/>
+                </Grid>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="Folder TEMP" Grid.Row="2" Margin="3">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="Button_InstaTemp" Content="Otwórz" Height="35" Width="250" Margin="2" BorderThickness="2"
+                            FontSize="15" Controls:ButtonHelper.PreserveTextCase="True" Background="{DynamicResource AccentColorBrush}" Click="Button_InstaTemp_Click"/>
+                <Button x:Name="Button_InstaClearTemp" Content="Wyczyść" Height="35" Width="250" Margin="2" BorderThickness="2" Grid.Column="1"
+                            FontSize="15" Controls:ButtonHelper.PreserveTextCase="True" Background="{DynamicResource AccentColorBrush}" Click="Button_InstaClearTemp_Click"/>
+            </Grid>
+        </GroupBox>
     </Grid>
 </Controls:MetroWindow>

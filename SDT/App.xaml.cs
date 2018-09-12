@@ -1,4 +1,8 @@
-﻿using System.Windows;
+﻿using System;
+using System.Diagnostics;
+using System.Reflection;
+using System.Security.Principal;
+using System.Windows;
 
 namespace SDT
 {
@@ -7,5 +11,35 @@ namespace SDT
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            if (!IsRunAsAdministrator())
+            {
+                var processInfo = new ProcessStartInfo(Assembly.GetExecutingAssembly().CodeBase);
+
+                processInfo.UseShellExecute = true;
+                processInfo.Verb = "runas";
+
+                try
+                {
+                    Process.Start(processInfo);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Aplikacja musi być uruchomiona jako administrator.");
+                }
+
+                Application.Current.Shutdown();
+            }
+
+            bool IsRunAsAdministrator()
+            {
+                var wi = WindowsIdentity.GetCurrent();
+                var wp = new WindowsPrincipal(wi);
+
+                return wp.IsInRole(WindowsBuiltInRole.Administrator);
+            }
+            base.OnStartup(e);
+        }
     }
 }
