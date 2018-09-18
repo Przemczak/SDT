@@ -1,8 +1,10 @@
 ﻿using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
+using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -20,7 +22,7 @@ namespace SDT
         PC pec = new PC();
 
         /// <summary>
-        /// PsExec remote GPupdate
+        /// PsExec - remote GPupdate
         /// </summary>
         public async void GPUpdate(TextBox TextBox_PCin, ProgressBar WaitBarPC)
         {
@@ -57,7 +59,7 @@ namespace SDT
         }
 
         /// <summary>
-        /// PsExec remote Bitlocker status
+        /// PsExec - remote Bitlocker status
         /// </summary>
         public async void BitLocker(TextBox TextBox_PCin, ProgressBar WaitBarPC)
         {
@@ -92,11 +94,36 @@ namespace SDT
             }
         }
 
-        public async void IEFix(TextBox TextBox_PCin)
+        /// <summary>
+        /// IE Fix (Disable autostart)
+        /// </summary>
+        public async Task IEFix(TextBox TextBox_PCin)
         {
+            string ips = TextBox_PCin.Text;
+            string subkey = @"SYSTEM\CurrentControlSet\Services\\NlaSvc\Parameters\Internet";
 
+            try
+            {
+                RegistryKey myKey = RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, ips, RegistryView.Registry64)
+                        .OpenSubKey(subkey, true);
+                {
+                    myKey.SetValue("EnableActiveProbing", "0", RegistryValueKind.DWord);
+                    myKey.Close();
+
+                    var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
+                    if (window != null)
+                        await window.ShowMessageAsync("Informacja", "Zmieniono wpis w rejestrze.");
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
+                if (window != null)
+                    await window.ShowMessageAsync("Bład!", ex.Message);
+                return;
+            }
         }
             
-
     }
 }

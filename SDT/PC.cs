@@ -358,6 +358,9 @@ namespace SDT
             }
         }
 
+        /// <summary>
+        ///  Tasks for emote check ports
+        /// </summary>
         async Task Port135(TextBox TextBox_PCin)
         {
             var cancel = new TaskCompletionSource<bool>();

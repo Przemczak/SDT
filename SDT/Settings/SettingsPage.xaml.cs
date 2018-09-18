@@ -44,6 +44,13 @@ namespace SDT
             ColorsSelect.SelectedValue = "Value";
         }
 
+        private readonly MainWindow _MetroWindow;
+
+        public SettingsPage(MainWindow MetroWindow)
+        {
+            _MetroWindow = MetroWindow;
+        }
+
         /// <summary>
         /// Change Accent color
         /// </summary>
@@ -95,5 +102,7 @@ namespace SDT
                 return;
             }
         }
+
+
     }
 }

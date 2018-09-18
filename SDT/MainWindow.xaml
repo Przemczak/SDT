@@ -7,7 +7,7 @@
                         TextOptions.TextFormattingMode="Display"
                         ShowMaxRestoreButton="True"
                         GlowBrush="{DynamicResource AccentColorBrush}"
-                        BorderThickness="3" MinWidth="900" MinHeight="1020" Width="900" Height="1020"
+                        BorderThickness="3" MinWidth="900" MinHeight="900" Width="900" Height="900"
                         TitleCaps="False" ResizeMode="CanResize" Closing="MetroWindow_Closing">
 
     <Controls:MetroWindow.RightWindowCommands>
@@ -35,7 +35,7 @@
 
     <TabControl>
         <TabItem Header="Użytkownik">
-            <Grid x:Name="Grid_User">
+            <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -45,7 +45,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <Grid Grid.Row="0" Margin="5,5,5,20">
+                <Grid Grid.Row="0" Margin="5,5,5,10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="55"/>
                         <RowDefinition Height="40"/>
@@ -61,7 +61,7 @@
                 </Grid>
 
                 <GroupBox Header="Konto AD" Grid.Row="1" Margin="3">
-                    <Grid>
+                    <Grid x:Name="Grid_UserAD">
                         <Grid.RowDefinitions>
                             <RowDefinition/>
                             <RowDefinition/>
@@ -73,23 +73,23 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
 
-                        <Label Content="Status konta:" FontSize="15" Height="30" Grid.Row="0" Grid.Column="0"/>
+                        <Label Content="Status konta:" FontSize="15" Height="30" Grid.Row="0" Grid.Column="2"/>
                         <Label Content="Ostatnia zmiana hasła:" FontSize="15" Height="30" Grid.Row="0" Grid.Column="1"/>
-                        <Label Content="Hasło wygasa:" FontSize="15" Height="30" Grid.Row="0" Grid.Column="2"/>
+                        <Label Content="Hasło wygasa:" FontSize="15" Height="30" Grid.Row="0" Grid.Column="0"/>
                         <Label Content="Konto wygasa:" FontSize="15" Height="30" Grid.Row="0" Grid.Column="3"/>
-                        <TextBox x:Name="TextBox_UserLocked" Height="35" BorderThickness="2" Margin="1,0,5,1" IsReadOnly="True" Grid.Row="1" Grid.Column="0"
+                        <TextBox x:Name="TextBox_UserLocked" Height="30" BorderThickness="2" Margin="1,0,5,1" IsReadOnly="True" Grid.Row="1" Grid.Column="2"
+                                    TextAlignment="Center" FontSize="17" FontWeight="Bold"/>
+                        <TextBox x:Name="TextBox_UserLastPassChange" Height="30" BorderThickness="2" Margin="1,0,5,1" IsReadOnly="True" Grid.Row="1" Grid.Column="1"
                                     TextAlignment="Center" FontSize="17"/>
-                        <TextBox x:Name="TextBox_UserLastPassChange" Height="35" BorderThickness="2" Margin="1,0,5,1" IsReadOnly="True" Grid.Row="1" Grid.Column="1"
+                        <TextBox x:Name="TextBox_UserPassExpire" Height="30" BorderThickness="2" Margin="1,0,5,1" IsReadOnly="True" Grid.Row="1" Grid.Column="0"
                                     TextAlignment="Center" FontSize="17"/>
-                        <TextBox x:Name="TextBox_UserPassExpire" Height="35" BorderThickness="2" Margin="1,0,5,1" IsReadOnly="True" Grid.Row="1" Grid.Column="2"
-                                    TextAlignment="Center" FontSize="17"/>
-                        <TextBox x:Name="TextBox_UserAccExpire" Height="35" BorderThickness="2" Margin="1,0,5,1" IsReadOnly="True" Grid.Row="1" Grid.Column="3"
+                        <TextBox x:Name="TextBox_UserAccExpire" Height="30" BorderThickness="2" Margin="1,0,5,1" IsReadOnly="True" Grid.Row="1" Grid.Column="3"
                                     TextAlignment="Center" FontSize="17"/>
                     </Grid>
                 </GroupBox>
 
                 <GroupBox Header="Użytkownik" Grid.Row="2" Margin="3">
-                    <Grid>
+                    <Grid x:Name="Grid_UserUser">
                         <Grid.RowDefinitions>
                             <RowDefinition/>
                             <RowDefinition/>
@@ -101,36 +101,36 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
 
-                        <Label Content="Przełożony kadrowy:" FontSize="15" Height="30" Grid.Row="0" Grid.Column="0"/>
-                        <TextBox x:Name="TextBox_User_Manager" Height="35" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="0" Grid.Column="1"
+                        <Label Content="Przełożony kadrowy:" FontSize="15" Height="30" Grid.Row="1" Grid.Column="0"/>
+                        <TextBox x:Name="TextBox_User_Manager" Height="30" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="1" Grid.Column="1"
                                      TextAlignment="Center" FontSize="17"/>
-                        <Label Content="Przełożony funkcyjny:" FontSize="15" Height="30" Grid.Row="1" Grid.Column="0"/>
-                        <TextBox x:Name="TextBox_User_FunctManag" Height="35" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="1" Grid.Column="1"
+                        <Label Content="Przełożony funkcyjny:" FontSize="15" Height="30" Grid.Row="0" Grid.Column="0"/>
+                        <TextBox x:Name="TextBox_User_FunctManag" Height="30" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="0" Grid.Column="1"
                                      TextAlignment="Center" FontSize="17"/>
                         <Label Content="Numer IFS:" FontSize="15" Height="30" Grid.Row="0" Grid.Column="2"/>
-                        <TextBox x:Name="TextBox_UserIFS" Height="35" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="0" Grid.Column="3"
+                        <TextBox x:Name="TextBox_UserIFS" Height="30" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="0" Grid.Column="3"
                                      TextAlignment="Center" FontSize="17"/>
                         <Label Content="Zatrudnienie:" FontSize="15" Height="30" Grid.Row="1" Grid.Column="2"/>
-                        <TextBox x:Name="TextBox_UserEmploy" Height="35" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="1" Grid.Column="3"
+                        <TextBox x:Name="TextBox_UserEmploy" Height="30" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="1" Grid.Column="3"
                                      TextAlignment="Center" FontSize="17"/>
                     </Grid>
                 </GroupBox>
 
                 <GroupBox Header="Poczta" Grid.Row="3" Margin="3">
-                    <Grid>
+                    <Grid x:Name="testgrid">
                         <Grid.RowDefinitions>
                             <RowDefinition/>
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
 
-                        <Grid Grid.Row="0">
-                            <CheckBox x:Name="CheckBox_UserMailAct" Height="35" Width="245" Content=":Skrynka pocztowa aktywna" FlowDirection="RightToLeft" BorderThickness="2" Margin="5" Grid.Row="0"
+                        <Grid x:Name="Grid_UserMailC" Grid.Row="0">
+                            <CheckBox x:Name="CheckBox_UserMailAct" Height="25" Width="250" Content=":Skrzynka pocztowa aktywna" FlowDirection="RightToLeft" BorderThickness="2" Margin="5" Grid.Row="0"
                               FontSize="18" IsHitTestVisible="False" Focusable="False" />
 
                         </Grid>
 
-                        <Grid Grid.Row="1">
+                        <Grid x:Name="Grid_UserMail" Grid.Row="1">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
                                 <RowDefinition/>
@@ -142,21 +142,21 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
 
-                            <Label Content="Adres e-mail:" FontSize="15" Height="30" Grid.Row="0" Grid.Column="0"/>
-                            <TextBox x:Name="TextBox_UserMailAdr" Height="35" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="0" Grid.Column="1"
+                            <Label Content="Adres e-mail:" FontSize="15" Height="35" Grid.Row="0" Grid.Column="0"/>
+                            <TextBox x:Name="TextBox_UserMailAdr" Height="30" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="0" Grid.Column="1"
                                      TextAlignment="Center" FontSize="17"/>
                             <Label Content="SIP:" FontSize="15" Height="30" Grid.Row="1" Grid.Column="0"/>
                             <TextBox x:Name="TextBox_UserSIP" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="1" Grid.Column="1"
                                      TextAlignment="Center" FontSize="17"/>
                             <Label Content="Klasa skrzynki:" FontSize="15" Height="30" Grid.Row="0" Grid.Column="2"/>
-                            <TextBox x:Name="TextBox_UserMailBoxClass" Height="35" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="0" Grid.Column="3"
+                            <TextBox x:Name="TextBox_UserMailBoxClass" Height="30" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="0" Grid.Column="3"
                                      TextAlignment="Center" FontSize="17"/>
                             <Label Content="Wielkość skrzynki:" FontSize="15" Height="30" Grid.Row="1" Grid.Column="2"/>
-                            <TextBox x:Name="TextBox_UserMailQuota" Height="35" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="1" Grid.Column="3"
+                            <TextBox x:Name="TextBox_UserMailQuota" Height="30" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="1" Grid.Column="3"
                                      TextAlignment="Center" FontSize="17"/>
                         </Grid>
 
-                        <Grid Grid.Row="2">
+                        <Grid x:Name="Grid_UserMailBPTP" Grid.Row="2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="190"/>
                                 <ColumnDefinition MinWidth="360"/>
@@ -165,7 +165,7 @@
                             </Grid.ColumnDefinitions>
 
                             <Label Content="BPTP:" FontSize="15" Height="30" Grid.Row="0" Grid.Column="0"/>
-                            <TextBox x:Name="TextBox_UserBPTP"  Height="35" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Column="1"
+                            <TextBox x:Name="TextBox_UserBPTP"  Height="30" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Column="1"
                                      TextAlignment="Center" FontSize="17"/>
                         </Grid>
                     </Grid>
@@ -178,7 +178,7 @@
                     </Grid.ColumnDefinitions>
 
                     <GroupBox Header="Dostępy" Grid.Column="0" Margin="2">
-                        <Grid>
+                        <Grid x:Name="Grid_UserAccess">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
                                 <RowDefinition/>
@@ -188,29 +188,31 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <CheckBox x:Name="CheckBox_UserPrintDeny" Content=" :Blokada wydruków" Height="35" Width="170" BorderThickness="2" Grid.Row="0" Grid.Column="0"
+                            
+                            <CheckBox x:Name="CheckBox_UserPrintDeny" Content=" :Blokada wydruków" Height="25" Width="170" BorderThickness="2" Grid.Row="0" Grid.Column="0"
                                           FontSize="16" IsHitTestVisible="False" Focusable="False"  FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserPrintColor" Content=" :Wydruk w kolorze" Height="35" Width="170" BorderThickness="2" Grid.Row="0" Grid.Column="1"
+                            <CheckBox x:Name="CheckBox_UserPrintColor" Content=" :Wydruk w kolorze" Height="25" Width="170" BorderThickness="2" Grid.Row="1" Grid.Column="0"
                                           FontSize="16" IsHitTestVisible="False" Focusable="False"  FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserInternet" Content=" :Internet" Height="35" Width="170" BorderThickness="2" Grid.Row="1" Grid.Column="2"
+                            <CheckBox x:Name="CheckBox_UserInternet" Content=" :Internet" Height="25" Width="170" BorderThickness="2" Grid.Row="1" Grid.Column="2"
                                           FontSize="16" IsHitTestVisible="False" Focusable="False" FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserLyncPC" Content=" :Lync na PC" Height="35" Width="170" BorderThickness="2" Grid.Row="1" Grid.Column="0"
+                            <CheckBox x:Name="CheckBox_UserLyncPC" Content=" :Lync na PC" Height="25" Width="170" BorderThickness="2" Grid.Row="2" Grid.Column="0"
                                           FontSize="16" IsHitTestVisible="False" Focusable="False" FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserDevices" Content=" :.Nośniki zew" Height="35" Width="170" BorderThickness="2" Grid.Row="2" Grid.Column="1"
+                            <CheckBox x:Name="CheckBox_UserDevices" Content=" :.Nośniki zew" Height="25" Width="170" BorderThickness="2" Grid.Row="2" Grid.Column="1"
                                           FontSize="16" IsHitTestVisible="False" Focusable="False" FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserAirnet" Content=" :AirNet" Height="35" Width="170" BorderThickness="2" Grid.Row="2" Grid.Column="0"
+                            <CheckBox x:Name="CheckBox_UserAirnet" Content=" :AirNet" Height="25" Width="170" BorderThickness="2" Grid.Row="0" Grid.Column="1"
                                           FontSize="16" IsHitTestVisible="False" Focusable="False" FlowDirection="RightToLeft"/>
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="Developer" Grid.Column="1" Margin="2">
-                        <Grid>
+                        <Grid x:Name="Grid_UserDev">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <CheckBox x:Name="CheckBox_UserDev" Content=":Developer" Height="35" Width="100" BorderThickness="2" Grid.Row="0"
+                            
+                            <CheckBox x:Name="CheckBox_UserDev" Content=":Developer" Height="25" Width="100" BorderThickness="2" Grid.Row="0"
                                           FontSize="16" IsHitTestVisible="False" Focusable="False" FlowDirection="RightToLeft" />
-                            <TextBox x:Name="TextBox_UserDevPC" MinHeight="60" Width="360" BorderThickness="2" Margin="3" IsReadOnly="True" TextWrapping="Wrap" Grid.Row="1"
+                            <TextBox x:Name="TextBox_UserDevPC" Height="50" Width="360" BorderThickness="2" Margin="3" IsReadOnly="True" TextWrapping="Wrap" Grid.Row="1"
                                      TextAlignment="Center" FontSize="17" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
                         </Grid>
                     </GroupBox>
@@ -222,7 +224,7 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <GroupBox Header="BYOD" Grid.Column="0" Margin="2">
-                        <Grid>
+                        <Grid x:Name="Grid_UserBYOD">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
                                 <RowDefinition/>
@@ -233,26 +235,26 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <CheckBox x:Name="CheckBox_UserByodCitrix" Content=" :BYOD Citrix" Height="35" Width="170" BorderThickness="2" Grid.Row="0" Grid.Column="0"
+                            <CheckBox x:Name="CheckBox_UserByodCitrix" Content=" :BYOD Citrix" Height="25" Width="170" BorderThickness="2" Grid.Row="0" Grid.Column="0"
                                           FontSize="16" IsHitTestVisible="False" Focusable="False"  FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserByodHDD" Content=" :BYOD HDD" Height="35" Width="170" BorderThickness="2" Grid.Row="1" Grid.Column="0"
+                            <CheckBox x:Name="CheckBox_UserByodHDD" Content=" :BYOD HDD" Height="25" Width="170" BorderThickness="2" Grid.Row="1" Grid.Column="0"
                                           FontSize="16" IsHitTestVisible="False" Focusable="False"  FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserWTG" Content=" :BYOD WTG" Height="35" Width="170" BorderThickness="2" Grid.Row="2" Grid.Column="0"
+                            <CheckBox x:Name="CheckBox_UserWTG" Content=" :BYOD WTG" Height="25" Width="170" BorderThickness="2" Grid.Row="2" Grid.Column="0"
                                           FontSize="16" IsHitTestVisible="False" Focusable="False"  FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserLWMW7" Content=" :BYOD LVM W7" Height="35" Width="170" BorderThickness="2" Grid.Row="3" Grid.Column="0"
+                            <CheckBox x:Name="CheckBox_UserLWMW7" Content=" :BYOD LVM W7" Height="25" Width="170" BorderThickness="2" Grid.Row="3" Grid.Column="0"
                                           FontSize="16" IsHitTestVisible="False" Focusable="False"  FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserLWMW10" Content=" :BYOD LVM W10" Height="35" Width="170" BorderThickness="2" Grid.Row="0" Grid.Column="1"
+                            <CheckBox x:Name="CheckBox_UserLWMW10" Content=" :BYOD LVM W10" Height="25" Width="170" BorderThickness="2" Grid.Row="0" Grid.Column="1"
                                           FontSize="16" IsHitTestVisible="False" Focusable="False"  FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserByodCitrixTest" Content=" :BYOD Citrix Test" Height="35" Width="170" BorderThickness="2" Grid.Row="1" Grid.Column="1"
+                            <CheckBox x:Name="CheckBox_UserByodCitrixTest" Content=" :BYOD Citrix Test" Height="25" Width="170" BorderThickness="2" Grid.Row="1" Grid.Column="1"
                                           FontSize="16" IsHitTestVisible="False" Focusable="False"  FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserLWMW7Test" Content=" :BYOD LVM W7 Test" Height="35" Width="170" BorderThickness="2" Grid.Row="2" Grid.Column="2"
+                            <CheckBox x:Name="CheckBox_UserLWMW7Test" Content=" :BYOD LVM W7 Test" Height="25" Width="170" BorderThickness="2" Grid.Row="2" Grid.Column="2"
                                           FontSize="16" IsHitTestVisible="False" Focusable="False"  FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserLWMW10Test" Content=" :BYOD LVM W10 Test" Height="35" Width="170" BorderThickness="2" Grid.Row="3" Grid.Column="3"
+                            <CheckBox x:Name="CheckBox_UserLWMW10Test" Content=" :BYOD LVM W10 Test" Height="25" Width="170" BorderThickness="2" Grid.Row="3" Grid.Column="3"
                                           FontSize="16" IsHitTestVisible="False" Focusable="False"  FlowDirection="RightToLeft"/>
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="AIRWATCH" Grid.Column="1" Margin="2">
-                        <Grid>
+                        <Grid x:Name="Grid_UserAirWatch">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
                                 <RowDefinition/>
@@ -261,15 +263,15 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
 
-                            <CheckBox x:Name="CheckBox_UserAirWatchBasic" Content=" :AirWatch Podstawowy" Height="35" Width="190" BorderThickness="2" Grid.Row="0"
+                            <CheckBox x:Name="CheckBox_UserAirWatchBasic" Content=" :AirWatch Podstawowy" Height="25" Width="190" BorderThickness="2" Grid.Row="0"
                                           FontSize="16" IsHitTestVisible="False" Focusable="False" FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserAirWatchExp" Content=" :AirWatch Rozszerzony" Height="35" Width="190" BorderThickness="2" Grid.Row="1"
+                            <CheckBox x:Name="CheckBox_UserAirWatchExp" Content=" :AirWatch Rozszerzony" Height="25" Width="190" BorderThickness="2" Grid.Row="1"
                                           FontSize="16" IsHitTestVisible="False" Focusable="False"  FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserAirWatchVIP" Content=" :AirWatch VIP" Height="35" Width="190" BorderThickness="2" Grid.Row="2"
+                            <CheckBox x:Name="CheckBox_UserAirWatchVIP" Content=" :AirWatch VIP" Height="25" Width="190" BorderThickness="2" Grid.Row="2"
                                           FontSize="16" IsHitTestVisible="False" Focusable="False"  FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserAirWatchLync" Content=" :AirWatch Lync" Height="35" Width="190" BorderThickness="2" Grid.Row="3"
+                            <CheckBox x:Name="CheckBox_UserAirWatchLync" Content=" :AirWatch Lync" Height="25" Width="190" BorderThickness="2" Grid.Row="3"
                                           FontSize="16" IsHitTestVisible="False" Focusable="False"  FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserAirWatchSkype" Content=" :BYOD LVM W10 Test" Height="35" Width="190" BorderThickness="2" Grid.Row="4"
+                            <CheckBox x:Name="CheckBox_UserAirWatchSkype" Content=" :AirWatch Skype" Height="25" Width="190" BorderThickness="2" Grid.Row="4"
                                           FontSize="16" IsHitTestVisible="False" Focusable="False"  FlowDirection="RightToLeft"/>
                         </Grid>
                     </GroupBox>
@@ -287,7 +289,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <Grid Grid.Row="0" Margin="5,5,5,20">
+                <Grid Grid.Row="0" Margin="5,5,5,10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="55"/>
                         <RowDefinition Height="40"/>
@@ -366,13 +368,13 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <CheckBox x:Name="CheckBox_PC135" Content=" :(Port 135 (RCP" Height="35" Width="190" BorderThickness="2" Grid.Column="0"
+                            <CheckBox x:Name="CheckBox_PC135" Content=" :(Port 135 (RCP" Height="30" Width="190" BorderThickness="2" Grid.Column="0"
                                           FontSize="16" IsHitTestVisible="False" Focusable="False" FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_PC445" Content=" :(Port 445 (Sharing" Height="35" Width="190" BorderThickness="2" Grid.Column="1"
+                            <CheckBox x:Name="CheckBox_PC445" Content=" :(Port 445 (Sharing" Height="30" Width="190" BorderThickness="2" Grid.Column="1"
                                           FontSize="16" IsHitTestVisible="False" Focusable="False" FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_PC2701" Content=" :(Port 2701 (Remote" Height="35" Width="190" BorderThickness="2" Grid.Column="2"
+                            <CheckBox x:Name="CheckBox_PC2701" Content=" :(Port 2701 (Remote" Height="30" Width="190" BorderThickness="2" Grid.Column="2"
                                           FontSize="16" IsHitTestVisible="False" Focusable="False" FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_PC8081" Content=" :(Port 8081 (McAfee" Height="35" Width="190" BorderThickness="2" Grid.Column="3"
+                            <CheckBox x:Name="CheckBox_PC8081" Content=" :(Port 8081 (McAfee" Height="30" Width="190" BorderThickness="2" Grid.Column="3"
                                           FontSize="16" IsHitTestVisible="False" Focusable="False" FlowDirection="RightToLeft"/>
 
                         </Grid>

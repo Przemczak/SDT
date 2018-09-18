@@ -7,13 +7,14 @@
                         Title="Ustawienia"
                         TitleCaps="False"
                         SizeToContent="WidthAndHeight"
-                        ShowMaxRestoreButton="False" ResizeMode="CanMinimize" Width="550" Height="200"
+                        ShowMaxRestoreButton="False" ResizeMode="CanMinimize" Width="550" Height="300"
                         GlowBrush="{DynamicResource AccentColorBrush}"
                         WindowStartupLocation="CenterOwner">
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <GroupBox Header="Motyw aplikacji" Grid.Row="0" Margin="3">
@@ -36,7 +37,7 @@
                 </Grid>
 
                 <Grid Grid.Row="1">
-                    <ComboBox x:Name="ColorsSelect" Margin="2" BorderThickness="2" Height="30"
+                    <ComboBox x:Name="ColorsSelect" BorderThickness="2" Height="30"
                                     VerticalAlignment="Center"
                                     SelectionChanged="ColorsSelectOnSelectionChanged"
                                     ItemsSource="{Binding cols}"
@@ -46,6 +47,15 @@
                 </Grid>
             </Grid>
         </GroupBox>
+        <!--<GroupBox Header="Minimalizacja" Grid.Row="1" Margin="3">
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Controls:ToggleSwitch x:Name="TSmintotray" Header="Minimalizacja do Tray" OnLabel="Włączona" OffLabel="Wyłączona" Width="200" Height="70" Margin="1" Grid.Column="0" IsCheckedChanged="TSmintotray_IsCheckedChanged"/>
+            </Grid>
+        </GroupBox>-->
     </Grid>
     
 </Controls:MetroWindow>

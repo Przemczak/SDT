@@ -46,5 +46,17 @@ namespace SDT.Properties {
                 this["AccentC"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool MinimalizetoTray {
+            get {
+                return ((bool)(this["MinimalizetoTray"]));
+            }
+            set {
+                this["MinimalizetoTray"] = value;
+            }
+        }
     }
 }

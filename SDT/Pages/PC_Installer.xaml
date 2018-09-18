@@ -25,7 +25,7 @@
             </Grid.RowDefinitions>
 
             <Label Content="Instalator dla stacji:" FontSize="16" Height="30" Width="160" Grid.Row="0" FontWeight="Bold"/>
-            <TextBox x:Name="TextBox_PCadress" Height="35" BorderThickness="2" Margin="1,0,5,1" IsReadOnly="True" Grid.Row="1"
+            <TextBox x:Name="TextBox_PCadress" Height="35" BorderThickness="2" Margin="5,0,5,20" IsReadOnly="True" Grid.Row="1"
                                     TextAlignment="Center" FontSize="17"/>
         </Grid>
 
@@ -38,9 +38,9 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
 
-                <TextBox x:Name="TextBox_Instapath" Height="35" Width="250" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="1"
+                <TextBox x:Name="TextBox_Instapath" Height="35" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="1"
                                      TextAlignment="Center" FontSize="17"/>
-                <ComboBox x:Name="Combo_Instal" Margin="2" FontSize="15" BorderThickness="2"
+                <ComboBox x:Name="Combo_Instal" Margin="2" Width="250" FontSize="15" BorderThickness="2"
                                     SelectionChanged="ServerSelectOnSelectionChanged"
                                     ItemsSource="{Binding servs}"
                                     DisplayMemberPath="Key"

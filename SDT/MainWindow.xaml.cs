@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
+
 
 namespace SDT
 {
@@ -17,6 +17,8 @@ namespace SDT
         public MainWindow()
         {
             InitializeComponent();
+            //Settings.TrayIco TI;
+            //TI = new Settings.TrayIco(this);
 
             try
             {
@@ -36,6 +38,62 @@ namespace SDT
             }
         }
 
+        /// <summary>
+        /// Clear Textboxes and Checkboxes in User Tab
+        /// </summary>
+        private void ClearBoxes()
+        {
+            foreach (Control c in Grid_UserAD.Children)
+            {
+                if (c is TextBox && c != null) { ((TextBox)c).Text = string.Empty; }
+            }
+
+            foreach (Control c in Grid_UserUser.Children)
+            {
+                if (c is TextBox && c != null) { ((TextBox)c).Text = string.Empty; }
+            }
+
+            foreach (Control c in Grid_UserMail.Children)
+            {
+                if (c is TextBox && c != null) { ((TextBox)c).Text = string.Empty; }
+            }
+
+            foreach (Control c in Grid_UserMailBPTP.Children)
+            {
+                if (c is TextBox && c != null) { ((TextBox)c).Text = string.Empty; }
+            }
+
+            foreach (Control c in Grid_UserDev.Children)
+            {
+                if (c is TextBox && c != null) { ((TextBox)c).Text = string.Empty; }
+            }
+
+            foreach (Control c in Grid_UserMailC.Children)
+            {
+                if (c is CheckBox && c != null) { ((CheckBox)c).IsChecked = false; }
+            }
+
+            foreach (Control c in Grid_UserAccess.Children)
+            {
+                if (c is CheckBox && c != null) { ((CheckBox)c).IsChecked = false; }
+            }
+
+            foreach (Control c in Grid_UserDev.Children)
+            {
+                if (c is CheckBox && c != null) { ((CheckBox)c).IsChecked = false; }
+            }
+
+            foreach (Control c in Grid_UserBYOD.Children)
+            {
+                if (c is CheckBox && c != null) { ((CheckBox)c).IsChecked = false; }
+            }
+
+            foreach (Control c in Grid_UserAirWatch.Children)
+            {
+                if (c is CheckBox && c != null) { ((CheckBox)c).IsChecked = false; }
+            }
+        }
+
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
@@ -47,8 +105,9 @@ namespace SDT
             Properties.Settings.Default.Save();
         }
 
-
-
+        /// <summary>
+        /// Open Info page
+        /// </summary>
         private void Button_Info_Click(object sender, RoutedEventArgs e)
         {
             Information sh = new Information
@@ -58,6 +117,9 @@ namespace SDT
             sh.Show();
         }
 
+        /// <summary>
+        /// Open Settings page
+        /// </summary>
         private void Click_Button_Settings(object sender, RoutedEventArgs e)
         {
             SettingsPage sp = new SettingsPage
@@ -67,21 +129,13 @@ namespace SDT
             sp.Show();
         }
 
+
         /// <summary>
         /// User (User TAB)
         /// </summary>
         private void Button_UserCheck_Click(object sender, RoutedEventArgs e)
         {
-            //foreach (Control c in Grid_User.Children)
-            //{
-            //    if (c is TextBox && c != null)
-            //    {
-            //        if (c.Name != "TextBox_UserLoginIn")
-            //            ((TextBox)c).Text = String.Empty;
-            //        CheckBox_UserPrintDeny.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFCCCCCC"));
-            //        CheckBox_UserMailAct.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFCCCCCC"));
-            //    }
-            //}
+            ClearBoxes();
 
             TextBox_UserLoginIn.Text = string.Join("", TextBox_UserLoginIn.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
             if (string.IsNullOrWhiteSpace(TextBox_UserLoginIn.Text))
@@ -95,6 +149,7 @@ namespace SDT
             User us = new User(this);
             us.CheckAD(TextBox_UserLoginIn, WaitBarUser);
         }
+
 
         /// <summary>
         /// PC (PC TAB)
@@ -229,6 +284,7 @@ namespace SDT
             }
         }
 
+
         /// <summary>
         /// Scripts (List in Button_Scripts_Click)
         /// </summary>
@@ -260,18 +316,19 @@ namespace SDT
             pecs.BitLocker(TextBox_PCin, WaitBarPC);
         }
 
-        private void Button_IEFix_Click(object sender, RoutedEventArgs e)
+        private async void Button_IEFix_Click(object sender, RoutedEventArgs e)
         {
             TextBox_PCin.Text = string.Join("", TextBox_PCin.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
             if (string.IsNullOrWhiteSpace(TextBox_PCin.Text))
             {
                 var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
                 if (window != null)
-                    window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
+                   await window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
                 return;
             }
             PC_Scripts pecs = new PC_Scripts(this);
-            pecs.IEFix(TextBox_PCin);
+            await pecs.IEFix(TextBox_PCin);
         }
+
     }
 }
