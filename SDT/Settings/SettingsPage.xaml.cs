@@ -44,11 +44,11 @@ namespace SDT
             ColorsSelect.SelectedValue = "Value";
         }
 
-        private readonly MainWindow _MetroWindow;
+        private MainWindow mainWindow;
 
-        public SettingsPage(MainWindow MetroWindow)
+        public SettingsPage(MainWindow MetroWindow): this()
         {
-            _MetroWindow = MetroWindow;
+            mainWindow = MetroWindow;
         }
 
         /// <summary>
@@ -102,7 +102,5 @@ namespace SDT
                 return;
             }
         }
-
-
     }
 }

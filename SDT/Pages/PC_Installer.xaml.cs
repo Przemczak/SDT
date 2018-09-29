@@ -81,7 +81,7 @@ namespace SDT
         /// </summary>
         public async void Button_Insta_Click(object sender, RoutedEventArgs e)
         {
-            PC pec = new PC();
+            Services.PC pec = new Services.PC();
             await CopyDirec();
 
             if (!string.IsNullOrWhiteSpace(TextBox_Instapath.Text))
@@ -121,7 +121,7 @@ namespace SDT
         /// </summary>
         private async void Button_InstaCopy_Click(object sender, RoutedEventArgs e)
         {
-            PC pec = new PC();
+            Services.PC pec = new Services.PC();
             var pingcheck = await pec.Ping(TextBox_PCadress);
             if (pingcheck)
             {
@@ -141,7 +141,7 @@ namespace SDT
         /// </summary>
         private async void Button_InstaTemp_Click(object sender, RoutedEventArgs e)
         {
-            PC pec = new PC();
+            Services.PC pec = new Services.PC();
             var pingcheck = await pec.Ping(TextBox_PCadress);
             if (pingcheck)
             {
@@ -171,7 +171,7 @@ namespace SDT
         /// </summary>
         private async void Button_InstaClearTemp_Click(object sender, RoutedEventArgs e)
         {
-            PC pec = new PC();
+            Services.PC pec = new Services.PC();
             var pingcheck = await pec.Ping(TextBox_PCadress);
             if (pingcheck)
             {

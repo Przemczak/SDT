@@ -3,9 +3,9 @@ using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-
 
 namespace SDT
 {
@@ -14,28 +14,19 @@ namespace SDT
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
+        Regex REGEX_TP = new Regex(@"(TP[a-zA-Z0-9]{12})", RegexOptions.Compiled);
+        Regex REGEX_OPL = new Regex(@"(OPL[a-zA-Z0-9]{12})", RegexOptions.Compiled);
+        Regex REGEX_FRA = new Regex(@"(FRA[a-zA-Z0-9]{10})", RegexOptions.Compiled);
+        Regex REGEX_WTG = new Regex(@"(WTG[a-zA-Z0-9]{12})", RegexOptions.Compiled);
+        Regex REGEX_BHD = new Regex(@"(BHD[a-zA-Z0-9]{11})", RegexOptions.Compiled);
+        Regex REGEX_IP = new Regex(@"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})", RegexOptions.Compiled);
+
         public MainWindow()
         {
             InitializeComponent();
-            //Settings.TrayIco TI;
-            //TI = new Settings.TrayIco(this);
-
-            try
-            {
-                var newAccent = Properties.Settings.Default.AccentC;
-                var newTheme = Properties.Settings.Default.ThemeC;
-
-                ThemeManager.ChangeAppStyle(Application.Current,
-                    ThemeManager.GetAccent(newAccent),
-                    ThemeManager.GetAppTheme(newTheme));
-            }
-            catch (Exception ex)
-            {
-                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
-                if (window != null)
-                    window.ShowMessageAsync("Błąd!", ex.Message);
-                return;
-            }
+            StartListeningForClipboardChange();
+            ThemeSettingsLoad();
+            Helpers.TrayIcon.Tray(this);
         }
 
         /// <summary>
@@ -70,12 +61,12 @@ namespace SDT
 
             foreach (Control c in Grid_UserMailC.Children)
             {
-                if (c is CheckBox && c != null) { ((CheckBox)c).IsChecked = false; }
+                if (c is CheckBox && c != null) { ((CheckBox)c).IsChecked = false; ((CheckBox)c).ClearValue(CheckBox.ForegroundProperty); }
             }
 
             foreach (Control c in Grid_UserAccess.Children)
             {
-                if (c is CheckBox && c != null) { ((CheckBox)c).IsChecked = false; }
+                if (c is CheckBox && c != null) { ((CheckBox)c).IsChecked = false; ((CheckBox)c).ClearValue(CheckBox.ForegroundProperty); }
             }
 
             foreach (Control c in Grid_UserDev.Children)
@@ -92,17 +83,26 @@ namespace SDT
             {
                 if (c is CheckBox && c != null) { ((CheckBox)c).IsChecked = false; }
             }
+
+
         }
 
-        protected override void OnClosed(EventArgs e)
+        public void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            Helpers.TrayIcon.disposeico();
+
+            Properties.Settings.Default.Save();
+
             base.OnClosed(e);
             Application.Current.Shutdown();
         }
 
-        private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void StartListeningForClipboardChange()
         {
-            Properties.Settings.Default.Save();
+            Helpers.ClipboardNotification.ClipboardUpdate += (o, e) =>
+            {
+               onClipboardChanged(Clipboard.GetText());
+            };
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace SDT
         /// </summary>
         private void Click_Button_Settings(object sender, RoutedEventArgs e)
         {
-            SettingsPage sp = new SettingsPage
+            SettingsPage sp = new SettingsPage(this)
             {
                 Owner = this, WindowStartupLocation = WindowStartupLocation.CenterOwner
             };
@@ -146,7 +146,7 @@ namespace SDT
                 return;
             }
 
-            User us = new User(this);
+            Services.User us = new Services.User(this);
             us.CheckAD(TextBox_UserLoginIn, WaitBarUser);
         }
 
@@ -164,7 +164,7 @@ namespace SDT
                     await window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
                 return;
             }
-            PC pec = new PC(this);
+            Services.PC pec = new Services.PC(this);
             await pec.Ping(TextBox_PCin, WaitBarPC);
         }
 
@@ -179,7 +179,7 @@ namespace SDT
                 return;
             }
 
-            PC pec = new PC(this);
+            Services.PC pec = new Services.PC(this);
             pec.Sharing(TextBox_PCin, WaitBarPC);
         }
 
@@ -194,7 +194,7 @@ namespace SDT
                 return;
             }
 
-            PC pec = new PC(this);
+            Services.PC pec = new Services.PC(this);
             pec.Cmrcviewer(TextBox_PCin, WaitBarPC);
         }
         
@@ -209,7 +209,7 @@ namespace SDT
                 return;
             }
 
-            PC pec = new PC(this);
+            Services.PC pec = new Services.PC(this);
             pec.PCinfo(TextBox_PCin, WaitBarPC);
         }
 
@@ -232,7 +232,7 @@ namespace SDT
                 return;
             }
 
-            PC pec = new PC(this);
+            Services.PC pec = new Services.PC(this);
             pec.PsExecRUN(TextBox_PCin, WaitBarPC);
         }
 
@@ -248,7 +248,7 @@ namespace SDT
             }
             else
             {
-                PC pec = new PC();
+                Services.PC pec = new Services.PC();
                 var pscheck = pec.PsExecCheck();
                 if (pscheck)
                 {
@@ -279,9 +279,24 @@ namespace SDT
             }
             else
             {
-                PC pec = new PC(this);
+                Services.PC pec = new Services.PC(this);
                 await pec.PortCheck(TextBox_PCin, WaitBarPC);
             }
+        }
+
+        private async void Button_PCpingT_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox_PCin.Text = string.Join("", TextBox_PCin.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
+            if (string.IsNullOrWhiteSpace(TextBox_PCin.Text))
+            {
+                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
+                if (window != null)
+                    await window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
+                return;
+            }
+
+            Services.PC pec = new Services.PC(this);
+            pec.PingT(TextBox_PCin);
         }
 
 
@@ -298,7 +313,7 @@ namespace SDT
                     window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
                 return;
             }
-            PC_Scripts pecs = new PC_Scripts(this);
+            Services.PC_Scripts pecs = new Services.PC_Scripts(this);
             pecs.GPUpdate(TextBox_PCin, WaitBarPC);
         }
 
@@ -312,7 +327,7 @@ namespace SDT
                     window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
                 return;
             }
-            PC_Scripts pecs = new PC_Scripts(this);
+            Services.PC_Scripts pecs = new Services.PC_Scripts(this);
             pecs.BitLocker(TextBox_PCin, WaitBarPC);
         }
 
@@ -326,9 +341,195 @@ namespace SDT
                    await window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
                 return;
             }
-            PC_Scripts pecs = new PC_Scripts(this);
-            await pecs.IEFix(TextBox_PCin);
+            Services.PC_Scripts pecs = new Services.PC_Scripts(this);
+            pecs.IEFix(TextBox_PCin);
         }
 
+        private async void Button_SpoolReset_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox_PCin.Text = string.Join("", TextBox_PCin.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
+            if (string.IsNullOrWhiteSpace(TextBox_PCin.Text))
+            {
+                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
+                if (window != null)
+                    await window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
+                return;
+            }
+            Services.PC_Scripts pecs = new Services.PC_Scripts(this);
+            pecs.SpoolerReset(TextBox_PCin, WaitBarPC);
+        }
+
+        /// <summary>
+        /// Theme load settings
+        /// </summary>
+        private void ThemeSettingsLoad()
+        {
+            try
+            {
+                var newAccent = Properties.Settings.Default.AccentC;
+                var newTheme = Properties.Settings.Default.ThemeC;
+
+                ThemeManager.ChangeAppStyle(Application.Current,
+                    ThemeManager.GetAccent(newAccent),
+                    ThemeManager.GetAppTheme(newTheme));
+            }
+            catch (Exception ex)
+            {
+                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
+                if (window != null)
+                    window.ShowMessageAsync("Błąd!", ex.Message);
+                return;
+            }
+        }
+
+        /// <summary>
+        /// Clipboard results
+        /// </summary>
+        public void onClipboardChanged(string clipboardContents)
+        {
+            /*
+                1. TPxxxxxxxxxxxx - 14 characters, only alphanumeric
+                2. OPLxxxxxxxxxxxx - 15 characters, only alphanumeric
+                3. FRAxxxxxxxxxx - 13 characters, only alphanumeric
+                4. WTGxxxxxxxxxxxx - 15 characters, only alphanumeric
+                5. BHDxxxxxxxxxxx - 14 characters, only alphanumeric
+                6. xxx.xxx.xxx.xxx - Address IP. Numerical characters and "."
+            */
+
+            {
+                Match m = REGEX_TP.Match(clipboardContents);
+                if (m.Success)
+                {
+                    process_TP(m.Groups[1].Value);
+                }
+            }
+
+            {
+                Match m = REGEX_OPL.Match(clipboardContents);
+                if (m.Success)
+                {
+                    process_OPL(m.Groups[1].Value);
+                }
+            }
+
+            {
+                Match m = REGEX_FRA.Match(clipboardContents);
+                if (m.Success)
+                {
+                    process_FRA(m.Groups[1].Value);
+                }
+            }
+
+            {
+                Match m = REGEX_WTG.Match(clipboardContents);
+                if (m.Success)
+                {
+                    process_WTG(m.Groups[1].Value);
+                }
+            }
+
+            {
+                Match m = REGEX_BHD.Match(clipboardContents);
+                if (m.Success)
+                {
+                    process_BHD(m.Groups[1].Value);
+                }
+            }
+
+            {
+                Match m = REGEX_IP.Match(clipboardContents);
+                if (m.Success)
+                {
+                    process_IP(m.Groups[1].Value);
+                }
+            }
+        }
+        private void process_TP(string value)
+        {
+            TextBox_PCin.Text = value;
+        }
+        private void process_OPL(string value)
+        {
+            TextBox_PCin.Text = value;
+        }
+        private void process_FRA(string value)
+        {
+            TextBox_PCin.Text = value;
+        }
+        private void process_WTG(string value)
+        {
+            TextBox_PCin.Text = value;
+        }
+        private void process_BHD(string value)
+        {
+            TextBox_PCin.Text = value;
+        }
+        private void process_IP(string value)
+        {
+            TextBox_PCin.Text = value;
+        }
+
+        /// <summary>
+        /// Check IP ping from Clipboard
+        /// </summary>
+        private async void TextBox_PCin_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string pcaddress = TextBox_PCin.Text;
+
+            if(REGEX_TP.IsMatch(TextBox_PCin.Text))
+            {
+                Services.PC pec = new Services.PC();
+                int pingcheck = await pec.PingAuto(TextBox_PCin, WaitBarPC);
+
+                if(pingcheck == 1) { Helpers.TrayIcon.BalloonPingOnline(pcaddress); }
+                else if(pingcheck == 2) { Helpers.TrayIcon.BalloonPingOffline(pcaddress); }
+            }
+
+            else if(REGEX_OPL.IsMatch(TextBox_PCin.Text))
+            {
+                Services.PC pec = new Services.PC();
+                int pingcheck = await pec.PingAuto(TextBox_PCin, WaitBarPC);
+
+                if (pingcheck == 1) { Helpers.TrayIcon.BalloonPingOnline(pcaddress); }
+                else if (pingcheck == 2) { Helpers.TrayIcon.BalloonPingOffline(pcaddress); }
+            }
+
+            else if(REGEX_FRA.IsMatch(TextBox_PCin.Text))
+            {
+                Services.PC pec = new Services.PC();
+                int pingcheck = await pec.PingAuto(TextBox_PCin, WaitBarPC);
+
+                if (pingcheck == 1) { Helpers.TrayIcon.BalloonPingOnline(pcaddress); }
+                else if (pingcheck == 2) { Helpers.TrayIcon.BalloonPingOffline(pcaddress); }
+            }
+
+            else if(REGEX_WTG.IsMatch(TextBox_PCin.Text))
+            {
+                Services.PC pec = new Services.PC();
+                int pingcheck = await pec.PingAuto(TextBox_PCin, WaitBarPC);
+
+                if (pingcheck == 1) { Helpers.TrayIcon.BalloonPingOnline(pcaddress); }
+                else if (pingcheck == 2) { Helpers.TrayIcon.BalloonPingOffline(pcaddress); }
+            }
+
+            else if (REGEX_BHD.IsMatch(TextBox_PCin.Text))
+            {
+                Services.PC pec = new Services.PC();
+                int pingcheck = await pec.PingAuto(TextBox_PCin, WaitBarPC);
+
+                if (pingcheck == 1) { Helpers.TrayIcon.BalloonPingOnline(pcaddress); }
+                else if (pingcheck == 2) { Helpers.TrayIcon.BalloonPingOffline(pcaddress); }
+            }
+
+            else if(REGEX_IP.IsMatch(TextBox_PCin.Text))
+            {
+                Services.PC pec = new Services.PC();
+                int pingcheck = await pec.PingAutoIP(TextBox_PCin, WaitBarPC);
+
+                if (pingcheck == 1) { Helpers.TrayIcon.BalloonPingOnline(pcaddress); }
+                else if (pingcheck == 2) { Helpers.TrayIcon.BalloonPingOffline(pcaddress); }
+            }
+        }
     }
 }
+

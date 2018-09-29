@@ -15,7 +15,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace SDT
+namespace SDT.Services
 {
     public class PC
     {
@@ -100,6 +100,98 @@ namespace SDT
                 if (window != null)
                     await window.ShowMessageAsync("Błąd!", e.Message);
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Check PC ping (modified for Clipboard Monitor) only netbios
+        /// return int: 1 = online = 2, offline, 3 = error
+        /// </summary>
+        public async Task<int> PingAuto(TextBox TextBox_PCin, ProgressBar WaitBarPC)
+        {
+            try
+            {
+                string ipa = TextBox_PCin.Text;
+                WaitBarPC.Visibility = Visibility.Visible;
+
+                var PingOdp = await Task.Run(() =>
+                {
+                    Ping PingZapytanie = new Ping();
+                    return PingZapytanie.Send(ipa);
+                });
+
+                if (PingOdp.Status == IPStatus.Success)
+                {
+                    TextBox_PCin.Background = new SolidColorBrush(Colors.Green);
+                    WaitBarPC.Visibility = Visibility.Hidden;
+                    return 1;
+                }
+                else
+                {
+                    TextBox_PCin.Background = new SolidColorBrush(Colors.Red);
+                    WaitBarPC.Visibility = Visibility.Hidden;
+                    return 2;
+                }
+            }
+            catch (Exception e)
+            {
+                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
+                if (window != null)
+                    await window.ShowMessageAsync("Błąd!", e.Message);
+                WaitBarPC.Visibility = Visibility.Hidden;
+                return 3;
+            }
+        }
+
+        /// <summary>
+        /// Check PC ping + IP parse (modified for Clipboard Monitor) only for IP
+        /// return int: 1 = online = 2, offline, 3 = error
+        /// </summary>
+        public async Task<int> PingAutoIP(TextBox TextBox_PCin, ProgressBar WaitBarPC)
+        {
+            try
+            {
+                WaitBarPC.Visibility = Visibility.Visible;
+                IPAddress ipa = null;
+
+                if (IPAddress.TryParse(TextBox_PCin.Text, out ipa))
+                {
+                    var PingOdp = await Task.Run(() =>
+                    {
+                        Ping PingZapytanie = new Ping();
+                        return PingZapytanie.Send(ipa);
+                    });
+
+                    if (PingOdp.Status == IPStatus.Success)
+                    {
+                        TextBox_PCin.Background = new SolidColorBrush(Colors.Green);
+                        WaitBarPC.Visibility = Visibility.Hidden;
+                        return 1;
+                    }
+                    else
+                    {
+                        TextBox_PCin.Background = new SolidColorBrush(Colors.Red);
+                        WaitBarPC.Visibility = Visibility.Hidden;
+                        return 2;
+                    }
+                }
+                else
+                {
+                    var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
+                    if (window != null)
+                        await window.ShowMessageAsync("Błąd!", "Błedy zakres adresacji IPv4");
+                    WaitBarPC.Visibility = Visibility.Hidden;
+                    return 3;
+                }
+
+            }
+            catch (Exception e)
+            {
+                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
+                if (window != null)
+                    await window.ShowMessageAsync("Błąd!", e.Message);
+                WaitBarPC.Visibility = Visibility.Hidden;
+                return 3;
             }
         }
 
@@ -433,5 +525,15 @@ namespace SDT
                 }
             }
         }
+
+        /// <summary>
+        /// CMD ping with -t
+        /// </summary>
+        public void PingT(TextBox TextBox_PCin)
+        {
+            string CmdTxt = "/C ping " + TextBox_PCin.Text + " -t";
+            Process.Start("CMD.exe", CmdTxt);
+        }
+
     }
 }

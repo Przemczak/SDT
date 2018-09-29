@@ -47,15 +47,6 @@
                 </Grid>
             </Grid>
         </GroupBox>
-        <!--<GroupBox Header="Minimalizacja" Grid.Row="1" Margin="3">
-            <Grid >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-
-                <Controls:ToggleSwitch x:Name="TSmintotray" Header="Minimalizacja do Tray" OnLabel="Włączona" OffLabel="Wyłączona" Width="200" Height="70" Margin="1" Grid.Column="0" IsCheckedChanged="TSmintotray_IsCheckedChanged"/>
-            </Grid>
-        </GroupBox>-->
     </Grid>
     
 </Controls:MetroWindow>

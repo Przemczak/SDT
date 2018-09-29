@@ -4,11 +4,13 @@ using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.ServiceProcess;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace SDT
+namespace SDT.Services
 {
     class PC_Scripts
     {
@@ -97,7 +99,7 @@ namespace SDT
         /// <summary>
         /// IE Fix (Disable autostart)
         /// </summary>
-        public async Task IEFix(TextBox TextBox_PCin)
+        public async void IEFix(TextBox TextBox_PCin)
         {
             string ips = TextBox_PCin.Text;
             string subkey = @"SYSTEM\CurrentControlSet\Services\\NlaSvc\Parameters\Internet";
@@ -124,6 +126,58 @@ namespace SDT
                 return;
             }
         }
-            
+
+        /// <summary>
+        /// Spooler Reset/Start
+        /// </summary>
+        public async void SpoolerReset(TextBox TextBox_PCin, ProgressBar WaitBarPC)
+        {
+            WaitBarPC.Visibility = Visibility.Visible;
+            string ips = TextBox_PCin.Text;
+
+            try
+            {
+                ServiceController sc = new ServiceController("Spooler", ips);
+                if (sc.Status == ServiceControllerStatus.Stopped)
+                {
+                    await Task.Run(() =>
+                    {
+                        sc.Start();
+                    });
+                    WaitBarPC.Visibility = Visibility.Hidden;
+
+                    var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
+                    if (window != null)
+                        await window.ShowMessageAsync("Informacja", "Uruchomiono Bufor Wydruku na stacji.");
+                    return;
+                }
+                else
+                {
+                    await Task.Run(() =>
+                    {
+                        sc.Stop();
+                        Thread.Sleep(3000);
+                        sc.Start();
+                    });
+                    WaitBarPC.Visibility = Visibility.Hidden;
+
+                    var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
+                    if (window != null)
+                        await window.ShowMessageAsync("Informacja", "Zrestartowano Bufor Wydruku na stacji.");
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
+                if (window != null)
+                    await window.ShowMessageAsync("Bład!", ex.Message);
+                return;
+            }
+        }
+        /// <summary>
+        /// Old IE settings in registry
+        /// </summary>
+        
     }
 }
