@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace SDT.Helpers
+namespace SDT.Services
 {
     public sealed class ClipboardNotification
     {

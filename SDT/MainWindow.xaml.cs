@@ -1,9 +1,9 @@
 ﻿using MahApps.Metro;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
+using SDT.Helpers;
 using System;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -14,242 +14,167 @@ namespace SDT
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
-        Regex REGEX_TP = new Regex(@"(TP[a-zA-Z0-9]{12})", RegexOptions.Compiled);
-        Regex REGEX_OPL = new Regex(@"(OPL[a-zA-Z0-9]{12})", RegexOptions.Compiled);
-        Regex REGEX_FRA = new Regex(@"(FRA[a-zA-Z0-9]{10})", RegexOptions.Compiled);
-        Regex REGEX_WTG = new Regex(@"(WTG[a-zA-Z0-9]{12})", RegexOptions.Compiled);
-        Regex REGEX_BHD = new Regex(@"(BHD[a-zA-Z0-9]{11})", RegexOptions.Compiled);
-        Regex REGEX_IP = new Regex(@"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})", RegexOptions.Compiled);
+        private readonly Services.User _user;
+        private readonly Services.PC _pc;
+        private readonly Services.PC_Scripts _pc_scripts;
 
         public MainWindow()
         {
             InitializeComponent();
-            StartListeningForClipboardChange();
+
+            // Load theme color and application color settings
             ThemeSettingsLoad();
-            Helpers.TrayIcon.Tray(this);
-        }
 
-        /// <summary>
-        /// Clear Textboxes and Checkboxes in User Tab
-        /// </summary>
-        private void ClearBoxes()
-        {
-            foreach (Control c in Grid_UserAD.Children)
-            {
-                if (c is TextBox && c != null) { ((TextBox)c).Text = string.Empty; }
-            }
+            // Load tray icon
+            TrayIcon.Tray(this);
 
-            foreach (Control c in Grid_UserUser.Children)
-            {
-                if (c is TextBox && c != null) { ((TextBox)c).Text = string.Empty; }
-            }
+            // Load clipboard listening and load Regex
+            StartListeningForClipboardChange();
 
-            foreach (Control c in Grid_UserMail.Children)
-            {
-                if (c is TextBox && c != null) { ((TextBox)c).Text = string.Empty; }
-            }
-
-            foreach (Control c in Grid_UserMailBPTP.Children)
-            {
-                if (c is TextBox && c != null) { ((TextBox)c).Text = string.Empty; }
-            }
-
-            foreach (Control c in Grid_UserDev.Children)
-            {
-                if (c is TextBox && c != null) { ((TextBox)c).Text = string.Empty; }
-            }
-
-            foreach (Control c in Grid_UserMailC.Children)
-            {
-                if (c is CheckBox && c != null) { ((CheckBox)c).IsChecked = false; ((CheckBox)c).ClearValue(CheckBox.ForegroundProperty); }
-            }
-
-            foreach (Control c in Grid_UserAccess.Children)
-            {
-                if (c is CheckBox && c != null) { ((CheckBox)c).IsChecked = false; ((CheckBox)c).ClearValue(CheckBox.ForegroundProperty); }
-            }
-
-            foreach (Control c in Grid_UserDev.Children)
-            {
-                if (c is CheckBox && c != null) { ((CheckBox)c).IsChecked = false; }
-            }
-
-            foreach (Control c in Grid_UserBYOD.Children)
-            {
-                if (c is CheckBox && c != null) { ((CheckBox)c).IsChecked = false; }
-            }
-
-            foreach (Control c in Grid_UserAirWatch.Children)
-            {
-                if (c is CheckBox && c != null) { ((CheckBox)c).IsChecked = false; }
-            }
-
-
+            // Create instance of methods
+            _user = new Services.User(this);
+            _pc = new Services.PC(this);
+            _pc_scripts = new Services.PC_Scripts(this);
         }
 
         public void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Helpers.TrayIcon.disposeico();
+            // Dispose tray icon
+            TrayIcon.disposeico();
 
+            // Save settings
             Properties.Settings.Default.Save();
 
+            //Close all opened pages on exit
             base.OnClosed(e);
             Application.Current.Shutdown();
         }
 
-        private void StartListeningForClipboardChange()
-        {
-            Helpers.ClipboardNotification.ClipboardUpdate += (o, e) =>
-            {
-               onClipboardChanged(Clipboard.GetText());
-            };
-        }
-
         /// <summary>
-        /// Open Info page
-        /// </summary>
-        private void Button_Info_Click(object sender, RoutedEventArgs e)
-        {
-            Information sh = new Information
-            {
-                Owner = this, WindowStartupLocation = WindowStartupLocation.CenterOwner
-            };
-            sh.Show();
-        }
-
-        /// <summary>
-        /// Open Settings page
-        /// </summary>
-        private void Click_Button_Settings(object sender, RoutedEventArgs e)
-        {
-            SettingsPage sp = new SettingsPage(this)
-            {
-                Owner = this, WindowStartupLocation = WindowStartupLocation.CenterOwner
-            };
-            sp.Show();
-        }
-
-
-        /// <summary>
-        /// User (User TAB)
+        /// USER TAB
+        /// Check User Login
         /// </summary>
         private void Button_UserCheck_Click(object sender, RoutedEventArgs e)
         {
-            ClearBoxes();
+            //Clear Textboxes and Checkboxes in USER_TAB
+            MainHelpers.ClearBoxesUSERTAB(Grid_UserAD, Grid_UserUser, Grid_UserMail, Grid_UserMailBPTP, Grid_UserDev, Grid_UserMailC, Grid_UserAccess, Grid_UserBYOD, Grid_UserAirWatch);
 
-            TextBox_UserLoginIn.Text = string.Join("", TextBox_UserLoginIn.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
-            if (string.IsNullOrWhiteSpace(TextBox_UserLoginIn.Text))
-            {
-                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
-                if (window != null)
-                    window.ShowMessageAsync("Błąd!", "Podaj login użytkownika.");
-                return;
-            }
+            TextBox_UserLoginIn.Text = TextBox_UserLoginIn.Text.TrimStart().TrimEnd();
 
-            Services.User us = new Services.User(this);
-            us.CheckAD(TextBox_UserLoginIn, WaitBarUser);
+            bool CS = MainHelpers.CheckNullUSERTAB(TextBox_UserLoginIn);
+            if(CS)
+                _user.CheckAD(TextBox_UserLoginIn, WaitBarUser);
         }
 
-
         /// <summary>
-        /// PC (PC TAB)
+        /// PC TAB
+        /// Check PC ping
         /// </summary>
         private async void Button_PCping_Click(object sender, RoutedEventArgs e)
         {
-            TextBox_PCin.Text = string.Join("", TextBox_PCin.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
-            if (string.IsNullOrWhiteSpace(TextBox_PCin.Text))
-            {
-                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
-                if (window != null)
-                    await window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
-                return;
-            }
-            Services.PC pec = new Services.PC(this);
-            await pec.Ping(TextBox_PCin, WaitBarPC);
+            TextBox_PCin.Text = TextBox_PCin.Text.TrimStart().TrimEnd();
+
+            bool CS = MainHelpers.CheckNullPCTAB(TextBox_PCin);
+            if (CS)
+                await _pc.Ping(TextBox_PCin, WaitBarPC);
         }
 
+        /// <summary>
+        /// PC TAB
+        /// Run PC CMD Ping (-t)
+        /// </summary>
+        private void Button_PCpingT_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox_PCin.Text = TextBox_PCin.Text.TrimStart().TrimEnd();
+
+            bool CS = MainHelpers.CheckNullPCTAB(TextBox_PCin);
+            if (CS)
+                _pc.PingT(TextBox_PCin);
+        }
+
+        /// <summary>
+        /// PC TAB
+        /// Run Sharing C:\
+        /// </summary>
         private void Button_Sharing_Click(object sender, RoutedEventArgs e)
         {
-            TextBox_PCin.Text = string.Join("", TextBox_PCin.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
-            if (string.IsNullOrWhiteSpace(TextBox_PCin.Text))
-            {
-                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
-                if (window != null)
-                    window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
-                return;
-            }
+            TextBox_PCin.Text = TextBox_PCin.Text.TrimStart().TrimEnd();
 
-            Services.PC pec = new Services.PC(this);
-            pec.Sharing(TextBox_PCin, WaitBarPC);
+            bool CS = MainHelpers.CheckNullPCTAB(TextBox_PCin);
+            if (CS)
+                _pc.Sharing(TextBox_PCin, WaitBarPC);
         }
 
-        private void Button_RCV_Click(object sender, RoutedEventArgs e)
-        {
-            TextBox_PCin.Text = string.Join("", TextBox_PCin.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
-            if (string.IsNullOrWhiteSpace(TextBox_PCin.Text))
-            {
-                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
-                if (window != null)
-                    window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
-                return;
-            }
-
-            Services.PC pec = new Services.PC(this);
-            pec.Cmrcviewer(TextBox_PCin, WaitBarPC);
-        }
-        
+        /// <summary>
+        /// PC TAB
+        /// Check PC info
+        /// </summary>
         private void Button_PCinfo_Click(object sender, RoutedEventArgs e)
         {
-            TextBox_PCin.Text = string.Join("", TextBox_PCin.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
-            if (string.IsNullOrWhiteSpace(TextBox_PCin.Text))
-            {
-                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
-                if (window != null)
-                    window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
-                return;
-            }
+            //Clear Textboxes in PC_TAB(PC info)
+            MainHelpers.ClearBoxesPCTAB(Grid_PCInfo);
 
-            Services.PC pec = new Services.PC(this);
-            pec.PCinfo(TextBox_PCin, WaitBarPC);
+            TextBox_PCin.Text = TextBox_PCin.Text.TrimStart().TrimEnd();
+
+            bool CS = MainHelpers.CheckNullPCTAB(TextBox_PCin);
+            if (CS)
+                _pc.PCinfo(TextBox_PCin, WaitBarPC);
         }
 
-        private void Button_Scripts_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// PC TAB
+        /// Run RCV Client
+        /// </summary>
+        private void Button_RCV_Click(object sender, RoutedEventArgs e)
         {
-            (sender as Button).ContextMenu.IsEnabled = true;
-            (sender as Button).ContextMenu.PlacementTarget = (sender as Button);
-            (sender as Button).ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
-            (sender as Button).ContextMenu.IsOpen = true;
+            TextBox_PCin.Text = TextBox_PCin.Text.TrimStart().TrimEnd();
+
+            bool CS = MainHelpers.CheckNullPCTAB(TextBox_PCin);
+            if (CS)
+                _pc.Cmrcviewer(TextBox_PCin, WaitBarPC);
         }
 
-        private async void Button_PsExec_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// PC TAB
+        /// Check Ports
+        /// </summary>
+        private async void Button_PCPorts_Click(object sender, RoutedEventArgs e)
         {
-            TextBox_PCin.Text = string.Join("", TextBox_PCin.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
-            if (string.IsNullOrWhiteSpace(TextBox_PCin.Text))
-            {
-                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
-                if (window != null)
-                    await window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
-                return;
-            }
+            //Clear Checkboxes in PC_TAB(Ports)
+            MainHelpers.ClearBoxesPCTAB(Grid_PCPorts);
 
-            Services.PC pec = new Services.PC(this);
-            pec.PsExecRUN(TextBox_PCin, WaitBarPC);
+            TextBox_PCin.Text = TextBox_PCin.Text.TrimStart().TrimEnd();
+
+            bool CS = MainHelpers.CheckNullPCTAB(TextBox_PCin);
+            if (CS)
+                await _pc.PortCheck(TextBox_PCin, WaitBarPC);
         }
 
-        private async void Button_Insta_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// PC TAB
+        /// Run PsExec
+        /// </summary>
+        private void Button_PsExec_Click(object sender, RoutedEventArgs e)
         {
-            TextBox_PCin.Text = string.Join("", TextBox_PCin.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
-            if (string.IsNullOrWhiteSpace(TextBox_PCin.Text))
+            TextBox_PCin.Text = TextBox_PCin.Text.TrimStart().TrimEnd();
+
+            bool CS = MainHelpers.CheckNullPCTAB(TextBox_PCin);
+            if (CS)
+                _pc.PsExecRUN(TextBox_PCin, WaitBarPC);
+        }
+
+        /// <summary>
+        /// PC TAB
+        /// Run PsExec
+        /// </summary>
+        private void Button_Insta_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox_PCin.Text = TextBox_PCin.Text.TrimStart().TrimEnd();
+
+            bool CS = MainHelpers.CheckNullPCTAB(TextBox_PCin);
+            if (CS)
             {
-                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
-                if (window != null)
-                    await window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
-                return;
-            }
-            else
-            {
-                Services.PC pec = new Services.PC();
-                var pscheck = pec.PsExecCheck();
+                var pscheck = _pc.PsExecCheck();
                 if (pscheck)
                 {
                     PC_Installer PI = new PC_Installer(TextBox_PCin)
@@ -262,105 +187,69 @@ namespace SDT
             }
         }
 
-        private async void Button_PCPorts_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// PC TAB
+        /// Menu - Button Scripts
+        /// </summary>
+        private void Button_Scripts_Click(object sender, RoutedEventArgs e)
         {
-            CheckBox_PC135.IsChecked = false;
-            CheckBox_PC445.IsChecked = false;
-            CheckBox_PC2701.IsChecked = false;
-            CheckBox_PC8081.IsChecked = false;
-
-            TextBox_PCin.Text = string.Join("", TextBox_PCin.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
-            if (string.IsNullOrWhiteSpace(TextBox_PCin.Text))
-            {
-                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
-                if (window != null)
-                    await window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
-                return;
-            }
-            else
-            {
-                Services.PC pec = new Services.PC(this);
-                await pec.PortCheck(TextBox_PCin, WaitBarPC);
-            }
+            (sender as Button).ContextMenu.IsEnabled = true;
+            (sender as Button).ContextMenu.PlacementTarget = (sender as Button);
+            (sender as Button).ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+            (sender as Button).ContextMenu.IsOpen = true;
         }
-
-        private async void Button_PCpingT_Click(object sender, RoutedEventArgs e)
-        {
-            TextBox_PCin.Text = string.Join("", TextBox_PCin.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
-            if (string.IsNullOrWhiteSpace(TextBox_PCin.Text))
-            {
-                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
-                if (window != null)
-                    await window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
-                return;
-            }
-
-            Services.PC pec = new Services.PC(this);
-            pec.PingT(TextBox_PCin);
-        }
-
 
         /// <summary>
-        /// Scripts (List in Button_Scripts_Click)
+        /// PC TAB
+        /// Menu - Button Scripts (Scripts list)
         /// </summary>
         private void Button_GP_Click(object sender, RoutedEventArgs e)
         {
-            TextBox_PCin.Text = string.Join("", TextBox_PCin.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
-            if (string.IsNullOrWhiteSpace(TextBox_PCin.Text))
-            {
-                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
-                if (window != null)
-                    window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
-                return;
-            }
-            Services.PC_Scripts pecs = new Services.PC_Scripts(this);
-            pecs.GPUpdate(TextBox_PCin, WaitBarPC);
-        }
+            TextBox_PCin.Text = TextBox_PCin.Text.TrimStart().TrimEnd();
 
+            bool CS = MainHelpers.CheckNullPCTAB(TextBox_PCin);
+            if (CS)
+                _pc_scripts.GPUpdate(TextBox_PCin, WaitBarPC);
+        }
         private void Button_BitLocker_Click(object sender, RoutedEventArgs e)
         {
-            TextBox_PCin.Text = string.Join("", TextBox_PCin.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
-            if (string.IsNullOrWhiteSpace(TextBox_PCin.Text))
-            {
-                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
-                if (window != null)
-                    window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
-                return;
-            }
-            Services.PC_Scripts pecs = new Services.PC_Scripts(this);
-            pecs.BitLocker(TextBox_PCin, WaitBarPC);
-        }
+            TextBox_PCin.Text = TextBox_PCin.Text.TrimStart().TrimEnd();
 
-        private async void Button_IEFix_Click(object sender, RoutedEventArgs e)
-        {
-            TextBox_PCin.Text = string.Join("", TextBox_PCin.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
-            if (string.IsNullOrWhiteSpace(TextBox_PCin.Text))
-            {
-                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
-                if (window != null)
-                   await window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
-                return;
-            }
-            Services.PC_Scripts pecs = new Services.PC_Scripts(this);
-            pecs.IEFix(TextBox_PCin);
+            bool CS = MainHelpers.CheckNullPCTAB(TextBox_PCin);
+            if (CS)
+                _pc_scripts.BitLocker(TextBox_PCin, WaitBarPC);
         }
-
-        private async void Button_SpoolReset_Click(object sender, RoutedEventArgs e)
+        private void Button_IEFix_Click(object sender, RoutedEventArgs e)
         {
-            TextBox_PCin.Text = string.Join("", TextBox_PCin.Text.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
-            if (string.IsNullOrWhiteSpace(TextBox_PCin.Text))
-            {
-                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
-                if (window != null)
-                    await window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
-                return;
-            }
-            Services.PC_Scripts pecs = new Services.PC_Scripts(this);
-            pecs.SpoolerReset(TextBox_PCin, WaitBarPC);
+            TextBox_PCin.Text = TextBox_PCin.Text.TrimStart().TrimEnd();
+
+            bool CS = MainHelpers.CheckNullPCTAB(TextBox_PCin);
+            if (CS)
+                _pc_scripts.IEFix(TextBox_PCin);
+        }
+        private void Button_SpoolReset_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox_PCin.Text = TextBox_PCin.Text.TrimStart().TrimEnd();
+
+            bool CS = MainHelpers.CheckNullPCTAB(TextBox_PCin);
+            if (CS)
+                _pc_scripts.SpoolerReset(TextBox_PCin, WaitBarPC);
         }
 
         /// <summary>
-        /// Theme load settings
+        /// Start Listening from Clipboard
+        /// </summary>
+        private void StartListeningForClipboardChange()
+        {
+            var helper = new ClipboardHelpers(this);
+            Services.ClipboardNotification.ClipboardUpdate += (o, e) =>
+            {
+                helper.OnClipboardChanged(Clipboard.GetText());
+            };
+        }
+
+        /// <summary>
+        /// Load Theme/Color Settings
         /// </summary>
         private void ThemeSettingsLoad()
         {
@@ -383,152 +272,36 @@ namespace SDT
         }
 
         /// <summary>
-        /// Clipboard results
+        /// Open Information Page
         /// </summary>
-        public void onClipboardChanged(string clipboardContents)
+        private void Button_Info_Click(object sender, RoutedEventArgs e)
         {
-            /*
-                1. TPxxxxxxxxxxxx - 14 characters, only alphanumeric
-                2. OPLxxxxxxxxxxxx - 15 characters, only alphanumeric
-                3. FRAxxxxxxxxxx - 13 characters, only alphanumeric
-                4. WTGxxxxxxxxxxxx - 15 characters, only alphanumeric
-                5. BHDxxxxxxxxxxx - 14 characters, only alphanumeric
-                6. xxx.xxx.xxx.xxx - Address IP. Numerical characters and "."
-            */
-
+            Information sh = new Information
             {
-                Match m = REGEX_TP.Match(clipboardContents);
-                if (m.Success)
-                {
-                    process_TP(m.Groups[1].Value);
-                }
-            }
-
-            {
-                Match m = REGEX_OPL.Match(clipboardContents);
-                if (m.Success)
-                {
-                    process_OPL(m.Groups[1].Value);
-                }
-            }
-
-            {
-                Match m = REGEX_FRA.Match(clipboardContents);
-                if (m.Success)
-                {
-                    process_FRA(m.Groups[1].Value);
-                }
-            }
-
-            {
-                Match m = REGEX_WTG.Match(clipboardContents);
-                if (m.Success)
-                {
-                    process_WTG(m.Groups[1].Value);
-                }
-            }
-
-            {
-                Match m = REGEX_BHD.Match(clipboardContents);
-                if (m.Success)
-                {
-                    process_BHD(m.Groups[1].Value);
-                }
-            }
-
-            {
-                Match m = REGEX_IP.Match(clipboardContents);
-                if (m.Success)
-                {
-                    process_IP(m.Groups[1].Value);
-                }
-            }
-        }
-        private void process_TP(string value)
-        {
-            TextBox_PCin.Text = value;
-        }
-        private void process_OPL(string value)
-        {
-            TextBox_PCin.Text = value;
-        }
-        private void process_FRA(string value)
-        {
-            TextBox_PCin.Text = value;
-        }
-        private void process_WTG(string value)
-        {
-            TextBox_PCin.Text = value;
-        }
-        private void process_BHD(string value)
-        {
-            TextBox_PCin.Text = value;
-        }
-        private void process_IP(string value)
-        {
-            TextBox_PCin.Text = value;
+                Owner = this, WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+            sh.Show();
         }
 
         /// <summary>
-        /// Check IP ping from Clipboard
+        /// Open Settings Page
         /// </summary>
-        private async void TextBox_PCin_TextChanged(object sender, TextChangedEventArgs e)
+        private void Click_Button_Settings(object sender, RoutedEventArgs e)
         {
-            string pcaddress = TextBox_PCin.Text;
-
-            if(REGEX_TP.IsMatch(TextBox_PCin.Text))
+            SettingsPage sp = new SettingsPage(this)
             {
-                Services.PC pec = new Services.PC();
-                int pingcheck = await pec.PingAuto(TextBox_PCin, WaitBarPC);
+                Owner = this, WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+            sp.Show();
+        }
 
-                if(pingcheck == 1) { Helpers.TrayIcon.BalloonPingOnline(pcaddress); }
-                else if(pingcheck == 2) { Helpers.TrayIcon.BalloonPingOffline(pcaddress); }
-            }
-
-            else if(REGEX_OPL.IsMatch(TextBox_PCin.Text))
-            {
-                Services.PC pec = new Services.PC();
-                int pingcheck = await pec.PingAuto(TextBox_PCin, WaitBarPC);
-
-                if (pingcheck == 1) { Helpers.TrayIcon.BalloonPingOnline(pcaddress); }
-                else if (pingcheck == 2) { Helpers.TrayIcon.BalloonPingOffline(pcaddress); }
-            }
-
-            else if(REGEX_FRA.IsMatch(TextBox_PCin.Text))
-            {
-                Services.PC pec = new Services.PC();
-                int pingcheck = await pec.PingAuto(TextBox_PCin, WaitBarPC);
-
-                if (pingcheck == 1) { Helpers.TrayIcon.BalloonPingOnline(pcaddress); }
-                else if (pingcheck == 2) { Helpers.TrayIcon.BalloonPingOffline(pcaddress); }
-            }
-
-            else if(REGEX_WTG.IsMatch(TextBox_PCin.Text))
-            {
-                Services.PC pec = new Services.PC();
-                int pingcheck = await pec.PingAuto(TextBox_PCin, WaitBarPC);
-
-                if (pingcheck == 1) { Helpers.TrayIcon.BalloonPingOnline(pcaddress); }
-                else if (pingcheck == 2) { Helpers.TrayIcon.BalloonPingOffline(pcaddress); }
-            }
-
-            else if (REGEX_BHD.IsMatch(TextBox_PCin.Text))
-            {
-                Services.PC pec = new Services.PC();
-                int pingcheck = await pec.PingAuto(TextBox_PCin, WaitBarPC);
-
-                if (pingcheck == 1) { Helpers.TrayIcon.BalloonPingOnline(pcaddress); }
-                else if (pingcheck == 2) { Helpers.TrayIcon.BalloonPingOffline(pcaddress); }
-            }
-
-            else if(REGEX_IP.IsMatch(TextBox_PCin.Text))
-            {
-                Services.PC pec = new Services.PC();
-                int pingcheck = await pec.PingAutoIP(TextBox_PCin, WaitBarPC);
-
-                if (pingcheck == 1) { Helpers.TrayIcon.BalloonPingOnline(pcaddress); }
-                else if (pingcheck == 2) { Helpers.TrayIcon.BalloonPingOffline(pcaddress); }
-            }
+        /// <summary>
+        /// Ping and Tray Balloon from Clipboard
+        /// </summary>
+        private void TextBox_PCin_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var helper2 = new ClipboardHelpers(this);
+            helper2.ClipboardToTextbox();
         }
     }
 }

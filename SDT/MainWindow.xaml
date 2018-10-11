@@ -320,7 +320,7 @@
                             FontSize="15" Controls:ButtonHelper.PreserveTextCase="True" Background="{DynamicResource AccentColorBrush}" Click="Button_PCinfo_Click"/>
                         </Grid>
 
-                        <Grid Grid.Row="1">
+                        <Grid Grid.Row="1" x:Name="Grid_PCInfo">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
                                 <RowDefinition/>
@@ -365,7 +365,7 @@
                             <Button x:Name="Button_PCPorts" Content="Porty" Height="35" Width="350" Margin="2" BorderThickness="2"
                             FontSize="15" Controls:ButtonHelper.PreserveTextCase="True" Background="{DynamicResource AccentColorBrush}" Click="Button_PCPorts_Click"/>
                         </Grid>
-                        <Grid Grid.Row="1">
+                        <Grid Grid.Row="1" x:Name="Grid_PCPorts">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
@@ -399,7 +399,7 @@
                             FontSize="15" Controls:ButtonHelper.PreserveTextCase="True" Background="{DynamicResource AccentColorBrush}" Click="Button_Scripts_Click">
                         <Button.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="GPUpdate" x:Name="Button_GP" ToolTip="Odświeżenie uprawnień na stacji" Click="Button_GP_Click" />
+                                <MenuItem Header="GPUpdate" x:Name="Button_GP" ToolTip="Odświeżenie uprawnień na stacji" Click="Button_GP_Click"/>
                                 <MenuItem Header="BitLocker" x:Name="Button_BitLocker" ToolTip="Sprawdzenie statusu szyfrowania" Click="Button_BitLocker_Click"/>
                                 <MenuItem Header="IE Fix" x:Name="Button_IEFix" ToolTip="Zmiana w rejestrze by IE nie uruchamiał się przy starcie systemu" Click="Button_IEFix_Click"/>
                                 <MenuItem Header="Spooler restart" x:Name="Button_SpoolReset" ToolTip="Zdalnie restartuje Bufor Wydruku na stacji" Click="Button_SpoolReset_Click"/>

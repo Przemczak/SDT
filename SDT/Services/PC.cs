@@ -245,7 +245,7 @@ namespace SDT.Services
                     _MetroWindow.TextBox_PCip.Text = ip[0].ToString();
 
                     ManagementScope Scope;
-                    Scope = new ManagementScope(String.Format("\\\\{0}\\root\\CIMV2", TextBox_PCin.Text), null);
+                    Scope = new ManagementScope(string.Format("\\\\{0}\\root\\CIMV2", TextBox_PCin.Text), null);
                     Scope.Connect();
 
                     ObjectQuery Query = new ObjectQuery("Select * From Win32_ComputerSystem");
@@ -270,8 +270,8 @@ namespace SDT.Services
                     ManagementObjectSearcher Searcher3 = new ManagementObjectSearcher(Scope, Query3);
                     foreach (ManagementObject WmiObject in Searcher3.Get())
                     {
-                        UInt64 miejsce = UInt64.Parse(WmiObject["FreeSpace"].ToString());
-                        UInt64 wolne = (miejsce / (1024 * 1024 * 1024));
+                        ulong miejsce = ulong.Parse(WmiObject["FreeSpace"].ToString());
+                        ulong wolne = (miejsce / (1024 * 1024 * 1024));
                         _MetroWindow.TextBox_PCspace.Text = wolne + " GB".ToString();
                     }
                     ObjectQuery Query4 = new ObjectQuery("Select * from Win32_ComputerSystem");
@@ -306,8 +306,7 @@ namespace SDT.Services
                     await window.ShowMessageAsync("Bład!", "Stacja nie odpowiada w sieci.");
                 return;
             }
-
-}
+        }
 
         /// <summary>
         /// Remote run PsExec (CMD)
@@ -395,9 +394,7 @@ namespace SDT.Services
             {
                 var pingcheck = await Ping(TextBox_PCin, WaitBarPC);
                 if (pingcheck)
-                {
                     Process.Start(@"C:\Program Files (x86)\Microsoft Configuration Manager\AdminConsole\bin\i386\CmRcViewer.exe", TextBox_PCin.Text);
-                }
                 else
                 {
                     var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();

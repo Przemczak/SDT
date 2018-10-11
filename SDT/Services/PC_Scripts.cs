@@ -175,9 +175,5 @@ namespace SDT.Services
                 return;
             }
         }
-        /// <summary>
-        /// Old IE settings in registry
-        /// </summary>
-        
     }
 }
