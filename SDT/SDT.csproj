@@ -14,7 +14,7 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>\\dsb192\SDT%24\\App\</PublishUrl>
+    <PublishUrl>\\dsb192\SDTBeta%24\\App\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Unc</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -24,12 +24,13 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <UpdateUrl>\\dsb192\SDT%24\\App\</UpdateUrl>
-    <PublisherName>Wojtczak Przemysław 2 - Partner Hurt</PublisherName>
+    <UpdateUrl>\\dsb192\SDTBeta%24\\App\</UpdateUrl>
+    <ProductName>SDT - Service Desk Tool</ProductName>
+    <PublisherName>SDT - Service Desk Tool</PublisherName>
     <WebPage>SDT.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.3.1.0</ApplicationVersion>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>1.3.1.1</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -140,6 +141,7 @@
     <Compile Include="Pages\Information.xaml.cs">
       <DependentUpon>Information.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Services\ClipboardPing.cs" />
     <Compile Include="Services\PC.cs" />
     <Compile Include="Pages\PC_Installer.xaml.cs">
       <DependentUpon>PC_Installer.xaml</DependentUpon>

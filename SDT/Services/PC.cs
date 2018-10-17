@@ -19,11 +19,11 @@ namespace SDT.Services
 {
     public class PC
     {
-        private readonly MainWindow _MetroWindow;
+        private readonly MainWindow _metroWindow;
 
         public PC(MainWindow MetroWindow)
         {
-            _MetroWindow = MetroWindow;
+            _metroWindow = MetroWindow;
         }
 
         public PC()
@@ -39,14 +39,14 @@ namespace SDT.Services
             try
             {
                 WaitBarPC.Visibility = Visibility.Visible;
-                var ipa = TextBox_PCin.Text;
+                var address = TextBox_PCin.Text;
 
-                var PingOdp = await Task.Run(() =>
+                var pingAnswer = await Task.Run(() =>
                 {
-                    Ping PingZapytanie = new Ping();
-                    return PingZapytanie.Send(ipa);
+                    Ping ping = new Ping();
+                    return ping.Send(address);
                 });
-                if (PingOdp.Status == IPStatus.Success)
+                if (pingAnswer.Status == IPStatus.Success)
                 {
                     TextBox_PCin.Background = new SolidColorBrush(Colors.Green);
                     WaitBarPC.Visibility = Visibility.Hidden;
@@ -76,14 +76,14 @@ namespace SDT.Services
         {
             try
             {
-                var ipa = TextBox_PCadress.Text;
+                var address = TextBox_PCadress.Text;
 
-                var PingOdp = await Task.Run(() =>
+                var pingAnswer = await Task.Run(() =>
                 {
-                    Ping PingZapytanie = new Ping();
-                    return PingZapytanie.Send(ipa);
+                    Ping ping = new Ping();
+                    return ping.Send(address);
                 });
-                if (PingOdp.Status == IPStatus.Success)
+                if (pingAnswer.Status == IPStatus.Success)
                 {
                     TextBox_PCadress.Background = new SolidColorBrush(Colors.Green);
                     return true;
@@ -104,104 +104,12 @@ namespace SDT.Services
         }
 
         /// <summary>
-        /// Check PC ping (modified for Clipboard Monitor) only netbios
-        /// return int: 1 = online = 2, offline, 3 = error
-        /// </summary>
-        public async Task<int> PingAuto(TextBox TextBox_PCin, ProgressBar WaitBarPC)
-        {
-            try
-            {
-                string ipa = TextBox_PCin.Text;
-                WaitBarPC.Visibility = Visibility.Visible;
-
-                var PingOdp = await Task.Run(() =>
-                {
-                    Ping PingZapytanie = new Ping();
-                    return PingZapytanie.Send(ipa);
-                });
-
-                if (PingOdp.Status == IPStatus.Success)
-                {
-                    TextBox_PCin.Background = new SolidColorBrush(Colors.Green);
-                    WaitBarPC.Visibility = Visibility.Hidden;
-                    return 1;
-                }
-                else
-                {
-                    TextBox_PCin.Background = new SolidColorBrush(Colors.Red);
-                    WaitBarPC.Visibility = Visibility.Hidden;
-                    return 2;
-                }
-            }
-            catch (Exception e)
-            {
-                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
-                if (window != null)
-                    await window.ShowMessageAsync("Błąd!", e.Message);
-                WaitBarPC.Visibility = Visibility.Hidden;
-                return 3;
-            }
-        }
-
-        /// <summary>
-        /// Check PC ping + IP parse (modified for Clipboard Monitor) only for IP
-        /// return int: 1 = online = 2, offline, 3 = error
-        /// </summary>
-        public async Task<int> PingAutoIP(TextBox TextBox_PCin, ProgressBar WaitBarPC)
-        {
-            try
-            {
-                WaitBarPC.Visibility = Visibility.Visible;
-                IPAddress ipa = null;
-
-                if (IPAddress.TryParse(TextBox_PCin.Text, out ipa))
-                {
-                    var PingOdp = await Task.Run(() =>
-                    {
-                        Ping PingZapytanie = new Ping();
-                        return PingZapytanie.Send(ipa);
-                    });
-
-                    if (PingOdp.Status == IPStatus.Success)
-                    {
-                        TextBox_PCin.Background = new SolidColorBrush(Colors.Green);
-                        WaitBarPC.Visibility = Visibility.Hidden;
-                        return 1;
-                    }
-                    else
-                    {
-                        TextBox_PCin.Background = new SolidColorBrush(Colors.Red);
-                        WaitBarPC.Visibility = Visibility.Hidden;
-                        return 2;
-                    }
-                }
-                else
-                {
-                    var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
-                    if (window != null)
-                        await window.ShowMessageAsync("Błąd!", "Błedy zakres adresacji IPv4");
-                    WaitBarPC.Visibility = Visibility.Hidden;
-                    return 3;
-                }
-
-            }
-            catch (Exception e)
-            {
-                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
-                if (window != null)
-                    await window.ShowMessageAsync("Błąd!", e.Message);
-                WaitBarPC.Visibility = Visibility.Hidden;
-                return 3;
-            }
-        }
-
-        /// <summary>
         /// Run > Sharing
         /// </summary>
         public async void Sharing(TextBox TextBox_PCin, ProgressBar WaitBarPC)
         {
-            var pingcheck = await Ping(TextBox_PCin, WaitBarPC);
-            if (pingcheck)
+            var pingCheck = await Ping(TextBox_PCin, WaitBarPC);
+            if (pingCheck)
             {
                 try
                 {
@@ -229,20 +137,20 @@ namespace SDT.Services
         /// </summary>
         public async void PCinfo(TextBox TextBox_PCin, ProgressBar WaitBarPC)
         {
-            var pingcheck = await Ping(TextBox_PCin, WaitBarPC);
-            if (pingcheck)
+            var pingCheck = await Ping(TextBox_PCin, WaitBarPC);
+            if (pingCheck)
             {
-                string pcadress = TextBox_PCin.Text;
+                string address = TextBox_PCin.Text;
                 WaitBarPC.Visibility = Visibility.Visible;
                 try
                 {
                     IPAddress[] ip = await Task.Run(() =>
                     {
-                        IPHostEntry hostname = Dns.GetHostEntry(pcadress);
+                        IPHostEntry hostname = Dns.GetHostEntry(address);
                         return hostname.AddressList;
                     });
 
-                    _MetroWindow.TextBox_PCip.Text = ip[0].ToString();
+                    _metroWindow.TextBox_PCip.Text = ip[0].ToString();
 
                     ManagementScope Scope;
                     Scope = new ManagementScope(string.Format("\\\\{0}\\root\\CIMV2", TextBox_PCin.Text), null);
@@ -252,19 +160,19 @@ namespace SDT.Services
                     ManagementObjectSearcher Searcher = new ManagementObjectSearcher(Scope, Query);
                     foreach (ManagementObject WmiObject in Searcher.Get())
                     {
-                        _MetroWindow.TextBox_PCnetbios.Text = (WmiObject["Name"].ToString());
+                        _metroWindow.TextBox_PCnetbios.Text = (WmiObject["Name"].ToString());
                     }
                     ObjectQuery Query1 = new ObjectQuery("Select * From Win32_NetworkAdapterConfiguration where IPEnabled = 1");
                     ManagementObjectSearcher Searcher1 = new ManagementObjectSearcher(Scope, Query1);
                     foreach (ManagementObject WmiObject in Searcher1.Get())
                     {
-                        _MetroWindow.TextBox_PCmac.Text = (WmiObject["MacAddress"].ToString());
+                        _metroWindow.TextBox_PCmac.Text = (WmiObject["MacAddress"].ToString());
                     }
                     ObjectQuery Query2 = new ObjectQuery("Select * From Win32_BIOS");
                     ManagementObjectSearcher Searcher2 = new ManagementObjectSearcher(Scope, Query2);
                     foreach (ManagementObject WmiObject in Searcher2.Get())
                     {
-                        _MetroWindow.TextBox_PCns.Text = (WmiObject["SerialNumber"].ToString());
+                        _metroWindow.TextBox_PCns.Text = (WmiObject["SerialNumber"].ToString());
                     }
                     ObjectQuery Query3 = new ObjectQuery("Select * From Win32_LogicalDisk where DeviceID = 'C:'");
                     ManagementObjectSearcher Searcher3 = new ManagementObjectSearcher(Scope, Query3);
@@ -272,20 +180,20 @@ namespace SDT.Services
                     {
                         ulong miejsce = ulong.Parse(WmiObject["FreeSpace"].ToString());
                         ulong wolne = (miejsce / (1024 * 1024 * 1024));
-                        _MetroWindow.TextBox_PCspace.Text = wolne + " GB".ToString();
+                        _metroWindow.TextBox_PCspace.Text = wolne + " GB".ToString();
                     }
                     ObjectQuery Query4 = new ObjectQuery("Select * from Win32_ComputerSystem");
                     ManagementObjectSearcher Searcher4 = new ManagementObjectSearcher(Scope, Query4);
                     foreach (ManagementObject WmiObject in Searcher4.Get())
                     {
-                        var zalo = (WmiObject["UserName"].ToString());
-                        if (string.IsNullOrWhiteSpace(zalo))
+                        var userLogged = (WmiObject["UserName"].ToString());
+                        if (string.IsNullOrWhiteSpace(userLogged))
                         {
-                            _MetroWindow.TextBox_PCloguser.Text = "Nikt nie jest zalogowany na stacji";
+                            _metroWindow.TextBox_PCloguser.Text = "Nikt nie jest zalogowany na stacji";
                         }
                         else
                         {
-                            _MetroWindow.TextBox_PCloguser.Text = zalo.Substring(zalo.IndexOf("\\") + 1);
+                            _metroWindow.TextBox_PCloguser.Text = userLogged.Substring(userLogged.IndexOf("\\") + 1);
                         }
                     }
                     WaitBarPC.Visibility = Visibility.Hidden;
@@ -313,17 +221,18 @@ namespace SDT.Services
         /// </summary>
         public async void PsExecRUN(TextBox TextBox_PCin, ProgressBar WaitBarPC)
         {
-            var pingcheck = await Ping(TextBox_PCin, WaitBarPC);
-            if (pingcheck)
+            var pingCheck = await Ping(TextBox_PCin, WaitBarPC);
+            if (pingCheck)
             {
-                var pscheck = PsExecCheck();
-                if (pscheck)
+                var psExecCheck = PsExecCheck();
+                if (psExecCheck)
                 {
                     Process process = new Process();
                     process.StartInfo.FileName = @"C:\My Program Files\PsExec64.exe";
                     process.StartInfo.Arguments = String.Format(@"\\{0} CMD", TextBox_PCin.Text);
                     process.Start();
                     process.WaitForExit();
+
                 }
                 else
                 {
@@ -417,8 +326,8 @@ namespace SDT.Services
         /// </summary>
         public async Task PortCheck(TextBox TextBox_PCin, ProgressBar WaitBarPC)
         {
-            var pingcheck = await Ping(TextBox_PCin, WaitBarPC);
-            if (pingcheck)
+            var pingCheck = await Ping(TextBox_PCin, WaitBarPC);
+            if (pingCheck)
             {
                 try
                 {
@@ -452,72 +361,72 @@ namespace SDT.Services
         /// </summary>
         async Task Port135(TextBox TextBox_PCin)
         {
-            var cancel = new TaskCompletionSource<bool>();
+            var cancelcts = new TaskCompletionSource<bool>();
             using (var cts = new CancellationTokenSource(5000))
             {
-                using (var client = new TcpClient())
+                using (var tcpClient = new TcpClient())
                 {
-                    var task = client.ConnectAsync(TextBox_PCin.Text, 135);
-                    using (cts.Token.Register(() => cancel.TrySetResult(true)))
+                    var task = tcpClient.ConnectAsync(TextBox_PCin.Text, 135);
+                    using (cts.Token.Register(() => cancelcts.TrySetResult(true)))
                     {
-                        if (task != await Task.WhenAny(task, cancel.Task))
-                            _MetroWindow.CheckBox_PC135.IsChecked = false;
+                        if (task != await Task.WhenAny(task, cancelcts.Task))
+                            _metroWindow.CheckBox_PC135.IsChecked = false;
                         else
-                            _MetroWindow.CheckBox_PC135.IsChecked = true;
+                            _metroWindow.CheckBox_PC135.IsChecked = true;
                     }
                 }
             }
         }
         async Task Port445(TextBox TextBox_PCin)
         {
-            var cancel = new TaskCompletionSource<bool>();
+            var cancelcts = new TaskCompletionSource<bool>();
             using (var cts = new CancellationTokenSource(5000))
             {
-                using (var client = new TcpClient())
+                using (var tcpClient = new TcpClient())
                 {
-                    var task = client.ConnectAsync(TextBox_PCin.Text, 445);
-                    using (cts.Token.Register(() => cancel.TrySetResult(true)))
+                    var task = tcpClient.ConnectAsync(TextBox_PCin.Text, 445);
+                    using (cts.Token.Register(() => cancelcts.TrySetResult(true)))
                     {
-                        if (task != await Task.WhenAny(task, cancel.Task))
-                            _MetroWindow.CheckBox_PC445.IsChecked = false;
+                        if (task != await Task.WhenAny(task, cancelcts.Task))
+                            _metroWindow.CheckBox_PC445.IsChecked = false;
                         else
-                            _MetroWindow.CheckBox_PC445.IsChecked = true;
+                            _metroWindow.CheckBox_PC445.IsChecked = true;
                     }
                 }
             }
         }
         async Task Port2701(TextBox TextBox_PCin)
         {
-            var cancel = new TaskCompletionSource<bool>();
+            var cancelcts = new TaskCompletionSource<bool>();
             using (var cts = new CancellationTokenSource(5000))
             {
-                using (var client = new TcpClient())
+                using (var tcpClient = new TcpClient())
                 {
-                    var task = client.ConnectAsync(TextBox_PCin.Text, 2701);
-                    using (cts.Token.Register(() => cancel.TrySetResult(true)))
+                    var task = tcpClient.ConnectAsync(TextBox_PCin.Text, 2701);
+                    using (cts.Token.Register(() => cancelcts.TrySetResult(true)))
                     {
-                        if (task != await Task.WhenAny(task, cancel.Task))
-                            _MetroWindow.CheckBox_PC2701.IsChecked = false;
+                        if (task != await Task.WhenAny(task, cancelcts.Task))
+                            _metroWindow.CheckBox_PC2701.IsChecked = false;
                         else
-                            _MetroWindow.CheckBox_PC2701.IsChecked = true;
+                            _metroWindow.CheckBox_PC2701.IsChecked = true;
                     }
                 }
             }
         }
         async Task Port8081(TextBox TextBox_PCin)
         {
-            var cancel = new TaskCompletionSource<bool>();
+            var cancelcts = new TaskCompletionSource<bool>();
             using (var cts = new CancellationTokenSource(5000))
             {
-                using (var client = new TcpClient())
+                using (var tcpClient = new TcpClient())
                 {
-                    var task = client.ConnectAsync(TextBox_PCin.Text, 8081);
-                    using (cts.Token.Register(() => cancel.TrySetResult(true)))
+                    var task = tcpClient.ConnectAsync(TextBox_PCin.Text, 8081);
+                    using (cts.Token.Register(() => cancelcts.TrySetResult(true)))
                     {
-                        if (task != await Task.WhenAny(task, cancel.Task))
-                            _MetroWindow.CheckBox_PC8081.IsChecked = false;
+                        if (task != await Task.WhenAny(task, cancelcts.Task))
+                            _metroWindow.CheckBox_PC8081.IsChecked = false;
                         else
-                            _MetroWindow.CheckBox_PC8081.IsChecked = true;
+                            _metroWindow.CheckBox_PC8081.IsChecked = true;
                     }
                 }
             }
@@ -528,8 +437,8 @@ namespace SDT.Services
         /// </summary>
         public void PingT(TextBox TextBox_PCin)
         {
-            string CmdTxt = "/C ping " + TextBox_PCin.Text + " -t";
-            Process.Start("CMD.exe", CmdTxt);
+            string cmdText = "/C ping " + TextBox_PCin.Text + " -t";
+            Process.Start("CMD.exe", cmdText);
         }
 
     }

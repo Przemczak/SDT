@@ -4,12 +4,12 @@ namespace SDT.Helpers
 {
     class ClipboardHelpers
     {
-        private readonly MainWindow _MetroWindow;
+        private readonly MainWindow _metroWindow;
         private readonly Services.PC _pc;
 
         public ClipboardHelpers(MainWindow MetroWindow)
         {
-            _MetroWindow = MetroWindow;
+            _metroWindow = MetroWindow;
             _pc = new Services.PC();
         }
 
@@ -22,27 +22,27 @@ namespace SDT.Helpers
 
         void Process_TP(string value)
         {
-            _MetroWindow.TextBox_PCin.Text = value;
+            _metroWindow.TextBox_PCin.Text = value;
         }
         void Process_OPL(string value)
         {
-            _MetroWindow.TextBox_PCin.Text = value;
+            _metroWindow.TextBox_PCin.Text = value;
         }
         void Process_FRA(string value)
         {
-            _MetroWindow.TextBox_PCin.Text = value;
+            _metroWindow.TextBox_PCin.Text = value;
         }
         void Process_WTG(string value)
         {
-            _MetroWindow.TextBox_PCin.Text = value;
+            _metroWindow.TextBox_PCin.Text = value;
         }
         void Process_BHD(string value)
         {
-            _MetroWindow.TextBox_PCin.Text = value;
+            _metroWindow.TextBox_PCin.Text = value;
         }
         void Process_IP(string value)
         {
-            _MetroWindow.TextBox_PCin.Text = value;
+            _metroWindow.TextBox_PCin.Text = value;
         }
 
         /// <summary>
@@ -104,54 +104,54 @@ namespace SDT.Helpers
         /// </summary>
         public async void ClipboardToTextbox()
         {
-            string pcaddress = _MetroWindow.TextBox_PCin.Text;
+            string pcAddress = _metroWindow.TextBox_PCin.Text;
 
-            if (REGEX_TP.IsMatch(_MetroWindow.TextBox_PCin.Text))
+            if (REGEX_TP.IsMatch(_metroWindow.TextBox_PCin.Text))
             {
-                int pingcheck = await _pc.PingAuto(_MetroWindow.TextBox_PCin, _MetroWindow.WaitBarPC);
+                int pingcheck = await Services.ClipboardPing.Instance.ClipboardNetbiosPing(_metroWindow.TextBox_PCin, _metroWindow.WaitBarPC);
 
-                if (pingcheck == 1) { TrayIcon.BalloonPingOnline(pcaddress); }
-                else if (pingcheck == 2) { TrayIcon.BalloonPingOffline(pcaddress); }
+                if (pingcheck == 1) { TrayIcon.BalloonPingOnline(pcAddress); }
+                else if (pingcheck == 2) { TrayIcon.BalloonPingOffline(pcAddress); }
             }
 
-            else if (REGEX_OPL.IsMatch(_MetroWindow.TextBox_PCin.Text))
+            else if (REGEX_OPL.IsMatch(_metroWindow.TextBox_PCin.Text))
             {
-                int pingcheck = await _pc.PingAuto(_MetroWindow.TextBox_PCin, _MetroWindow.WaitBarPC);
+                int pingcheck = await Services.ClipboardPing.Instance.ClipboardNetbiosPing(_metroWindow.TextBox_PCin, _metroWindow.WaitBarPC);
 
-                if (pingcheck == 1) { TrayIcon.BalloonPingOnline(pcaddress); }
-                else if (pingcheck == 2) { TrayIcon.BalloonPingOffline(pcaddress); }
+                if (pingcheck == 1) { TrayIcon.BalloonPingOnline(pcAddress); }
+                else if (pingcheck == 2) { TrayIcon.BalloonPingOffline(pcAddress); }
             }
 
-            else if (REGEX_FRA.IsMatch(_MetroWindow.TextBox_PCin.Text))
+            else if (REGEX_FRA.IsMatch(_metroWindow.TextBox_PCin.Text))
             {
-                int pingcheck = await _pc.PingAuto(_MetroWindow.TextBox_PCin, _MetroWindow.WaitBarPC);
+                int pingcheck = await Services.ClipboardPing.Instance.ClipboardNetbiosPing(_metroWindow.TextBox_PCin, _metroWindow.WaitBarPC);
 
-                if (pingcheck == 1) { TrayIcon.BalloonPingOnline(pcaddress); }
-                else if (pingcheck == 2) { TrayIcon.BalloonPingOffline(pcaddress); }
+                if (pingcheck == 1) { TrayIcon.BalloonPingOnline(pcAddress); }
+                else if (pingcheck == 2) { TrayIcon.BalloonPingOffline(pcAddress); }
             }
 
-            else if (REGEX_WTG.IsMatch(_MetroWindow.TextBox_PCin.Text))
+            else if (REGEX_WTG.IsMatch(_metroWindow.TextBox_PCin.Text))
             {
-                int pingcheck = await _pc.PingAuto(_MetroWindow.TextBox_PCin, _MetroWindow.WaitBarPC);
+                int pingcheck = await Services.ClipboardPing.Instance.ClipboardNetbiosPing(_metroWindow.TextBox_PCin, _metroWindow.WaitBarPC);
 
-                if (pingcheck == 1) { TrayIcon.BalloonPingOnline(pcaddress); }
-                else if (pingcheck == 2) { TrayIcon.BalloonPingOffline(pcaddress); }
+                if (pingcheck == 1) { TrayIcon.BalloonPingOnline(pcAddress); }
+                else if (pingcheck == 2) { TrayIcon.BalloonPingOffline(pcAddress); }
             }
 
-            else if (REGEX_BHD.IsMatch(_MetroWindow.TextBox_PCin.Text))
+            else if (REGEX_BHD.IsMatch(_metroWindow.TextBox_PCin.Text))
             {
-                int pingcheck = await _pc.PingAuto(_MetroWindow.TextBox_PCin, _MetroWindow.WaitBarPC);
+                int pingcheck = await Services.ClipboardPing.Instance.ClipboardNetbiosPing(_metroWindow.TextBox_PCin, _metroWindow.WaitBarPC);
 
-                if (pingcheck == 1) { TrayIcon.BalloonPingOnline(pcaddress); }
-                else if (pingcheck == 2) { TrayIcon.BalloonPingOffline(pcaddress); }
+                if (pingcheck == 1) { TrayIcon.BalloonPingOnline(pcAddress); }
+                else if (pingcheck == 2) { TrayIcon.BalloonPingOffline(pcAddress); }
             }
 
-            else if (REGEX_IP.IsMatch(_MetroWindow.TextBox_PCin.Text))
+            else if (REGEX_IP.IsMatch(_metroWindow.TextBox_PCin.Text))
             {
-                int pingcheck = await _pc.PingAutoIP(_MetroWindow.TextBox_PCin, _MetroWindow.WaitBarPC);
+                int pingcheck = await Services.ClipboardPing.Instance.ClipboardIPPing(_metroWindow.TextBox_PCin, _metroWindow.WaitBarPC);
 
-                if (pingcheck == 1) { TrayIcon.BalloonPingOnline(pcaddress); }
-                else if (pingcheck == 2) { TrayIcon.BalloonPingOffline(pcaddress); }
+                if (pingcheck == 1) { TrayIcon.BalloonPingOnline(pcAddress); }
+                else if (pingcheck == 2) { TrayIcon.BalloonPingOffline(pcAddress); }
             }
         }
     }

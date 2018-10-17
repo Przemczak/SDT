@@ -40,7 +40,7 @@ namespace SDT
         public void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             // Dispose tray icon
-            TrayIcon.disposeico();
+            TrayIcon.Disposeico();
 
             // Save settings
             Properties.Settings.Default.Save();

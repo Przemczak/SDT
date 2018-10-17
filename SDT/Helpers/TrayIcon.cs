@@ -6,23 +6,23 @@ namespace SDT.Helpers
 {
     public static class TrayIcon
     {
-        public static NotifyIcon _ni;
+        public static NotifyIcon _notifyIcon;
 
         /// <summary>
         /// Load Icon in Tray
         /// </summary>
         public static void Tray(MainWindow mainWindow)
         {
-            NotifyIcon ni = new NotifyIcon();
-            _ni = ni;
+            NotifyIcon notifyIcon = new NotifyIcon();
+            _notifyIcon = notifyIcon;
 
-            ni.Icon = Properties.Resources.icons8_maintenance_64_W6f_icon;
-            ni.Text = "SDT - Service Desk Tool";
-            ni.Visible = true;
+            notifyIcon.Icon = Properties.Resources.icons8_maintenance_64_W6f_icon;
+            notifyIcon.Text = "SDT - Service Desk Tool";
+            notifyIcon.Visible = true;
             
-            ni.ContextMenuStrip = new ContextMenuStrip();
-            ni.ContextMenuStrip.Items.Add("Otwórz", null, Open_Click);
-            ni.ContextMenuStrip.Items.Add("Zamknij", null, Close_Click);
+            notifyIcon.ContextMenuStrip = new ContextMenuStrip();
+            notifyIcon.ContextMenuStrip.Items.Add("Otwórz", null, Open_Click);
+            notifyIcon.ContextMenuStrip.Items.Add("Zamknij", null, Close_Click);
 
             void Open_Click(object sender, EventArgs e)
             {
@@ -35,7 +35,7 @@ namespace SDT.Helpers
                 mainWindow.MetroWindow_Closing(sender, null);
             }
 
-            ni.DoubleClick += delegate (object sender, EventArgs args)
+            notifyIcon.DoubleClick += delegate (object sender, EventArgs args)
             {
                 mainWindow.Show();
                 mainWindow.WindowState = WindowState.Normal;
@@ -45,10 +45,10 @@ namespace SDT.Helpers
         /// <summary>
         /// Close tray icon when closing app
         /// </summary>
-        public static void disposeico()
+        public static void Disposeico()
         {
-            _ni.Visible = false;
-            _ni.Icon.Dispose();
+            _notifyIcon.Visible = false;
+            _notifyIcon.Icon.Dispose();
         }
 
         /// <summary>
@@ -56,10 +56,10 @@ namespace SDT.Helpers
         /// </summary>
         public static void BalloonPingOnline(string pcaddress)
         {
-            _ni.BalloonTipTitle = pcaddress + " - Online!";
-            _ni.BalloonTipText = "Adres " + pcaddress + " odpowiada w sieci.";
-            _ni.ShowBalloonTip(7000);
-              
+            _notifyIcon.BalloonTipTitle = pcaddress + " - Online!";
+            _notifyIcon.BalloonTipText = "Adres odpowiada w sieci.";
+            _notifyIcon.BalloonTipIcon = ToolTipIcon.Info;
+            _notifyIcon.ShowBalloonTip(7000);
         }
 
         /// <summary>
@@ -67,9 +67,10 @@ namespace SDT.Helpers
         /// </summary>
         public static void BalloonPingOffline(string pcaddress)
         {
-            _ni.BalloonTipTitle = pcaddress + " - Offline!";
-            _ni.BalloonTipText = "Adres " + pcaddress + " nie odpowiada w sieci.";
-            _ni.ShowBalloonTip(7000);
+            _notifyIcon.BalloonTipTitle = pcaddress + " - Offline!";
+            _notifyIcon.BalloonTipText = "Adres nie odpowiada w sieci.";
+            _notifyIcon.BalloonTipIcon = ToolTipIcon.Error;
+            _notifyIcon.ShowBalloonTip(7000);
         }
     }
 }
