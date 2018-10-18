@@ -154,13 +154,13 @@ namespace SDT
         /// PC TAB
         /// Run PsExec
         /// </summary>
-        private void Button_PsExec_Click(object sender, RoutedEventArgs e)
+        private async void Button_PsExec_Click(object sender, RoutedEventArgs e)
         {
             TextBox_PCin.Text = TextBox_PCin.Text.TrimStart().TrimEnd();
 
             bool CS = MainHelpers.CheckNullPCTAB(TextBox_PCin);
             if (CS)
-                _pc.PsExecRUN(TextBox_PCin, WaitBarPC);
+                await _pc.PsExecRUN(TextBox_PCin, WaitBarPC);
         }
 
         /// <summary>

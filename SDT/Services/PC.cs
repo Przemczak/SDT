@@ -219,7 +219,7 @@ namespace SDT.Services
         /// <summary>
         /// Remote run PsExec (CMD)
         /// </summary>
-        public async void PsExecRUN(TextBox TextBox_PCin, ProgressBar WaitBarPC)
+        public async Task PsExecRUN(TextBox TextBox_PCin, ProgressBar WaitBarPC)
         {
             var pingCheck = await Ping(TextBox_PCin, WaitBarPC);
             if (pingCheck)
@@ -227,11 +227,16 @@ namespace SDT.Services
                 var psExecCheck = PsExecCheck();
                 if (psExecCheck)
                 {
-                    Process process = new Process();
-                    process.StartInfo.FileName = @"C:\My Program Files\PsExec64.exe";
-                    process.StartInfo.Arguments = String.Format(@"\\{0} CMD", TextBox_PCin.Text);
-                    process.Start();
-                    process.WaitForExit();
+                    var test1 = TextBox_PCin.Text;
+                    await Task.Run(() =>
+                    {
+                        Process process = new Process();
+                        process.StartInfo.FileName = @"C:\My Program Files\PsExec64.exe";
+                        process.StartInfo.Arguments = String.Format(@"\\{0} CMD", test1);
+                        process.Start();
+                        process.WaitForExit();
+                        return;
+                    });
 
                 }
                 else

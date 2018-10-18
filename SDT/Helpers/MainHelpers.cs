@@ -1,7 +1,6 @@
 ﻿using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -10,7 +9,7 @@ namespace SDT.Helpers
     class MainHelpers
     {
         /// <summary>
-        ///  and Checkboxes in USER_TAB
+        /// Clear Checkboxes in USER_TAB
         /// </summary>
         public static void ClearBoxesUSERTAB(Grid Grid_UserAD, Grid Grid_UserUser, Grid Grid_UserMail, Grid Grid_UserMailBPTP, Grid Grid_UserDev, Grid Grid_UserMailC, 
             Grid Grid_UserAccess, Grid Grid_UserBYOD, Grid Grid_UserAirWatch)
@@ -112,7 +111,7 @@ namespace SDT.Helpers
             {
                 var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
                 if (window != null)
-                    window.ShowMessageAsync("Błąd!", "Podaj login użytkownika.");
+                    window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
                 return false;
             }
             else { return true; }
