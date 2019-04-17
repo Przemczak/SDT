@@ -1,239 +1,135 @@
-﻿using MahApps.Metro;
-using MahApps.Metro.Controls;
-using MahApps.Metro.Controls.Dialogs;
-using SDT.Helpers;
+﻿using SDT.Helpers;
 using System;
-using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace SDT
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : MetroWindow
+    public partial class MainWindow : Window
     {
         private readonly Services.User _user;
         private readonly Services.PC _pc;
-        private readonly Services.PC_Scripts _pc_scripts;
+        private readonly Services.Printer _printer;
+        private readonly MainHelpers _mainHelpers;
+        private readonly ClipboardHelpers _clipboardhelpers;
+        private readonly Updater _updater;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            // Load theme color and application color settings
-            ThemeSettingsLoad();
+            ///Load Settings
+            Settings _settings = new Settings();
 
-            // Load tray icon
+            /// Load tray icon
             TrayIcon.Tray(this);
 
-            // Load clipboard listening and load Regex
+            /// Load clipboard listening and load Regex
             StartListeningForClipboardChange();
 
-            // Create instance of methods
+            /// Create instance of methods
             _user = new Services.User(this);
             _pc = new Services.PC(this);
-            _pc_scripts = new Services.PC_Scripts(this);
-        }
+            _printer = new Services.Printer(this);
+            _mainHelpers = new MainHelpers(this);
+            _clipboardhelpers = new ClipboardHelpers(this);
+            _updater = new Updater(this);
 
-        public void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            // Dispose tray icon
-            TrayIcon.Disposeico();
-
-            // Save settings
-            Properties.Settings.Default.Save();
-
-            //Close all opened pages on exit
-            base.OnClosed(e);
-            Application.Current.Shutdown();
+            /// Check updates
+            _updater.CheckUpdate();
         }
 
         /// <summary>
-        /// USER TAB
-        /// Check User Login
+        /// Custom TAB Control
         /// </summary>
-        private void Button_UserCheck_Click(object sender, RoutedEventArgs e)
+        private void UserGridButton_Click(object sender, RoutedEventArgs e)
         {
-            //Clear Textboxes and Checkboxes in USER_TAB
-            MainHelpers.ClearBoxesUSERTAB(Grid_UserAD, Grid_UserUser, Grid_UserMail, Grid_UserMailBPTP, Grid_UserDev, Grid_UserMailC, Grid_UserAccess, Grid_UserBYOD, Grid_UserAirWatch);
+            userGrid.Visibility = Visibility.Visible;
+            pcGrid.Visibility = Visibility.Hidden;
+            printerGrid.Visibility = Visibility.Hidden;
+        }
 
-            TextBox_UserLoginIn.Text = TextBox_UserLoginIn.Text.TrimStart().TrimEnd();
+        private void PcGridButton_Click(object sender, RoutedEventArgs e)
+        {
+            userGrid.Visibility = Visibility.Hidden;
+            pcGrid.Visibility = Visibility.Visible;
+            printerGrid.Visibility = Visibility.Hidden;
+        }
 
-            bool CS = MainHelpers.CheckNullUSERTAB(TextBox_UserLoginIn);
-            if(CS)
-                _user.CheckAD(TextBox_UserLoginIn, WaitBarUser);
+        private void PrinterGridButton_Click(object sender, RoutedEventArgs e)
+        {
+            userGrid.Visibility = Visibility.Hidden;
+            pcGrid.Visibility = Visibility.Hidden;
+            printerGrid.Visibility = Visibility.Visible;
         }
 
         /// <summary>
-        /// PC TAB
-        /// Check PC ping
+        /// Moving borderless window event
         /// </summary>
-        private async void Button_PCping_Click(object sender, RoutedEventArgs e)
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            TextBox_PCin.Text = TextBox_PCin.Text.TrimStart().TrimEnd();
-
-            bool CS = MainHelpers.CheckNullPCTAB(TextBox_PCin);
-            if (CS)
-                await _pc.Ping(TextBox_PCin, WaitBarPC);
-        }
-
-        /// <summary>
-        /// PC TAB
-        /// Run PC CMD Ping (-t)
-        /// </summary>
-        private void Button_PCpingT_Click(object sender, RoutedEventArgs e)
-        {
-            TextBox_PCin.Text = TextBox_PCin.Text.TrimStart().TrimEnd();
-
-            bool CS = MainHelpers.CheckNullPCTAB(TextBox_PCin);
-            if (CS)
-                _pc.PingT(TextBox_PCin);
-        }
-
-        /// <summary>
-        /// PC TAB
-        /// Run Sharing C:\
-        /// </summary>
-        private void Button_Sharing_Click(object sender, RoutedEventArgs e)
-        {
-            TextBox_PCin.Text = TextBox_PCin.Text.TrimStart().TrimEnd();
-
-            bool CS = MainHelpers.CheckNullPCTAB(TextBox_PCin);
-            if (CS)
-                _pc.Sharing(TextBox_PCin, WaitBarPC);
-        }
-
-        /// <summary>
-        /// PC TAB
-        /// Check PC info
-        /// </summary>
-        private void Button_PCinfo_Click(object sender, RoutedEventArgs e)
-        {
-            //Clear Textboxes in PC_TAB(PC info)
-            MainHelpers.ClearBoxesPCTAB(Grid_PCInfo);
-
-            TextBox_PCin.Text = TextBox_PCin.Text.TrimStart().TrimEnd();
-
-            bool CS = MainHelpers.CheckNullPCTAB(TextBox_PCin);
-            if (CS)
-                _pc.PCinfo(TextBox_PCin, WaitBarPC);
-        }
-
-        /// <summary>
-        /// PC TAB
-        /// Run RCV Client
-        /// </summary>
-        private void Button_RCV_Click(object sender, RoutedEventArgs e)
-        {
-            TextBox_PCin.Text = TextBox_PCin.Text.TrimStart().TrimEnd();
-
-            bool CS = MainHelpers.CheckNullPCTAB(TextBox_PCin);
-            if (CS)
-                _pc.Cmrcviewer(TextBox_PCin, WaitBarPC);
-        }
-
-        /// <summary>
-        /// PC TAB
-        /// Check Ports
-        /// </summary>
-        private async void Button_PCPorts_Click(object sender, RoutedEventArgs e)
-        {
-            //Clear Checkboxes in PC_TAB(Ports)
-            MainHelpers.ClearBoxesPCTAB(Grid_PCPorts);
-
-            TextBox_PCin.Text = TextBox_PCin.Text.TrimStart().TrimEnd();
-
-            bool CS = MainHelpers.CheckNullPCTAB(TextBox_PCin);
-            if (CS)
-                await _pc.PortCheck(TextBox_PCin, WaitBarPC);
-        }
-
-        /// <summary>
-        /// PC TAB
-        /// Run PsExec
-        /// </summary>
-        private async void Button_PsExec_Click(object sender, RoutedEventArgs e)
-        {
-            TextBox_PCin.Text = TextBox_PCin.Text.TrimStart().TrimEnd();
-
-            bool CS = MainHelpers.CheckNullPCTAB(TextBox_PCin);
-            if (CS)
-                await _pc.PsExecRUN(TextBox_PCin, WaitBarPC);
-        }
-
-        /// <summary>
-        /// PC TAB
-        /// Run PsExec
-        /// </summary>
-        private void Button_Insta_Click(object sender, RoutedEventArgs e)
-        {
-            TextBox_PCin.Text = TextBox_PCin.Text.TrimStart().TrimEnd();
-
-            bool CS = MainHelpers.CheckNullPCTAB(TextBox_PCin);
-            if (CS)
+            if (e.LeftButton == MouseButtonState.Pressed)
             {
-                var pscheck = _pc.PsExecCheck();
-                if (pscheck)
-                {
-                    PC_Installer PI = new PC_Installer(TextBox_PCin)
-                    {
-                        Owner = this,
-                        WindowStartupLocation = WindowStartupLocation.CenterOwner
-                    };
-                    PI.Show();
-                }
+                DragMove();
             }
         }
 
         /// <summary>
-        /// PC TAB
-        /// Menu - Button Scripts
+        /// Exit button
         /// </summary>
-        private void Button_Scripts_Click(object sender, RoutedEventArgs e)
+        private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
-            (sender as Button).ContextMenu.IsEnabled = true;
-            (sender as Button).ContextMenu.PlacementTarget = (sender as Button);
-            (sender as Button).ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
-            (sender as Button).ContextMenu.IsOpen = true;
+            Window_Closing();
+        }
+
+        public void Window_Closing()
+        {
+            /// Dispose tray icon
+            TrayIcon.Disposeico();
+
+            /// Close all opened pages on exit
+            Application.Current.Shutdown();
         }
 
         /// <summary>
-        /// PC TAB
-        /// Menu - Button Scripts (Scripts list)
+        /// Minimize button
         /// </summary>
-        private void Button_GP_Click(object sender, RoutedEventArgs e)
+        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
         {
-            TextBox_PCin.Text = TextBox_PCin.Text.TrimStart().TrimEnd();
-
-            bool CS = MainHelpers.CheckNullPCTAB(TextBox_PCin);
-            if (CS)
-                _pc_scripts.GPUpdate(TextBox_PCin, WaitBarPC);
+            WindowState = WindowState.Minimized;
         }
-        private void Button_BitLocker_Click(object sender, RoutedEventArgs e)
-        {
-            TextBox_PCin.Text = TextBox_PCin.Text.TrimStart().TrimEnd();
 
-            bool CS = MainHelpers.CheckNullPCTAB(TextBox_PCin);
-            if (CS)
-                _pc_scripts.BitLocker(TextBox_PCin, WaitBarPC);
+        /// <summary>
+        /// Open Info Dialog
+        /// </summary>
+        private void InfoButton_Click(object sender, RoutedEventArgs e)
+        {
+            Version version = Assembly.GetExecutingAssembly().GetName().Version;
+
+            popupText.Text = "SDT - Service Desk Tool" 
+                + Environment.NewLine + "Wersja:" + " " + version.Major + "." + version.Minor + "." + version.Build
+                + Environment.NewLine + ""
+                + Environment.NewLine + "Copyright © - Przemysław Wojtczak 2"
+                + Environment.NewLine + "";
+            mainPopupBox.IsPopupOpen = true;
         }
-        private void Button_IEFix_Click(object sender, RoutedEventArgs e)
-        {
-            TextBox_PCin.Text = TextBox_PCin.Text.TrimStart().TrimEnd();
 
-            bool CS = MainHelpers.CheckNullPCTAB(TextBox_PCin);
-            if (CS)
-                _pc_scripts.IEFix(TextBox_PCin);
-        }
-        private void Button_SpoolReset_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Open Settings page
+        /// </summary>
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            TextBox_PCin.Text = TextBox_PCin.Text.TrimStart().TrimEnd();
-
-            bool CS = MainHelpers.CheckNullPCTAB(TextBox_PCin);
-            if (CS)
-                _pc_scripts.SpoolerReset(TextBox_PCin, WaitBarPC);
+            Pages.Settings _settings = new Pages.Settings
+            {
+                Owner = this,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+            _settings.ShowDialog();
         }
 
         /// <summary>
@@ -241,68 +137,238 @@ namespace SDT
         /// </summary>
         private void StartListeningForClipboardChange()
         {
-            var helper = new ClipboardHelpers(this);
             Services.ClipboardNotification.ClipboardUpdate += (o, e) =>
             {
-                helper.OnClipboardChanged(Clipboard.GetText());
+                _clipboardhelpers.OnClipboardChanged(Clipboard.GetText());
             };
-        }
-
-        /// <summary>
-        /// Load Theme/Color Settings
-        /// </summary>
-        private void ThemeSettingsLoad()
-        {
-            try
-            {
-                var newAccent = Properties.Settings.Default.AccentC;
-                var newTheme = Properties.Settings.Default.ThemeC;
-
-                ThemeManager.ChangeAppStyle(Application.Current,
-                    ThemeManager.GetAccent(newAccent),
-                    ThemeManager.GetAppTheme(newTheme));
-            }
-            catch (Exception ex)
-            {
-                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
-                if (window != null)
-                    window.ShowMessageAsync("Błąd!", ex.Message);
-                return;
-            }
-        }
-
-        /// <summary>
-        /// Open Information Page
-        /// </summary>
-        private void Button_Info_Click(object sender, RoutedEventArgs e)
-        {
-            Information sh = new Information
-            {
-                Owner = this, WindowStartupLocation = WindowStartupLocation.CenterOwner
-            };
-            sh.Show();
-        }
-
-        /// <summary>
-        /// Open Settings Page
-        /// </summary>
-        private void Click_Button_Settings(object sender, RoutedEventArgs e)
-        {
-            SettingsPage sp = new SettingsPage(this)
-            {
-                Owner = this, WindowStartupLocation = WindowStartupLocation.CenterOwner
-            };
-            sp.Show();
         }
 
         /// <summary>
         /// Ping and Tray Balloon from Clipboard
         /// </summary>
-        private void TextBox_PCin_TextChanged(object sender, TextChangedEventArgs e)
+        private void PcTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            var helper2 = new ClipboardHelpers(this);
-            helper2.ClipboardToTextbox();
+            _clipboardhelpers.ClipboardPing();
+        }
+
+        /// <summary>
+        /// Update
+        /// </summary>
+        private void UpdateButton_Click(object sender, RoutedEventArgs e)
+        {
+            updatePopupBox.IsPopupOpen = true;
+        }
+
+        private void UpdateYesButton_Click(object sender, RoutedEventArgs e)
+        {
+            _updater.InstallUpdate();
+        }
+
+        private void CheckUpdateButton_Click(object sender, RoutedEventArgs e)
+        {
+            bool update = _updater.CheckUpdateOnDemand();
+
+            if(update)
+            {
+                updatePopupBox.IsPopupOpen = true;
+            }
+        }
+
+        /// <summary>
+        /// userGrid - Check User Login
+        /// </summary>  
+        private void UserCheckButton_Click(object sender, RoutedEventArgs e)
+        {
+            _mainHelpers.ClearUser();
+
+            userLoginTextBox.Text = userLoginTextBox.Text.TrimStart().TrimEnd();
+
+            bool CS = _mainHelpers.CheckTextBoxUser();
+            if (CS)
+                _user.CheckAD();
+        }
+
+        /// <summary>
+        /// userGrid - Ping
+        /// </summary>
+        private async void PcPingButton_Click(object sender, RoutedEventArgs e)
+        {
+            pcTextBox.Text = pcTextBox.Text.TrimStart().TrimEnd();
+
+            bool CS = _mainHelpers.CheckTextBoxPc();
+            if (CS)
+                await _pc.Ping();
+        }
+
+        /// <summary>
+        /// userGrid - Ping cmd with -t
+        /// </summary>
+        private void PcPingTButton_Click(object sender, RoutedEventArgs e)
+        {
+            pcTextBox.Text = pcTextBox.Text.TrimStart().TrimEnd();
+
+            bool CS = _mainHelpers.CheckTextBoxPc();
+            if (CS)
+                _pc.PingT();
+        }
+
+        /// <summary>
+        /// userGrid - Ports
+        /// </summary>
+        private async void PcPortsButton_Click(object sender, RoutedEventArgs e)
+        {
+            pcTextBox.Text = pcTextBox.Text.TrimStart().TrimEnd();
+
+            bool CS = _mainHelpers.CheckTextBoxPc();
+            if (CS)
+                await _pc.PortCheck();
+        }
+
+        /// <summary>
+        /// userGrid - PC Info
+        /// </summary>
+        private void PcInfoButton_Click(object sender, RoutedEventArgs e)
+        {
+            _mainHelpers.ClearPcInfo();
+
+            pcTextBox.Text = pcTextBox.Text.TrimStart().TrimEnd();
+
+            bool CS = _mainHelpers.CheckTextBoxPc();
+            if (CS)
+                _pc.PCinfo();
+        }
+
+        /// <summary>
+        /// userGrid - RCV
+        /// </summary>
+        private void RcvButton_Click(object sender, RoutedEventArgs e)
+        {
+            pcTextBox.Text = pcTextBox.Text.TrimStart().TrimEnd();
+
+            bool CS = _mainHelpers.CheckTextBoxPc();
+            if (CS)
+                _pc.Cmrcviewer();
+        }
+
+        /// <summary>
+        /// pcGrid - Open Installer
+        /// </summary>
+        private void InstallButton_Click(object sender, RoutedEventArgs e)
+        {
+            pcTextBox.Text = pcTextBox.Text.TrimStart().TrimEnd();
+
+            bool checknull = _mainHelpers.CheckTextBoxPc();
+            if (checknull)
+            {
+                var pscheck = _pc.PsExecCheck();
+                if (pscheck)
+                {
+                    Pages.Installer _installer = new Pages.Installer(this)
+                    {
+                        Owner = this,
+                        WindowStartupLocation = WindowStartupLocation.CenterOwner
+                    };
+                    _installer.Show();
+                }
+            }
+        }
+
+        /// <summary>
+        /// pcGrid - Sharing
+        /// </summary>
+        private void SharingButton_Click(object sender, RoutedEventArgs e)
+        {
+            pcTextBox.Text = pcTextBox.Text.TrimStart().TrimEnd();
+
+            bool CS = _mainHelpers.CheckTextBoxPc();
+            if (CS)
+                _pc.Sharing();
+        }
+
+        /// <summary>
+        /// userGrid - PsExec
+        /// </summary>
+        private async void PsexecButton_Click(object sender, RoutedEventArgs e)
+        {
+            pcTextBox.Text = pcTextBox.Text.TrimStart().TrimEnd();
+
+            bool CS = _mainHelpers.CheckTextBoxPc();
+            if (CS)
+                await _pc.PsExecRUN();
+        }
+
+        /// <summary>
+        /// userGrid - Scripts
+        /// </summary>
+        private void ScriptsButton_Click(object sender, RoutedEventArgs e)
+        {
+            (sender as Button).ContextMenu.IsEnabled = true;
+            (sender as Button).ContextMenu.PlacementTarget = (sender as Button);
+            (sender as Button).ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+            (sender as Button).ContextMenu.IsOpen = true;
+        }
+
+        private void GpUpdateButton_Click(object sender, RoutedEventArgs e)
+        {
+            pcTextBox.Text = pcTextBox.Text.TrimStart().TrimEnd();
+
+            bool CS = _mainHelpers.CheckTextBoxPc();
+            if (CS)
+                _pc.GPUpdate();
+        }
+
+        private void BitLockerStatusButton_Click(object sender, RoutedEventArgs e)
+        {
+            pcTextBox.Text = pcTextBox.Text.TrimStart().TrimEnd();
+
+            bool CS = _mainHelpers.CheckTextBoxPc();
+            if (CS)
+                _pc.BitLocker();
+        }
+
+        private void IeFixButton_Click(object sender, RoutedEventArgs e)
+        {
+            pcTextBox.Text = pcTextBox.Text.TrimStart().TrimEnd();
+
+            bool CS = _mainHelpers.CheckTextBoxPc();
+            if (CS)
+                _pc.IEFix();
+        }
+
+        private void SpoolResetButton_Click(object sender, RoutedEventArgs e)
+        {
+            pcTextBox.Text = pcTextBox.Text.TrimStart().TrimEnd();
+
+            bool CS = _mainHelpers.CheckTextBoxPc();
+            if (CS)
+                _pc.SpoolerReset();
+        }
+
+        private void PopupBox_OnOpened(object sender, RoutedEventArgs e) {}
+        private void PopupBox_OnClosed(object sender, RoutedEventArgs e) {}
+
+        /// <summary>
+        /// printerGrid - Check printer
+        /// </summary>
+        private void PrinterButton_Click(object sender, RoutedEventArgs e)
+        {
+            _mainHelpers.ClearPrinter();
+
+            printerTextBox.Text = printerTextBox.Text.TrimStart().TrimEnd();
+
+            bool CS = _mainHelpers.CheckTextBoxPrinter();
+            if (CS)
+                _printer.CheckPrinter();
+        }
+
+        private void PrinterIpTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            _printer.PingPrinter();
+        }
+
+        private void PingPrinterButton_Click(object sender, RoutedEventArgs e)
+        {
+            _printer.PingPrinter();
         }
     }
 }
-

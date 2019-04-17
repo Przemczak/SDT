@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SDT.Helpers;
+using System;
 using System.Diagnostics;
 using System.Reflection;
 using System.Security.Principal;
@@ -11,6 +12,9 @@ namespace SDT
     /// </summary>
     public partial class App : Application
     {
+        /// <summary>
+        /// Check if a process is running as administrator
+        /// </summary>
         protected override void OnStartup(StartupEventArgs e)
         {
             if (!IsRunAsAdministrator())
@@ -28,8 +32,7 @@ namespace SDT
                 {
                     MessageBox.Show("Aplikacja musi być uruchomiona jako administrator.");
                 }
-
-                Application.Current.Shutdown();
+                Current.Shutdown();
             }
 
             bool IsRunAsAdministrator()

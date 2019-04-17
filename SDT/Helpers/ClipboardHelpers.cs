@@ -4,13 +4,17 @@ namespace SDT.Helpers
 {
     class ClipboardHelpers
     {
-        private readonly MainWindow _metroWindow;
+        private readonly MainWindow _mainWindow;
         private readonly Services.PC _pc;
 
-        public ClipboardHelpers(MainWindow MetroWindow)
+        public ClipboardHelpers(MainWindow MainWindows)
         {
-            _metroWindow = MetroWindow;
-            _pc = new Services.PC();
+            _mainWindow = MainWindows;
+        }
+
+        public ClipboardHelpers(Services.PC PC)
+        {
+            _pc = PC;
         }
 
         Regex REGEX_TP = new Regex(@"(TP[a-zA-Z0-9]{12})", RegexOptions.Compiled);
@@ -22,27 +26,27 @@ namespace SDT.Helpers
 
         void Process_TP(string value)
         {
-            _metroWindow.TextBox_PCin.Text = value;
+            _mainWindow.pcTextBox.Text = value;
         }
         void Process_OPL(string value)
         {
-            _metroWindow.TextBox_PCin.Text = value;
+            _mainWindow.pcTextBox.Text = value;
         }
         void Process_FRA(string value)
         {
-            _metroWindow.TextBox_PCin.Text = value;
+            _mainWindow.pcTextBox.Text = value;
         }
         void Process_WTG(string value)
         {
-            _metroWindow.TextBox_PCin.Text = value;
+            _mainWindow.pcTextBox.Text = value;
         }
         void Process_BHD(string value)
         {
-            _metroWindow.TextBox_PCin.Text = value;
+            _mainWindow.pcTextBox.Text = value;
         }
         void Process_IP(string value)
         {
-            _metroWindow.TextBox_PCin.Text = value;
+            _mainWindow.pcTextBox.Text = value;
         }
 
         /// <summary>
@@ -102,56 +106,64 @@ namespace SDT.Helpers
         /// <summary>
         /// Clipboard to Textbox + Ping + TrayBalloon
         /// </summary>
-        public async void ClipboardToTextbox()
+        public async void ClipboardPing()
         {
-            string pcAddress = _metroWindow.TextBox_PCin.Text;
-
-            if (REGEX_TP.IsMatch(_metroWindow.TextBox_PCin.Text))
+            try
             {
-                int pingcheck = await Services.ClipboardPing.Instance.ClipboardNetbiosPing(_metroWindow.TextBox_PCin, _metroWindow.WaitBarPC);
+                string pcAddress = _mainWindow.pcTextBox.Text;
 
-                if (pingcheck == 1) { TrayIcon.BalloonPingOnline(pcAddress); }
-                else if (pingcheck == 2) { TrayIcon.BalloonPingOffline(pcAddress); }
+                if (REGEX_TP.IsMatch(_mainWindow.pcTextBox.Text))
+                {
+                    int pingcheck = await Services.ClipboardPing.Instance.ClipboardNetbiosPing(_mainWindow.pcTextBox, _mainWindow.pcProgressBar);
+
+                    if (pingcheck == 1) { TrayIcon.BalloonPingOnline(pcAddress); }
+                    else if (pingcheck == 2) { TrayIcon.BalloonPingOffline(pcAddress); }
+                }
+
+                else if (REGEX_OPL.IsMatch(_mainWindow.pcTextBox.Text))
+                {
+                    int pingcheck = await Services.ClipboardPing.Instance.ClipboardNetbiosPing(_mainWindow.pcTextBox, _mainWindow.pcProgressBar);
+
+                    if (pingcheck == 1) { TrayIcon.BalloonPingOnline(pcAddress); }
+                    else if (pingcheck == 2) { TrayIcon.BalloonPingOffline(pcAddress); }
+                }
+
+                else if (REGEX_FRA.IsMatch(_mainWindow.pcTextBox.Text))
+                {
+                    int pingcheck = await Services.ClipboardPing.Instance.ClipboardNetbiosPing(_mainWindow.pcTextBox, _mainWindow.pcProgressBar);
+
+                    if (pingcheck == 1) { TrayIcon.BalloonPingOnline(pcAddress); }
+                    else if (pingcheck == 2) { TrayIcon.BalloonPingOffline(pcAddress); }
+                }
+
+                else if (REGEX_WTG.IsMatch(_mainWindow.pcTextBox.Text))
+                {
+                    int pingcheck = await Services.ClipboardPing.Instance.ClipboardNetbiosPing(_mainWindow.pcTextBox, _mainWindow.pcProgressBar);
+
+                    if (pingcheck == 1) { TrayIcon.BalloonPingOnline(pcAddress); }
+                    else if (pingcheck == 2) { TrayIcon.BalloonPingOffline(pcAddress); }
+                }
+
+                else if (REGEX_BHD.IsMatch(_mainWindow.pcTextBox.Text))
+                {
+                    int pingcheck = await Services.ClipboardPing.Instance.ClipboardNetbiosPing(_mainWindow.pcTextBox, _mainWindow.pcProgressBar);
+
+                    if (pingcheck == 1) { TrayIcon.BalloonPingOnline(pcAddress); }
+                    else if (pingcheck == 2) { TrayIcon.BalloonPingOffline(pcAddress); }
+                }
+
+                else if (REGEX_IP.IsMatch(_mainWindow.pcTextBox.Text))
+                {
+                    int pingcheck = await Services.ClipboardPing.Instance.ClipboardIPPing(_mainWindow.pcTextBox, _mainWindow.pcProgressBar);
+
+                    if (pingcheck == 1) { TrayIcon.BalloonPingOnline(pcAddress); }
+                    else if (pingcheck == 2) { TrayIcon.BalloonPingOffline(pcAddress); }
+                }
             }
-
-            else if (REGEX_OPL.IsMatch(_metroWindow.TextBox_PCin.Text))
+            catch (System.Exception e)
             {
-                int pingcheck = await Services.ClipboardPing.Instance.ClipboardNetbiosPing(_metroWindow.TextBox_PCin, _metroWindow.WaitBarPC);
-
-                if (pingcheck == 1) { TrayIcon.BalloonPingOnline(pcAddress); }
-                else if (pingcheck == 2) { TrayIcon.BalloonPingOffline(pcAddress); }
-            }
-
-            else if (REGEX_FRA.IsMatch(_metroWindow.TextBox_PCin.Text))
-            {
-                int pingcheck = await Services.ClipboardPing.Instance.ClipboardNetbiosPing(_metroWindow.TextBox_PCin, _metroWindow.WaitBarPC);
-
-                if (pingcheck == 1) { TrayIcon.BalloonPingOnline(pcAddress); }
-                else if (pingcheck == 2) { TrayIcon.BalloonPingOffline(pcAddress); }
-            }
-
-            else if (REGEX_WTG.IsMatch(_metroWindow.TextBox_PCin.Text))
-            {
-                int pingcheck = await Services.ClipboardPing.Instance.ClipboardNetbiosPing(_metroWindow.TextBox_PCin, _metroWindow.WaitBarPC);
-
-                if (pingcheck == 1) { TrayIcon.BalloonPingOnline(pcAddress); }
-                else if (pingcheck == 2) { TrayIcon.BalloonPingOffline(pcAddress); }
-            }
-
-            else if (REGEX_BHD.IsMatch(_metroWindow.TextBox_PCin.Text))
-            {
-                int pingcheck = await Services.ClipboardPing.Instance.ClipboardNetbiosPing(_metroWindow.TextBox_PCin, _metroWindow.WaitBarPC);
-
-                if (pingcheck == 1) { TrayIcon.BalloonPingOnline(pcAddress); }
-                else if (pingcheck == 2) { TrayIcon.BalloonPingOffline(pcAddress); }
-            }
-
-            else if (REGEX_IP.IsMatch(_metroWindow.TextBox_PCin.Text))
-            {
-                int pingcheck = await Services.ClipboardPing.Instance.ClipboardIPPing(_metroWindow.TextBox_PCin, _metroWindow.WaitBarPC);
-
-                if (pingcheck == 1) { TrayIcon.BalloonPingOnline(pcAddress); }
-                else if (pingcheck == 2) { TrayIcon.BalloonPingOffline(pcAddress); }
+                _mainWindow.popupText.Text = e.Message;
+                _mainWindow.mainPopupBox.IsPopupOpen = true;
             }
         }
     }

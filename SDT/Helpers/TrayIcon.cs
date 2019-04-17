@@ -16,7 +16,7 @@ namespace SDT.Helpers
             NotifyIcon notifyIcon = new NotifyIcon();
             _notifyIcon = notifyIcon;
 
-            notifyIcon.Icon = Properties.Resources.icons8_maintenance_64_W6f_icon;
+            notifyIcon.Icon = Properties.Resources.App_icon;
             notifyIcon.Text = "SDT - Service Desk Tool";
             notifyIcon.Visible = true;
             
@@ -32,7 +32,7 @@ namespace SDT.Helpers
 
             void Close_Click(object sender, EventArgs e)
             {
-                mainWindow.MetroWindow_Closing(sender, null);
+                mainWindow.Window_Closing();
             }
 
             notifyIcon.DoubleClick += delegate (object sender, EventArgs args)

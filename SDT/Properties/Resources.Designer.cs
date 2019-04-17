@@ -63,20 +63,10 @@ namespace SDT.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon icons8_maintenance_64_W6f_icon {
+        internal static System.Drawing.Icon App_icon {
             get {
-                object obj = ResourceManager.GetObject("icons8_maintenance_64_W6f_icon", resourceCulture);
+                object obj = ResourceManager.GetObject("App_icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] PsExec {
-            get {
-                object obj = ResourceManager.GetObject("PsExec", resourceCulture);
-                return ((byte[])(obj));
             }
         }
         

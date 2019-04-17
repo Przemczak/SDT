@@ -1,428 +1,313 @@
-﻿<Controls:MetroWindow x:Class="SDT.MainWindow"
-                        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-                        Title="SDT - Service Desk Tool"
-                        RenderOptions.ClearTypeHint="Enabled"
-                        TextOptions.TextFormattingMode="Display"
-                        ShowMaxRestoreButton="True"
-                        GlowBrush="{DynamicResource AccentColorBrush}"
-                        BorderThickness="3" MinWidth="900" MinHeight="800" Width="900" Height="800"
-                        TitleCaps="False" ResizeMode="CanResize" Closing="MetroWindow_Closing">
+﻿<Window x:Class="SDT.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Height="570" Width="770" WindowStyle="None" AllowsTransparency="True" ResizeMode="NoResize" 
+        Background="{DynamicResource MaterialDesignPaper}"
+        MouseDown="Window_MouseDown" 
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="SemiBold"
+        FontFamily="{StaticResource MaterialDesignFont}">
 
-    <Controls:MetroWindow.RightWindowCommands>
-        <Controls:WindowCommands>
-            <Button x:Name="Button_Settings" ToolTip="Ustawienia" Visibility="Visible" Click="Click_Button_Settings">
-                <StackPanel Orientation="Horizontal">
-                    <Rectangle Width="20" Height="20" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
-                        <Rectangle.OpacityMask>
-                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_settings}" />
-                        </Rectangle.OpacityMask>
-                    </Rectangle>
-                </StackPanel>
-            </Button>
-            <Button x:Name="Button_Info" ToolTip="Informacje o SDT" Click="Button_Info_Click">
-                <StackPanel Orientation="Horizontal" >
-                    <Rectangle Width="20" Height="20" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
-                        <Rectangle.OpacityMask>
-                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_information_circle}" />
-                        </Rectangle.OpacityMask>
-                    </Rectangle>
-                </StackPanel>
-            </Button>
-        </Controls:WindowCommands>
-    </Controls:MetroWindow.RightWindowCommands>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.PopupBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TextBlock.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
 
-    <TabControl>
-        <TabItem Header="Użytkownik">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-
-                <Grid Grid.Row="0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition Height="38"/>
-                        <RowDefinition Height="20"/>
-                    </Grid.RowDefinitions>
-
-                    <TextBox x:Name="TextBox_UserLoginIn" Height="45" Width="350" BorderThickness="2" AcceptsTab="True" Grid.Row="0" 
-                             FontSize="28" TextAlignment="Center" Controls:TextBoxHelper.Watermark="Login..."/>
-                    <Button x:Name="Button_UserCheck" Content="Sprawdź" Height="35" Width="350" BorderThickness="2" IsDefault="True" Grid.Row="1" 
-                            FontSize="15" Controls:ButtonHelper.PreserveTextCase="True" Background="{DynamicResource AccentColorBrush}" Click="Button_UserCheck_Click"/>
-                    <ProgressBar x:Name="WaitBarUser" Height="15" Width="350" Margin="2" Visibility="Hidden" IsIndeterminate="True" Grid.Row="2" 
-                                 Foreground="{DynamicResource AccentColorBrush}"/>
-                </Grid>
-
-                <GroupBox Header="Konto AD" Grid.Row="1" Margin="2">
-                    <Grid x:Name="Grid_UserAD">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-
-                        <Label Content="Status konta:" FontSize="15" Height="29" Grid.Row="0" Grid.Column="2"/>
-                        <Label Content="Ostatnia zmiana hasła:" FontSize="15" Height="29" Grid.Row="0" Grid.Column="1"/>
-                        <Label Content="Hasło wygasa:" FontSize="15" Height="29" Grid.Row="0" Grid.Column="0"/>
-                        <Label Content="Konto wygasa:" FontSize="15" Height="29" Grid.Row="0" Grid.Column="3"/>
-                        <TextBox x:Name="TextBox_UserLocked" Height="29" BorderThickness="2" Margin="0,0,5,0" IsReadOnly="True" Grid.Row="1" Grid.Column="2"
-                                    TextAlignment="Center" FontSize="17" FontWeight="Bold"/>
-                        <TextBox x:Name="TextBox_UserLastPassChange" Height="29" BorderThickness="2" Margin="0,0,5,0" IsReadOnly="True" Grid.Row="1" Grid.Column="1"
-                                    TextAlignment="Center" FontSize="17"/>
-                        <TextBox x:Name="TextBox_UserPassExpire" Height="29" BorderThickness="2" Margin="0,0,5,0" IsReadOnly="True" Grid.Row="1" Grid.Column="0"
-                                    TextAlignment="Center" FontSize="17"/>
-                        <TextBox x:Name="TextBox_UserAccExpire" Height="29" BorderThickness="2" Margin="0,0,5,0" IsReadOnly="True" Grid.Row="1" Grid.Column="3"
-                                    TextAlignment="Center" FontSize="17"/>
-                    </Grid>
-                </GroupBox>
-
-                <GroupBox Header="Użytkownik" Grid.Row="2" Margin="2">
-                    <Grid x:Name="Grid_UserUser">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="190"/>
-                            <ColumnDefinition MinWidth="360"/>
-                            <ColumnDefinition Width="140"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-
-                        <Label Content="Przełożony kadrowy:" FontSize="15" Height="29" Grid.Row="1" Grid.Column="0"/>
-                        <TextBox x:Name="TextBox_User_Manager" Height="29" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="1" Grid.Column="1"
-                                     TextAlignment="Center" FontSize="17"/>
-                        <Label Content="Przełożony funkcyjny:" FontSize="15" Height="29" Grid.Row="0" Grid.Column="0"/>
-                        <TextBox x:Name="TextBox_User_FunctManag" Height="29" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="0" Grid.Column="1"
-                                     TextAlignment="Center" FontSize="17"/>
-                        <Label Content="Numer IFS:" FontSize="15" Height="29" Grid.Row="0" Grid.Column="2"/>
-                        <TextBox x:Name="TextBox_UserIFS" Height="29" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="0" Grid.Column="3"
-                                     TextAlignment="Center" FontSize="17"/>
-                        <Label Content="Zatrudnienie:" FontSize="15" Height="29" Grid.Row="1" Grid.Column="2"/>
-                        <TextBox x:Name="TextBox_UserEmploy" Height="29" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="1" Grid.Column="3"
-                                     TextAlignment="Center" FontSize="17"/>
-                    </Grid>
-                </GroupBox>
-
-                <GroupBox Header="Poczta" Grid.Row="3" Margin="2">
-                    <Grid x:Name="testgrid">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-
-                        <Grid x:Name="Grid_UserMailC" Grid.Row="0">
-                            <CheckBox x:Name="CheckBox_UserMailAct" Height="23" Width="250" Content=":Skrzynka pocztowa aktywna" FlowDirection="RightToLeft" BorderThickness="2" Margin="3" Grid.Row="0"
-                              FontSize="17" IsHitTestVisible="False" Focusable="False" />
-
-                        </Grid>
-
-                        <Grid x:Name="Grid_UserMail" Grid.Row="1">
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="190"/>
-                                <ColumnDefinition MinWidth="360"/>
-                                <ColumnDefinition Width="150"/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-
-                            <Label Content="Adres e-mail:" FontSize="15" Height="35" Grid.Row="0" Grid.Column="0"/>
-                            <TextBox x:Name="TextBox_UserMailAdr" Height="29" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="0" Grid.Column="1"
-                                     TextAlignment="Center" FontSize="17"/>
-                            <Label Content="SIP:" FontSize="15" Height="29" Grid.Row="1" Grid.Column="0"/>
-                            <TextBox x:Name="TextBox_UserSIP" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="1" Grid.Column="1"
-                                     TextAlignment="Center" FontSize="17"/>
-                            <Label Content="Klasa skrzynki:" FontSize="15" Height="29" Grid.Row="0" Grid.Column="2"/>
-                            <TextBox x:Name="TextBox_UserMailBoxClass" Height="29" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="0" Grid.Column="3"
-                                     TextAlignment="Center" FontSize="17"/>
-                            <Label Content="Wielkość skrzynki:" FontSize="15" Height="29" Grid.Row="1" Grid.Column="2"/>
-                            <TextBox x:Name="TextBox_UserMailQuota" Height="29" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="1" Grid.Column="3"
-                                     TextAlignment="Center" FontSize="17"/>
-                        </Grid>
-
-                        <Grid x:Name="Grid_UserMailBPTP" Grid.Row="2">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="190"/>
-                                <ColumnDefinition MinWidth="360"/>
-                                <ColumnDefinition Width="150"/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-
-                            <Label Content="BPTP:" FontSize="15" Height="29" Grid.Row="0" Grid.Column="0"/>
-                            <TextBox x:Name="TextBox_UserBPTP"  Height="29" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Column="1"
-                                     TextAlignment="Center" FontSize="17"/>
-                        </Grid>
-                    </Grid>
-                </GroupBox>
-
-                <Grid Grid.Row="4">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-
-                    <GroupBox Header="Dostępy" Grid.Column="0" Margin="2">
-                        <Grid x:Name="Grid_UserAccess">
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-
-                            <CheckBox x:Name="CheckBox_UserPrintDeny" Content=" :Blokada wydruków" Height="20" Width="170" BorderThickness="2" Grid.Row="0" Grid.Column="0"
-                                          FontSize="16" IsHitTestVisible="False" Focusable="False"  FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserPrintColor" Content=" :Wydruk w kolorze" Height="20" Width="170" BorderThickness="2" Grid.Row="1" Grid.Column="0"
-                                          FontSize="16" IsHitTestVisible="False" Focusable="False"  FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserInternet" Content=" :Internet" Height="20" Width="170" BorderThickness="2" Grid.Row="1" Grid.Column="2"
-                                          FontSize="16" IsHitTestVisible="False" Focusable="False" FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserLyncPC" Content=" :Lync na PC" Height="20" Width="170" BorderThickness="2" Grid.Row="2" Grid.Column="0"
-                                          FontSize="16" IsHitTestVisible="False" Focusable="False" FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserDevices" Content=" :.Nośniki zew" Height="20" Width="170" BorderThickness="2" Grid.Row="2" Grid.Column="1"
-                                          FontSize="16" IsHitTestVisible="False" Focusable="False" FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserAirnet" Content=" :AirNet" Height="20" Width="170" BorderThickness="2" Grid.Row="0" Grid.Column="1"
-                                          FontSize="16" IsHitTestVisible="False" Focusable="False" FlowDirection="RightToLeft"/>
-                        </Grid>
-                    </GroupBox>
-                    <GroupBox Header="Developer" Grid.Column="1" Margin="2">
-                        <Grid x:Name="Grid_UserDev">
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-
-                            <CheckBox x:Name="CheckBox_UserDev" Content=":Developer" Height="20" Width="100" BorderThickness="2" Grid.Row="0"
-                                          FontSize="16" IsHitTestVisible="False" Focusable="False" FlowDirection="RightToLeft" />
-                            <TextBox x:Name="TextBox_UserDevPC" Height="40" Width="360" BorderThickness="2" Margin="2" IsReadOnly="True" TextWrapping="Wrap" Grid.Row="1"
-                                     TextAlignment="Center" FontSize="17" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
-                        </Grid>
-                    </GroupBox>
-                </Grid>
-
-                <Grid Grid.Row="5">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <GroupBox Header="BYOD" Grid.Column="0" Margin="2">
-                        <Grid x:Name="Grid_UserBYOD">
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <CheckBox x:Name="CheckBox_UserByodCitrix" Content=" :BYOD Citrix" Height="20" Width="170" BorderThickness="2" Grid.Row="0" Grid.Column="0"
-                                          FontSize="16" IsHitTestVisible="False" Focusable="False"  FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserByodHDD" Content=" :BYOD HDD" Height="20" Width="170" BorderThickness="2" Grid.Row="1" Grid.Column="0"
-                                          FontSize="16" IsHitTestVisible="False" Focusable="False"  FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserWTG" Content=" :BYOD WTG" Height="20" Width="170" BorderThickness="2" Grid.Row="2" Grid.Column="0"
-                                          FontSize="16" IsHitTestVisible="False" Focusable="False"  FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserLWMW7" Content=" :BYOD LVM W7" Height="20" Width="170" BorderThickness="2" Grid.Row="3" Grid.Column="0"
-                                          FontSize="16" IsHitTestVisible="False" Focusable="False"  FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserLWMW10" Content=" :BYOD LVM W10" Height="20" Width="170" BorderThickness="2" Grid.Row="0" Grid.Column="1"
-                                          FontSize="16" IsHitTestVisible="False" Focusable="False"  FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserByodCitrixTest" Content=" :BYOD Citrix Test" Height="20" Width="170" BorderThickness="2" Grid.Row="1" Grid.Column="1"
-                                          FontSize="16" IsHitTestVisible="False" Focusable="False"  FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserLWMW7Test" Content=" :BYOD LVM W7 Test" Height="20" Width="170" BorderThickness="2" Grid.Row="2" Grid.Column="2"
-                                          FontSize="16" IsHitTestVisible="False" Focusable="False"  FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserLWMW10Test" Content=" :BYOD LVM W10 Test" Height="20" Width="170" BorderThickness="2" Grid.Row="3" Grid.Column="3"
-                                          FontSize="16" IsHitTestVisible="False" Focusable="False"  FlowDirection="RightToLeft"/>
-                        </Grid>
-                    </GroupBox>
-                    <GroupBox Header="AIRWATCH" Grid.Column="1" Margin="2">
-                        <Grid x:Name="Grid_UserAirWatch">
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-
-                            <CheckBox x:Name="CheckBox_UserAirWatchBasic" Content=" :AirWatch Podstawowy" Height="20" Width="190" BorderThickness="2" Grid.Row="0"
-                                          FontSize="16" IsHitTestVisible="False" Focusable="False" FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserAirWatchExp" Content=" :AirWatch Rozszerzony" Height="20" Width="190" BorderThickness="2" Grid.Row="1"
-                                          FontSize="16" IsHitTestVisible="False" Focusable="False"  FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserAirWatchVIP" Content=" :AirWatch VIP" Height="20" Width="190" BorderThickness="2" Grid.Row="2"
-                                          FontSize="16" IsHitTestVisible="False" Focusable="False"  FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserAirWatchLync" Content=" :AirWatch Lync" Height="20" Width="190" BorderThickness="2" Grid.Row="3"
-                                          FontSize="16" IsHitTestVisible="False" Focusable="False"  FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_UserAirWatchSkype" Content=" :AirWatch Skype" Height="20" Width="190" BorderThickness="2" Grid.Row="4"
-                                          FontSize="16" IsHitTestVisible="False" Focusable="False"  FlowDirection="RightToLeft"/>
-                        </Grid>
-                    </GroupBox>
-                </Grid>
+    <Grid x:Name="mainGrid" Background="{DynamicResource MaterialDesignPaper}">
+        <materialDesign:PopupBox x:Name="mainPopupBox" PlacementMode="TopAndAlignCentres" StaysOpen="False" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Grid Width="350" Height="Auto" MinHeight="60">
+                <TextBlock x:Name="popupText" FontSize="16" Width="330" Height="Auto" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" FontWeight="SemiBold"/>
             </Grid>
-        </TabItem>
+        </materialDesign:PopupBox>
 
-        <TabItem Header="Stacja">
-            <Grid x:Name="Grid_PC">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-
-                <Grid Grid.Row="0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition Height="38"/>
-                        <RowDefinition Height="20"/>
-                    </Grid.RowDefinitions>
-
-                    <TextBox x:Name="TextBox_PCin" Height="45" Width="350" BorderThickness="2" AcceptsTab="True" Grid.Row="0" 
-                             FontSize="28" TextAlignment="Center" Controls:TextBoxHelper.Watermark="IP/Netbios..." TextChanged="TextBox_PCin_TextChanged"/>
-                    <Grid Grid.Row="1">
-                        <Button x:Name="Button_PCping" Content="Ping" Height="35" Width="350" Margin="1" BorderThickness="2" IsDefault="True" 
-                            FontSize="15" Controls:ButtonHelper.PreserveTextCase="True" Background="{DynamicResource AccentColorBrush}" Click="Button_PCping_Click"/>
-                        <Button x:Name="Button_PCpingT" Content="Ping -t" Height="35" Width="100"  Margin="500,1,0,1" BorderThickness="2" HorizontalAlignment="Center"
-                                FontSize="15" Controls:ButtonHelper.PreserveTextCase="True" Background="{DynamicResource AccentColorBrush}" Click="Button_PCpingT_Click" />
-                    </Grid>
-                    <ProgressBar x:Name="WaitBarPC" Height="15" Width="350" Margin="2" Visibility="Hidden" IsIndeterminate="True" Grid.Row="2" 
-                                 Foreground="{DynamicResource AccentColorBrush}"/>
+            <materialDesign:PopupBox x:Name="updatePopupBox" PlacementMode="TopAndAlignCentres" StaysOpen="False" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Grid Width="250" Height="70" Margin="0,3,0,0">
+                    <TextBlock Text="Czy chcesz zaktualizować teraz?" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Top" TextWrapping="Wrap" TextAlignment="Center" FontWeight="SemiBold"/>
+                    <Button Content="Tak" Click="UpdateYesButton_Click" Width="100" Margin="5,0,0,0" Style="{StaticResource MaterialDesignRaisedButton}" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                    <Button Content="Nie" Width="100" Margin="0,0,5,0" Style="{StaticResource MaterialDesignRaisedButton}" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
                 </Grid>
+            </materialDesign:PopupBox>
 
-                <GroupBox Header="Informacje o stacji" Grid.Row="1" Margin="2">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
+        <Grid x:Name="topGrid" Height="25" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="60,0,0,0">
+            <Button Height="25" Width="25" HorizontalAlignment="Right" VerticalAlignment="Top" Click="ExitButton_Click" Background="{x:Null}" Foreground="Gray"
+                    Style="{StaticResource MaterialDesignFloatingActionMiniButton}" materialDesign:ShadowAssist.ShadowDepth="Depth0" BorderBrush="{x:Null}">
+                <materialDesign:PackIcon Kind="Close" Height="25" Width="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Button>
+            <Button Height="25" Width="25" HorizontalAlignment="Right" VerticalAlignment="Top" BorderBrush="{x:Null}" Margin="0,0,25,0" Click="MinimizeButton_Click"
+                    Style="{StaticResource MaterialDesignFloatingActionMiniButton}" materialDesign:ShadowAssist.ShadowDepth="Depth0" Background="{x:Null}" Foreground="Gray">
+                <materialDesign:PackIcon Kind="WindowMinimize" Height="25" Width="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Button>
+        </Grid>
 
-                        <Grid Grid.Row="0">
-                            <Button x:Name="Button_PCinfo" Content="Sprawdź" Height="35" Width="350" Margin="2" BorderThickness="2"
-                            FontSize="15" Controls:ButtonHelper.PreserveTextCase="True" Background="{DynamicResource AccentColorBrush}" Click="Button_PCinfo_Click"/>
-                        </Grid>
+        <Grid x:Name="leftGrid" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Stretch" >
+            <Button Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,70,0,0" Click="UserGridButton_Click"
+                    Style="{StaticResource MaterialDesignFloatingActionMiniButton}">
+                <materialDesign:PackIcon Kind="UserSearchOutline" Height="24" Width="24"/>
+            </Button>
+            <Button Width="40" Height="40" HorizontalAlignment="Center" Margin="0,120,0,0" VerticalAlignment="Top" Click="PcGridButton_Click"
+                    Style="{StaticResource MaterialDesignFloatingActionMiniButton}">
+                <materialDesign:PackIcon Kind="DesktopClassic" Height="24" Width="24"/>
+            </Button>
+            <Button Width="40" Height="40" HorizontalAlignment="Center" Margin="0,170,0,0" VerticalAlignment="Top" Click="PrinterGridButton_Click"
+                    Style="{StaticResource MaterialDesignFloatingActionMiniButton}">
+                <materialDesign:PackIcon Kind="PrinterSettings" Height="24" Width="24"/>
+            </Button>
+            <Button x:Name="updateButton" Width="30" Height="30" Style="{StaticResource MaterialDesignFloatingActionButton}" Click="UpdateButton_Click" VerticalAlignment="Bottom"
+                    Content="{materialDesign:PackIcon Download}" Margin="0,0,0,80" Visibility="Hidden"
+                    materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
+                    materialDesign:ButtonProgressAssist.Value="-1"
+                    materialDesign:ButtonProgressAssist.IsIndeterminate="True">
+                <Button.ToolTip>
+                    <ToolTip x:Name="updateButtonToolTip" ToolTipService.ShowDuration="60000" Placement="Bottom">
+                        <StackPanel>
+                            <TextBlock FontWeight="Bold">Dostępna jest aktualizacja</TextBlock>
+                            <TextBlock>Kliknij aby pobrać</TextBlock>
+                        </StackPanel>
+                    </ToolTip>
+                </Button.ToolTip>
+            </Button>
+            <Button x:Name="checkUpdateButton" Width="30" Height="30" HorizontalAlignment="Center" Margin="0,0,0,80" VerticalAlignment="Bottom" Click="CheckUpdateButton_Click"
+                Style="{StaticResource MaterialDesignFloatingActionMiniButton}" Visibility="Visible" ToolTip="Sprawdź aktualizację.">
+                <materialDesign:PackIcon Kind="Download" Height="24" Width="24"/>
+            </Button>
 
-                        <Grid Grid.Row="1" x:Name="Grid_PCInfo">
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
+            <Button Width="30" Height="30" HorizontalAlignment="Center" Margin="0,0,0,40" VerticalAlignment="Bottom" Click="SettingsButton_Click"
+                Style="{StaticResource MaterialDesignFloatingActionMiniButton}" ToolTip="Ustawienia">
+                <materialDesign:PackIcon Kind="SettingsOutline" Height="24" Width="24"/>
+            </Button>
+            <Button Width="30" Height="30" HorizontalAlignment="Center" Margin="0,0,0,5" VerticalAlignment="Bottom" Click="InfoButton_Click"
+                Style="{StaticResource MaterialDesignFloatingActionMiniButton}" ToolTip="Info">
+                <materialDesign:PackIcon Kind="InfoOutline" Height="24" Width="24"/>
+            </Button>
+        </Grid>
 
-                            <Label Content="Adres IP:" FontSize="15" Height="30" Grid.Row="0" Grid.Column="0"/>
-                            <TextBox x:Name="TextBox_PCip" Height="35" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="1" Grid.Column="0"
-                                     TextAlignment="Center" FontSize="17"/>
-                            <Label Content="Netbios:" FontSize="15" Height="30" Grid.Row="0" Grid.Column="1"/>
-                            <TextBox x:Name="TextBox_PCnetbios" Height="35" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="1" Grid.Column="1"
-                                     TextAlignment="Center" FontSize="17"/>
-                            <Label Content="Wolne miejsce:" FontSize="15" Height="30" Grid.Row="0" Grid.Column="2"/>
-                            <TextBox x:Name="TextBox_PCspace" Height="35" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="1" Grid.Column="2"
-                                     TextAlignment="Center" FontSize="17"/>
-                            <Label Content="Mac adres:" FontSize="15" Height="30" Grid.Row="2" Grid.Column="0"/>
-                            <TextBox x:Name="TextBox_PCmac" Height="35" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="3" Grid.Column="0"
-                                     TextAlignment="Center" FontSize="17"/>
-                            <Label Content="Numer seryjny:" FontSize="15" Height="30" Grid.Row="2" Grid.Column="1"/>
-                            <TextBox x:Name="TextBox_PCns" Height="35" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="3" Grid.Column="1"
-                                     TextAlignment="Center" FontSize="17"/>
-                            <Label Content="Zalogowany:" FontSize="15" Height="30" Grid.Row="2" Grid.Column="2"/>
-                            <TextBox x:Name="TextBox_PCloguser" Height="35" BorderThickness="2" Margin="2" IsReadOnly="True" Grid.Row="3" Grid.Column="2"
-                                     TextAlignment="Center" FontSize="17"/>
-                        </Grid>
-                    </Grid>
-                </GroupBox>
+        <Grid x:Name="userGrid" Visibility="Visible" Height="Auto" Width="Auto" Margin="60,25,0,0" Background="{DynamicResource MaterialDesignPaper}">
+            <Button Style="{StaticResource MaterialDesignFloatingActionButton}" ToolTip="Sprawdź użytkownika w AD." Click="UserCheckButton_Click"
+                    Margin="264,5,400,495" Height="45" Width="45"  IsDefault="True">
+                <materialDesign:PackIcon Kind="Magnify" Height="30" Width="30"/>
+            </Button>
 
-                <GroupBox Header="Porty" Grid.Row="2" Margin="2">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
-                            <Button x:Name="Button_PCPorts" Content="Porty" Height="35" Width="350" Margin="2" BorderThickness="2"
-                            FontSize="15" Controls:ButtonHelper.PreserveTextCase="True" Background="{DynamicResource AccentColorBrush}" Click="Button_PCPorts_Click"/>
-                        </Grid>
-                        <Grid Grid.Row="1" x:Name="Grid_PCPorts">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <CheckBox x:Name="CheckBox_PC135" Content=" :(Port 135 (RCP" Height="30" Width="190" BorderThickness="2" Grid.Column="0"
-                                          FontSize="16" IsHitTestVisible="False" Focusable="False" FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_PC445" Content=" :(Port 445 (Sharing" Height="30" Width="190" BorderThickness="2" Grid.Column="1"
-                                          FontSize="16" IsHitTestVisible="False" Focusable="False" FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_PC2701" Content=" :(Port 2701 (Remote" Height="30" Width="190" BorderThickness="2" Grid.Column="2"
-                                          FontSize="16" IsHitTestVisible="False" Focusable="False" FlowDirection="RightToLeft"/>
-                            <CheckBox x:Name="CheckBox_PC8081" Content=" :(Port 8081 (McAfee" Height="30" Width="190" BorderThickness="2" Grid.Column="3"
-                                          FontSize="16" IsHitTestVisible="False" Focusable="False" FlowDirection="RightToLeft"/>
+            <TextBox x:Name="userLoginTextBox" Height="50" Width="250" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="22" FontWeight="Bold"
+                     materialDesign:HintAssist.Hint="Login..." Style="{StaticResource MaterialDesignFloatingHintTextBox}" TextAlignment="Center"/>
+            <TextBox x:Name="userLastPassSetTextBox" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     HorizontalAlignment="Left" Height="30" Margin="5,160,0,0" VerticalAlignment="Top" Width="250" FontSize="16" TextAlignment="Center"/>
+            <TextBox x:Name="userPassExpireTextBox" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     HorizontalAlignment="Left" Height="30" Margin="5,110,0,0" VerticalAlignment="Top" Width="250" FontSize="16" TextAlignment="Center"/>
+            <TextBox x:Name="userAccExpireTextBox" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     HorizontalAlignment="Left" Height="30" Margin="277,110,0,0" VerticalAlignment="Top" Width="250" FontSize="16" TextAlignment="Center"/>
+            <TextBox x:Name="userManagerTextBox" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     HorizontalAlignment="Left" Height="30" Margin="180,214,0,0" VerticalAlignment="Top" Width="250" FontSize="16" TextAlignment="Center"/>
+            <TextBox x:Name="userAccCreated" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     HorizontalAlignment="Left" Height="30" Margin="277,160,0,0" VerticalAlignment="Top" Width="250" FontSize="16" TextAlignment="Center"/>
+            <TextBox x:Name="userFunctionalTextBox" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     HorizontalAlignment="Left" Height="30" Margin="180,265,0,0" VerticalAlignment="Top" Width="250" FontSize="16" TextAlignment="Center"/>
+            <TextBox x:Name="userIfsTextBox" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     HorizontalAlignment="Left" Height="30" Margin="5,215,0,0" VerticalAlignment="Top" Width="150" FontSize="16" TextAlignment="Center"/>
+            <TextBox x:Name="userEmploymentTextBox" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     HorizontalAlignment="Left" Height="30" Margin="5,265,0,0" VerticalAlignment="Top" Width="150" FontSize="16" TextAlignment="Center"/>
+            <TextBox x:Name="userMailAddressTextBox" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     HorizontalAlignment="Left" Height="30" Margin="180,320,0,0" VerticalAlignment="Top" Width="340" FontSize="16" TextAlignment="Center"/>
+            <TextBox x:Name="userSipTextBox" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     HorizontalAlignment="Left" Height="30" Margin="180,370,0,0" VerticalAlignment="Top" Width="340" FontSize="16" TextAlignment="Center"/>
+            <TextBox x:Name="userMailClassTextBox" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     HorizontalAlignment="Left" Height="30" Margin="5,320,0,0" VerticalAlignment="Top" Width="150" FontSize="16" TextAlignment="Center"/>
+            <TextBox x:Name="userMailQuotaTextBox" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     HorizontalAlignment="Left" Height="30" Margin="5,370,0,0" VerticalAlignment="Top" Width="150" FontSize="16" TextAlignment="Center"/>
+            <TextBox x:Name="userBptpTextBox" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     HorizontalAlignment="Left" Height="30" Margin="180,420,0,0" VerticalAlignment="Top" Width="340" FontSize="16" TextAlignment="Center"/>
+            <TextBox x:Name="userDeveloperTextBox" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" TextWrapping="Wrap" BorderThickness="1"
+                     HorizontalAlignment="Left" Height="70" Margin="492,219,0,0" VerticalAlignment="Top" Width="190" FontSize="16" TextAlignment="Center"/>
 
-                        </Grid>
-                    </Grid>
-                </GroupBox>
+            <CheckBox x:Name="blockedAccCheckbox" Content="Blokada konta" HorizontalAlignment="Left" Margin="155,60,0,0" VerticalAlignment="Top" Height="30" FontSize="15" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="AdStatusCheckbox" Content="Konto aktywne" HorizontalAlignment="Left" Margin="5,59,0,0" VerticalAlignment="Top" Height="30" FontSize="15" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="mailAccCheckBox" Content="Skrzynka aktywna" HorizontalAlignment="Left" Margin="305,60,0,0" VerticalAlignment="Top" Height="30" FontSize="15" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="printDenyCheckBox" Content="Blokada wydruku" HorizontalAlignment="Left" Margin="550,65,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="printColorCheckBox" Content="Wydruk kolor" HorizontalAlignment="Left" Margin="550,85,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="internetCheckBox" Content="Internet" HorizontalAlignment="Left" Margin="550,125,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="lyncPcCheckBox" Content="Lync PC" HorizontalAlignment="Left" Margin="550,145,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="devicesCheckBox" Content="Nośniki zew" HorizontalAlignment="Left" Margin="550,105,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="airnetCheckBox" Content="Airnet" HorizontalAlignment="Left" Margin="550,165,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="developerCheckBox" Content="Developer" HorizontalAlignment="Left" Margin="550,197,0,0" VerticalAlignment="Top" Height="20" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="byodCitrixCheckBox" Content="BYOD Citrix" HorizontalAlignment="Left" Margin="366.467,455,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="byodHddCheckBox" Content="BYOD HDD" HorizontalAlignment="Left" Margin="366.467,475,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="byodWtgCheckBox" Content="BYOD WTG" HorizontalAlignment="Left" Margin="366.467,495,0,0" VerticalAlignment="Top" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False" FontSize="14"/>
+            <CheckBox x:Name="lvmW7CheckBox" Content="BYOD LVM W7" HorizontalAlignment="Left" Margin="366.467,515,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="lvm10CheckBox" Content="BYOD LVM W10" HorizontalAlignment="Left" Margin="506.467,455,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="byodTestCitrixCheckBox" Content="BYOD Citrix Test" HorizontalAlignment="Left" Margin="506.467,475,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="lvm7TestCheckBox" Content="BYOD LVM W7 Test" HorizontalAlignment="Left" Margin="506.467,495,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="lvm10TestCheckBox" Content="BYOD LVM W10 Test" HorizontalAlignment="Left" Margin="506.467,515,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="airwatchBasicCheckBox" Content="AirWatch podstawowy" HorizontalAlignment="Left" Margin="5,455,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="airwatchExpCheckBox" Content="AirWatch rozszerzony" HorizontalAlignment="Left" Margin="5,475,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="airwatchVipCheckBox" Content="AirWatch VIP" HorizontalAlignment="Left" Margin="190,475,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="airwatchLyncCheckBox" Content="AirWatch Lync" HorizontalAlignment="Left" Margin="190,495,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="airwatchSkypeCheckbox" Content="AirWatch Skype" HorizontalAlignment="Left" Margin="190,455,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
 
-                <Grid Grid.Row="3" Margin="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
+            <ProgressBar Visibility="Hidden" IsIndeterminate="True" x:Name="userProgressBar" HorizontalAlignment="Left" Height="10" Margin="-2,47,0,0" VerticalAlignment="Top" Width="255" 
+                         BorderBrush="{x:Null}" Grid.ColumnSpan="2"/>
 
-                    <Button x:Name="Button_PsExec" Content="PsExec" Height="35" Width="250" Margin="2" BorderThickness="2" Grid.Column="0"
-                            FontSize="15" Controls:ButtonHelper.PreserveTextCase="True" Background="{DynamicResource AccentColorBrush}" Click="Button_PsExec_Click"/>
+            <TextBlock HorizontalAlignment="Left" Margin="5,145,0,0" Text="Ostatnia zmiana hasła:" VerticalAlignment="Top" FontSize="14"/>
+            <TextBlock HorizontalAlignment="Left"  Margin="5,95,0,0" Text="Hasło wygasa:" VerticalAlignment="Top" FontSize="14"/>
+            <TextBlock HorizontalAlignment="Left"  Margin="279,95,0,0" Text="Konto wygasa:" VerticalAlignment="Top" FontSize="14"/>
+            <TextBlock HorizontalAlignment="Left"  Margin="279,145,0,0" Text="Konto utworzono:" VerticalAlignment="Top" FontSize="14"/>
+            <TextBlock HorizontalAlignment="Left"  Margin="5,250,0,0" Text="Zatrudnienie:" VerticalAlignment="Top" FontSize="14"/>
+            <TextBlock HorizontalAlignment="Left"  Margin="180,199,0,0" Text="Przełożony kadrowy:" VerticalAlignment="Top" FontSize="14"/>
+            <TextBlock HorizontalAlignment="Left"  Margin="5,200,0,0" Text="IFS:" VerticalAlignment="Top" FontSize="14"/>
+            <TextBlock HorizontalAlignment="Left"  Margin="180,250,0,0" Text="Przełożony funkcyjny:" VerticalAlignment="Top" FontSize="14"/>
+            <TextBlock HorizontalAlignment="Left"  Margin="180,305,0,0" Text="Adres e-mail:" VerticalAlignment="Top" FontSize="14"/>
+            <TextBlock HorizontalAlignment="Left"  Margin="180,355,0,0" Text="SIP:" VerticalAlignment="Top" FontSize="14"/>
+            <TextBlock HorizontalAlignment="Left"  Margin="5,305,0,0" Text="Klasa skrzynki:" VerticalAlignment="Top" FontSize="14"/>
+            <TextBlock HorizontalAlignment="Left"  Margin="5,355,0,0" Text="Wielkość skrzynki:" VerticalAlignment="Top" FontSize="14"/>
+            <TextBlock HorizontalAlignment="Left"  Margin="180,405,0,0" Text="Adres BPTP:" VerticalAlignment="Top" FontSize="14"/>
+        </Grid>
 
-                    <Button x:Name="Button_Scripts" Content="Skrypty" Height="35" Width="250" Margin="2" BorderThickness="2" Grid.Column="1"
-                            FontSize="15" Controls:ButtonHelper.PreserveTextCase="True" Background="{DynamicResource AccentColorBrush}" Click="Button_Scripts_Click">
-                        <Button.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Header="GPUpdate" x:Name="Button_GP" ToolTip="Odświeżenie uprawnień na stacji" Click="Button_GP_Click"/>
-                                <MenuItem Header="BitLocker" x:Name="Button_BitLocker" ToolTip="Sprawdzenie statusu szyfrowania" Click="Button_BitLocker_Click"/>
-                                <MenuItem Header="IE Fix" x:Name="Button_IEFix" ToolTip="Zmiana w rejestrze by IE nie uruchamiał się przy starcie systemu" Click="Button_IEFix_Click"/>
-                                <MenuItem Header="Spooler restart" x:Name="Button_SpoolReset" ToolTip="Zdalnie restartuje Bufor Wydruku na stacji" Click="Button_SpoolReset_Click"/>
-                            </ContextMenu>
-                        </Button.ContextMenu>
-                    </Button>
-                    <Button x:Name="Button_RCV" Content="Instalator" Height="35" Width="250" Margin="2" BorderThickness="2" Grid.Column="2"
-                            FontSize="15" Controls:ButtonHelper.PreserveTextCase="True" Background="{DynamicResource AccentColorBrush}" Click="Button_Insta_Click"/>
-                </Grid>
+        <Grid x:Name="pcGrid" Visibility="Hidden" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="60,25,-0.4,-0.4" Background="{DynamicResource MaterialDesignPaper}">
 
-                <Grid Grid.Row="4" Margin="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
+            <Button Style="{StaticResource MaterialDesignFloatingActionButton}" ToolTip="Sprawdź ping stacji." Click="PcPingButton_Click"
+                    Margin="264,5,400,495" Height="45" Width="45">
+                <materialDesign:PackIcon Kind="HelpNetwork" Height="30" Width="30"/>
+            </Button>
+            <Button Style="{StaticResource MaterialDesignFloatingActionButton}" ToolTip="Informacje o stacji." Click="PcInfoButton_Click"
+                Margin="314,5,350.4,495.4" Height="45" Width="45">
+                <materialDesign:PackIcon Kind="InformationVariant" Height="30" Width="30"/>
+            </Button>
 
-                    <Button x:Name="Button_Sharing" Content="Sharing (C:\)" Height="35" Width="250" Margin="2" BorderThickness="2" Grid.Column="0"
-                            FontSize="15" Controls:ButtonHelper.PreserveTextCase="True" Background="{DynamicResource AccentColorBrush}" Click="Button_Sharing_Click"/>
-                    <Button x:Name="Button_Insta" Content="Remote Control Viewer" Height="35" Width="250" Margin="2" BorderThickness="2" Grid.Column="1"
-                            FontSize="15" Controls:ButtonHelper.PreserveTextCase="True" Background="{DynamicResource AccentColorBrush}" Click="Button_RCV_Click"/>
-                </Grid>
-            </Grid>
-        </TabItem>
-    </TabControl>
-</Controls:MetroWindow>
+            <materialDesign:PopupBox Style="{StaticResource MaterialDesignMultiFloatingActionPopupBox}" Height="45" Width="45" PlacementMode="BottomAndAlignCentres"
+                    ToolTipService.Placement="Right" ToolTip="Dodatkowe funkcje" Opened="PopupBox_OnOpened" Closed="PopupBox_OnClosed" Margin="364,5,0,495.4">
+                <StackPanel>
+                    <Button ToolTip="Ping z parametrem -t" Click="PcPingTButton_Click">Ping -t</Button>
+                    <Button ToolTip="Sprawdzenie portów stacji" Click="PcPortsButton_Click">Porty</Button>
+                </StackPanel>
+            </materialDesign:PopupBox>
 
+            <TextBox x:Name="pcTextBox" Height="50" Width="250" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="22" TextChanged="PcTextBox_TextChanged"
+                materialDesign:HintAssist.Hint="Adres stacji..." Style="{StaticResource MaterialDesignFloatingHintTextBox}" TextAlignment="Center"/>
+
+            <Button Content="PsExec" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignRaisedButton}"
+                    Margin="129,97,0,0" VerticalAlignment="Top" Width="120" Height="30" FontSize="17" Click="PsexecButton_Click"/>
+            <Button Content="Sharing" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignRaisedButton}"
+                    Margin="5,97,0,0" VerticalAlignment="Top" Width="120" FontSize="17" Height="30" Click="SharingButton_Click"/>
+            <Button Content="RCV" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignRaisedButton}"
+                    Margin="5,62,0,0" VerticalAlignment="Top" Width="120" FontSize="17" Height="30" Click="RcvButton_Click"/>
+            <Button Content="Instalator" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignRaisedButton}"
+                    Margin="130,62,0,0" VerticalAlignment="Top" Width="120" Height="30" FontSize="17" Click="InstallButton_Click"/>
+
+            <Button x:Name="scriptsButton" Content="Skrypty" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignRaisedButton}"
+                    Margin="68,131,0,0" VerticalAlignment="Top" Width="120" Height="30" FontSize="16" Click="ScriptsButton_Click">
+                <Button.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="GPUpdate" x:Name="gpUpdateButton" ToolTip="Odświeżenie uprawnień na stacji" Click="GpUpdateButton_Click" />
+                        <MenuItem Header="BitLocker" x:Name="bitLockerStatusButton" ToolTip="Sprawdzenie statusu szyfrowania" Click="BitLockerStatusButton_Click" />
+                        <MenuItem Header="IE Fix" x:Name="ieFixButton" ToolTip="Zmiana w rejestrze by IE nie uruchamiał się przy starcie systemu" Click="IeFixButton_Click"/>
+                        <MenuItem Header="Spooler restart" x:Name="spoolResetButton" ToolTip="Zdalnie restartuje Bufor Wydruku na stacji" Click="SpoolResetButton_Click"/>
+                    </ContextMenu>
+                </Button.ContextMenu>
+            </Button>
+
+            <TextBox x:Name="pcIpTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="30" Margin="350,136,0,0" VerticalAlignment="Top" Width="170" FontSize="16" TextAlignment="Center"/>
+            <TextBox x:Name="pcNetbiosTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="30" Margin="350,81,0,0" VerticalAlignment="Top" Width="170" FontSize="16" TextAlignment="Center"/>
+            <TextBox x:Name="pcSpaceTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="30" Margin="530,191,0,0" VerticalAlignment="Top" Width="170" FontSize="16" TextAlignment="Center"/>
+            <TextBox x:Name="pcMacTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="30" Margin="350,191,0,0" VerticalAlignment="Top" Width="170" FontSize="16" TextAlignment="Center"/>
+            <TextBox x:Name="pcSerialTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="30" Margin="530,81,0,0" VerticalAlignment="Top" Width="170" FontSize="16" TextAlignment="Center"/>
+            <TextBox x:Name="pcUserLoggedTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="30" Margin="530,136,0,0" VerticalAlignment="Top" Width="170" FontSize="16" TextAlignment="Center"/>
+            <TextBox x:Name="pcSystem" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="30" Margin="400,241,0,0" VerticalAlignment="Top" Width="250" FontSize="16" TextAlignment="Center"/>
+            <TextBox x:Name="pcSystemVersion" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="30" Margin="400,292,0,0" VerticalAlignment="Top" Width="250" FontSize="16" TextAlignment="Center"/>
+            <TextBox x:Name="pcSystemVersionUpdate" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                Height="30" Margin="400,344,0,0" VerticalAlignment="Top" Width="250" FontSize="16" TextAlignment="Center"/>
+
+            <CheckBox x:Name="port135_CheckBox" Content="Port 135" HorizontalAlignment="Left" Margin="32,199,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="port445_CheckBox" Content="Port 445" HorizontalAlignment="Left" Margin="144,199,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="port2701_CheckBox" Content="Port 2701" HorizontalAlignment="Left" Margin="32,218,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="port8081_CheckBox" Content="Port 8081" HorizontalAlignment="Left" Margin="144,218,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+
+            <CheckBox x:Name="joulex_CheckBox" Content="Comp-Joulex-wyjatki-GD" HorizontalAlignment="Left" Margin="431,390,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"
+                      ToolTip="Odstępstwo od polityk schematu zasilania"/>
+            <CheckBox x:Name="infonoc_CheckBox" Content="Komp-Info-Noc-GD" HorizontalAlignment="Left" Margin="431,410,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"
+                      ToolTip="Odstępsto od usypiania stacji"/>
+            <CheckBox x:Name="alterbrow_CheckBox" Content="Comp-AlterBrow-GD" HorizontalAlignment="Left" Margin="431,430,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"
+                      ToolTip="Dostęp do alternatywnych przeglądarek"/>
+            <CheckBox x:Name="bstb_CheckBoxx" Content="ProxyBSTBlokada" HorizontalAlignment="Left" Margin="431,450,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"
+                      ToolTip="Blokada dostępu do internetu (SOC)"/>
+
+            <ProgressBar Visibility="Hidden" IsIndeterminate="True" x:Name="pcProgressBar" HorizontalAlignment="Left" Height="10" Margin="-2,47,0,0" VerticalAlignment="Top" Width="255"
+                         BorderBrush="{x:Null}"/>
+
+            <TextBlock Text="Netbios:" HorizontalAlignment="Left" Margin="349,65,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <TextBlock Text="Adres IP:" HorizontalAlignment="Left" Margin="350,120,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <TextBlock Text="MAC:" HorizontalAlignment="Left" Margin="350,175,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <TextBlock Text="Numer seryjny:" HorizontalAlignment="Left" Margin="530,65,0,0" VerticalAlignment="Top" FontSize="14" />
+            <TextBlock Text="Zalogowany:" HorizontalAlignment="Left" Margin="530,120,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <TextBlock Text="Wolne miejsce na C:" HorizontalAlignment="Left" Margin="530,175,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <TextBlock Text="System operacyjny:" HorizontalAlignment="Left" Margin="461,225,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <TextBlock Text="Wersja systemu operacyjnego:" HorizontalAlignment="Left" Margin="431,275,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <TextBlock Text="Data aktualizacji systemu:" HorizontalAlignment="Left" Margin="448,327,0,0" VerticalAlignment="Top" FontSize="14"/>
+
+        </Grid>
+        <Grid x:Name="printerGrid" Visibility="Visible" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="60,25,-0.4,-0.4" Background="{DynamicResource MaterialDesignPaper}">
+
+            <Button Style="{StaticResource MaterialDesignFloatingActionButton}" ToolTip="Sprawdź drukarkę." Click="PrinterButton_Click"
+                    Margin="264,5,400,495" Height="45" Width="45">
+                <materialDesign:PackIcon Kind="Magnify" Height="30" Width="30"/>
+            </Button>
+
+            <TextBox x:Name="printerTextBox" Height="50" Width="250" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="22"
+                materialDesign:HintAssist.Hint="Adres IP/NS drukarki..." Style="{StaticResource MaterialDesignFloatingHintTextBox}" TextAlignment="Center"/>
+
+            <TextBox x:Name="printerIpTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="30" Margin="5,117,0,0" VerticalAlignment="Top" Width="170" FontSize="16" TextAlignment="Center" TextChanged="PrinterIpTextBox_TextChanged"/>
+            <TextBox x:Name="printerNsTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="30" Margin="240,117,0,0" VerticalAlignment="Top" Width="170" FontSize="16" TextAlignment="Center"/>
+            <TextBox x:Name="printerServerTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="30" Margin="5,222,0,0" VerticalAlignment="Top" Width="170" FontSize="16" TextAlignment="Center"/>
+            <TextBox x:Name="printerModelTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="30" Margin="5,170,0,0" VerticalAlignment="Top" Width="170" FontSize="16" TextAlignment="Center"/>
+            <TextBox x:Name="printerConnectionTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="30" Margin="240,170,0,0" VerticalAlignment="Top" Width="170" FontSize="16" TextAlignment="Center"/>
+            <TextBox x:Name="printerLocationTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="80" Margin="5,403,0,0" VerticalAlignment="Top" Width="570" FontSize="14" TextAlignment="Center" TextWrapping="Wrap"/>
+            <TextBox x:Name="printerStatusTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="30" Margin="240,222,0,0" VerticalAlignment="Top" Width="170" FontSize="16" TextAlignment="Center"/>
+            <TextBox x:Name="printerShareTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="55" Margin="5,326,0,0" VerticalAlignment="Top" Width="570" FontSize="14" TextAlignment="Center" TextWrapping="Wrap"/>
+            <TextBox x:Name="printerGuardianTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="30" Margin="5,274,0,0" VerticalAlignment="Top" Width="172" FontSize="16" TextAlignment="Center" ToolTip="Podana osoba otrzymuje ME z Proaktywności w danym miesiącu"/>
+            <CheckBox x:Name="terminalCheckBox" Content="Terminal" HorizontalAlignment="Left" Margin="10,55,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="salonCheckBox" Content="Salon" HorizontalAlignment="Left" Margin="103,55,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="faxCheckBox" Content="Fax" HorizontalAlignment="Left" Margin="180,55,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+
+            <ProgressBar x:Name="printerProgressBar" Visibility="Hidden" IsIndeterminate="True" HorizontalAlignment="Left" Height="10" Margin="-2,47,0,0" VerticalAlignment="Top" Width="255" 
+                         BorderBrush="{x:Null}"/>
+
+            <TextBlock Text="Adres IP:" HorizontalAlignment="Left" Margin="5,100,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <TextBlock Text="Numer seryjny:" HorizontalAlignment="Left" Margin="240,100,0,0"  VerticalAlignment="Top" FontSize="14"/>
+            <TextBlock Text="Model:" HorizontalAlignment="Left" Margin="5,153,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <TextBlock Text="Podłączenie:" HorizontalAlignment="Left" Margin="240,153,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <TextBlock Text="Lokalizacja:" HorizontalAlignment="Left" Margin="5,386,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <TextBlock Text="Serwer:" HorizontalAlignment="Left" Margin="5,205,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <TextBlock Text="Status" HorizontalAlignment="Left" Margin="240,205,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <TextBlock Text="Udział:" HorizontalAlignment="Left" Margin="5,309,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <TextBlock Text="Login opiekuna:" HorizontalAlignment="Left" Margin="5,257,0,0" VerticalAlignment="Top" FontSize="14"/>
+
+            <Button Style="{StaticResource MaterialDesignFloatingActionButton}" ToolTip="Sprawdź ping drukarki" Click="PingPrinterButton_Click"
+                Margin="180,120,505.4,400.4" Height="25" Width="25">
+                <materialDesign:PackIcon Kind="HelpNetwork" Height="20" Width="20"/>
+            </Button>
+        </Grid>
+    </Grid>
+</Window>

@@ -1,7 +1,5 @@
-﻿using MahApps.Metro.Controls;
-using MahApps.Metro.Controls.Dialogs;
+﻿using MaterialDesignThemes.Wpf;
 using System;
-using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
@@ -14,11 +12,11 @@ namespace SDT.Services
     public sealed class ClipboardPing
     {
         public static ClipboardPing _instance;
-        private readonly MainWindow _metroWindow;
+        private readonly MainWindow _mainWindow;
 
-        public ClipboardPing(MainWindow MetroWindow)
+        public ClipboardPing(MainWindow MainWindow)
         {
-            _metroWindow = MetroWindow;
+            _mainWindow = MainWindow;
         }
 
         public static ClipboardPing Instance
@@ -41,12 +39,12 @@ namespace SDT.Services
         /// PING from Clipboard (Netbios address)
         /// return int: 1 = online = 2, offline, 3 = error
         /// </summary>
-        public async Task<int> ClipboardNetbiosPing(TextBox TextBox_PCin, ProgressBar WaitBarPC)
+        public async Task<int> ClipboardNetbiosPing(TextBox PcTextBox, ProgressBar pcProgressBar)
         {
             try
             {
-                string netbios = TextBox_PCin.Text;
-                WaitBarPC.Visibility = Visibility.Visible;
+                string netbios = PcTextBox.Text;
+                pcProgressBar.Visibility = Visibility.Visible;
 
                 var pingAnswer = await Task.Run(() =>
                 {
@@ -56,23 +54,22 @@ namespace SDT.Services
 
                 if (pingAnswer.Status == IPStatus.Success)
                 {
-                    TextBox_PCin.Background = new SolidColorBrush(Colors.Green);
-                    WaitBarPC.Visibility = Visibility.Hidden;
+                    PcTextBox.Foreground = (Brush)new BrushConverter().ConvertFrom("#FF64DD17");
+                    pcProgressBar.Visibility = Visibility.Hidden;
                     return 1;
                 }
                 else
                 {
-                    TextBox_PCin.Background = new SolidColorBrush(Colors.Red);
-                    WaitBarPC.Visibility = Visibility.Hidden;
+                    PcTextBox.Foreground = (Brush)new BrushConverter().ConvertFrom("#FFEF5350");
+                    pcProgressBar.Visibility = Visibility.Hidden;
                     return 2;
                 }
             }
             catch (Exception e)
             {
-                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
-                if (window != null)
-                    await window.ShowMessageAsync("Błąd!", e.Message);
-                WaitBarPC.Visibility = Visibility.Hidden;
+                _mainWindow.popupText.Text = e.Message;
+                _mainWindow.mainPopupBox.IsPopupOpen = true;
+                pcProgressBar.Visibility = Visibility.Hidden;
                 return 3;
             }
         }
@@ -81,13 +78,13 @@ namespace SDT.Services
         /// Address IP parse + PING from Clipboard
         /// return int: 1 = online = 2, offline, 3 = error
         /// </summary>
-        public async Task<int> ClipboardIPPing(TextBox TextBox_PCin, ProgressBar WaitBarPC)
+        public async Task<int> ClipboardIPPing(TextBox PcTextBox, ProgressBar pcProgressBar)
         {
             try
             {
-                WaitBarPC.Visibility = Visibility.Visible;
+                pcProgressBar.Visibility = Visibility.Visible;
 
-                if (IPAddress.TryParse(TextBox_PCin.Text, out IPAddress ipaddress))
+                if (IPAddress.TryParse(PcTextBox.Text, out IPAddress ipaddress))
                 {
                     var pingAnswer = await Task.Run(() =>
                     {
@@ -97,33 +94,36 @@ namespace SDT.Services
 
                     if (pingAnswer.Status == IPStatus.Success)
                     {
-                        TextBox_PCin.Background = new SolidColorBrush(Colors.Green);
-                        WaitBarPC.Visibility = Visibility.Hidden;
+                        PcTextBox.Foreground = (Brush)new BrushConverter().ConvertFrom("#FF64DD17");
+                        pcProgressBar.Visibility = Visibility.Hidden;
                         return 1;
+                    }
+                    else if (pingAnswer.Status == IPStatus.Success || pingAnswer.Status == IPStatus.TimedOut)
+                    {
+                        PcTextBox.Foreground = (Brush)new BrushConverter().ConvertFrom("#FFEF5350");
+                        pcProgressBar.Visibility = Visibility.Hidden;
+                        return 2;
                     }
                     else
                     {
-                        TextBox_PCin.Background = new SolidColorBrush(Colors.Red);
-                        WaitBarPC.Visibility = Visibility.Hidden;
+                        PcTextBox.Foreground = (Brush)new BrushConverter().ConvertFrom("#FFEF5350");
+                        pcProgressBar.Visibility = Visibility.Hidden;
                         return 2;
                     }
                 }
                 else
                 {
-                    var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
-                    if (window != null)
-                        await window.ShowMessageAsync("Błąd!", "Błedy zakres adresacji IPv4");
-                    WaitBarPC.Visibility = Visibility.Hidden;
+                    var window = await DialogHost.Show("Błąd!", "Błedy zakres adresacji IPv4");
+                    pcProgressBar.Visibility = Visibility.Hidden;
                     return 3;
                 }
 
             }
             catch (Exception e)
             {
-                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
-                if (window != null)
-                    await window.ShowMessageAsync("Błąd!", e.Message);
-                WaitBarPC.Visibility = Visibility.Hidden;
+                _mainWindow.popupText.Text = e.Message;
+                _mainWindow.mainPopupBox.IsPopupOpen = true;
+                pcProgressBar.Visibility = Visibility.Hidden;
                 return 3;
             }
         }

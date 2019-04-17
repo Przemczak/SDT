@@ -1,6 +1,4 @@
-﻿using MahApps.Metro.Controls;
-using MahApps.Metro.Controls.Dialogs;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -8,110 +6,89 @@ namespace SDT.Helpers
 {
     class MainHelpers
     {
-        /// <summary>
-        /// Clear Checkboxes in USER_TAB
-        /// </summary>
-        public static void ClearBoxesUSERTAB(Grid Grid_UserAD, Grid Grid_UserUser, Grid Grid_UserMail, Grid Grid_UserMailBPTP, Grid Grid_UserDev, Grid Grid_UserMailC, 
-            Grid Grid_UserAccess, Grid Grid_UserBYOD, Grid Grid_UserAirWatch)
+        private readonly MainWindow _mainWindow;
+
+        public MainHelpers(MainWindow MainWindow)
         {
-            foreach (Control c in Grid_UserAD.Children)
-            {
-                if (c is TextBox && c != null) { ((TextBox)c).Text = string.Empty; }
-            }
+            _mainWindow = MainWindow;
+        }
 
-            foreach (Control c in Grid_UserUser.Children)
+        /// <summary>
+        /// Clear textboxes and checkboxes in User
+        /// </summary>
+        public void ClearUser()
+        {
+            foreach (TextBox c in _mainWindow.userGrid.Children.OfType<TextBox>())
             {
-                if (c is TextBox && c != null) { ((TextBox)c).Text = string.Empty; }
-            }
-
-            foreach (Control c in Grid_UserMail.Children)
-            {
-                if (c is TextBox && c != null) { ((TextBox)c).Text = string.Empty; }
-            }
-
-            foreach (Control c in Grid_UserMailBPTP.Children)
-            {
-                if (c is TextBox && c != null) { ((TextBox)c).Text = string.Empty; }
-            }
-
-            foreach (Control c in Grid_UserDev.Children)
-            {
-                if (c is TextBox && c != null) { ((TextBox)c).Text = string.Empty; }
-            }
-
-            foreach (Control c in Grid_UserMailC.Children)
-            {
-                if (c is CheckBox && c != null) { ((CheckBox)c).IsChecked = false; ((CheckBox)c).ClearValue(CheckBox.ForegroundProperty); }
-            }
-
-            foreach (Control c in Grid_UserAccess.Children)
-            {
-                if (c is CheckBox && c != null) { ((CheckBox)c).IsChecked = false; ((CheckBox)c).ClearValue(CheckBox.ForegroundProperty); }
-            }
-
-            foreach (Control c in Grid_UserDev.Children)
-            {
-                if (c is CheckBox && c != null) { ((CheckBox)c).IsChecked = false; }
-            }
-
-            foreach (Control c in Grid_UserBYOD.Children)
-            {
-                if (c is CheckBox && c != null) { ((CheckBox)c).IsChecked = false; }
-            }
-
-            foreach (Control c in Grid_UserAirWatch.Children)
-            {
-                if (c is CheckBox && c != null) { ((CheckBox)c).IsChecked = false; }
+                if(c.Name == "userLoginTextBox"){}
+                else
+                { if (c is TextBox && c != null) { c.Text = string.Empty; }}
             }
         }
 
         /// <summary>
-        /// Clear Textboxes and Checkboxes in PC_TAB
+        /// Clear textboxes in Pc
         /// </summary>
-        public static void ClearBoxesPCTAB(Grid Grid_PCInfo)
+        public void ClearPcInfo()
         {
-            foreach (Control c in Grid_PCInfo.Children)
+            foreach (TextBox c in _mainWindow.pcGrid.Children.OfType<TextBox>())
             {
-                if (c is TextBox && c != null) { ((TextBox)c).Text = string.Empty; }
+                if (c.Name == "pcTextBox") { }
+                else
+                { if (c is TextBox && c != null) { c.Text = string.Empty; } }
             }
         }
 
         /// <summary>
-        /// Clear Chechboxes in PC_TAB (Ports)
+        /// Clear textboxes in Printer
         /// </summary>
-        public static void ClearChecksPCTAB(Grid Grid_PCPorts)
+        public void ClearPrinter()
         {
-            foreach (Control c in Grid_PCPorts.Children)
+            foreach (TextBox c in _mainWindow.printerGrid.Children.OfType<TextBox>())
             {
-                if (c is CheckBox && c != null) { ((CheckBox)c).IsChecked = false; }
+                if (c.Name == "printerTextBox") { }
+                else
+                { if (c is TextBox && c != null) { c.Text = string.Empty; } }
             }
         }
 
         /// <summary>
-        /// Check null for USER
+        /// Check textbox for USER
         /// </summary>
-        public static bool CheckNullUSERTAB(TextBox TextBox_UserLoginIn)
+        public bool CheckTextBoxUser()
         {
-            if (string.IsNullOrWhiteSpace(TextBox_UserLoginIn.Text))
+            if (string.IsNullOrWhiteSpace(_mainWindow.userLoginTextBox.Text))
             {
-                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
-                if (window != null)
-                    window.ShowMessageAsync("Błąd!", "Podaj login użytkownika.");
+                _mainWindow.popupText.Text = "Podaj login użytkownika.";
+                _mainWindow.mainPopupBox.IsPopupOpen = true;
                 return false;
             }
             else { return true; }
         }
 
         /// <summary>
-        /// Check null for PC
+        /// Check textbox for PC
         /// </summary>
-        public static bool CheckNullPCTAB(TextBox TextBox_PCin)
+        public bool CheckTextBoxPc()
         {
-            if (string.IsNullOrWhiteSpace(TextBox_PCin.Text))
+            if (string.IsNullOrWhiteSpace(_mainWindow.pcTextBox.Text))
             {
-                var window = Application.Current.Windows.OfType<MetroWindow>().FirstOrDefault();
-                if (window != null)
-                    window.ShowMessageAsync("Błąd!", "Podaj adres stacji.");
+                _mainWindow.popupText.Text = "Podaj adres stacji.";
+                _mainWindow.mainPopupBox.IsPopupOpen = true;
+                return false;
+            }
+            else { return true; }
+        }
+
+        /// <summary>
+        /// Check textbox for Printer
+        /// </summary>
+        public bool CheckTextBoxPrinter()
+        {
+            if (string.IsNullOrWhiteSpace(_mainWindow.printerTextBox.Text))
+            {
+                _mainWindow.popupText.Text = "Podaj IP/NS drukarki.";
+                _mainWindow.mainPopupBox.IsPopupOpen = true;
                 return false;
             }
             else { return true; }
