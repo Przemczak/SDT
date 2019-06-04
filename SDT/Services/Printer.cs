@@ -57,6 +57,7 @@ namespace SDT.Services
             {
                 _mainWindow.popupText.Text = "Brak dostępu do danych";
                 _mainWindow.mainPopupBox.IsPopupOpen = true;
+                _mainWindow.printerProgressBar.Visibility = Visibility.Hidden;
             }
             else
             {
