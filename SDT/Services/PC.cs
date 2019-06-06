@@ -568,7 +568,7 @@ namespace SDT.Services
             try
             {
                 ServiceController sc = new ServiceController("Spooler", ips);
-                if (sc.Status == ServiceControllerStatus.Stopped)
+                if (sc.Status == ServiceControllerStatus.Stopped || sc.Status == ServiceControllerStatus.Paused)
                 {
                     await Task.Run(() =>
                     {
@@ -599,6 +599,67 @@ namespace SDT.Services
             {
                 _mainWindow.popupText.Text = ex.Message;
                 _mainWindow.mainPopupBox.IsPopupOpen = true;
+                _mainWindow.pcProgressBar.Visibility = Visibility.Hidden;
+                return;
+            }
+        }
+
+        public async void ServicesStart()
+        {
+            _mainWindow.pcProgressBar.Visibility = Visibility.Visible;
+            string ips = _mainWindow.pcTextBox.Text;
+
+            try
+            {
+                ServiceController sc1 = new ServiceController("CcmExec", ips);
+                if (sc1.Status == ServiceControllerStatus.Stopped || sc1.Status == ServiceControllerStatus.Paused)
+                {
+                    await Task.Run(() =>
+                    {
+                        sc1.Start();
+                    });
+                }
+
+                ServiceController sc2 = new ServiceController("CmRcService", ips);
+                if (sc2.Status == ServiceControllerStatus.Stopped || sc2.Status == ServiceControllerStatus.Paused)
+                {
+                    await Task.Run(() =>
+                    {
+                        sc2.Start();
+                    });
+                }
+                
+                ServiceController sc3 = new ServiceController("RemoteRegistry", ips);
+                if (sc3.Status == ServiceControllerStatus.Stopped || sc3.Status == ServiceControllerStatus.Paused)
+                {
+                    await Task.Run(() =>
+                    {
+                        sc3.Start();
+                    });
+                }
+
+                await Task.Run(() =>
+                {
+                    Thread.Sleep(8000);
+                });
+
+                ServiceController sc1a = new ServiceController("CcmExec", ips);
+                ServiceController sc2a = new ServiceController("CmRcService", ips);
+                ServiceController sc3a = new ServiceController("RemoteRegistry", ips);
+
+                _mainWindow.pcProgressBar.Visibility = Visibility.Hidden;
+                _mainWindow.popupText.Text = "Status procesów:"
+                    + Environment.NewLine + "CcmExec - " + sc1a.Status
+                    + Environment.NewLine + "CmRcService - " + sc2a.Status
+                    + Environment.NewLine + "RemoteRegistry - " + sc3a.Status;
+                _mainWindow.mainPopupBox.IsPopupOpen = true;
+                return;
+            }
+            catch (Exception ex)
+            {
+                _mainWindow.popupText.Text = ex.Message;
+                _mainWindow.mainPopupBox.IsPopupOpen = true;
+                _mainWindow.pcProgressBar.Visibility = Visibility.Hidden;
                 return;
             }
         }

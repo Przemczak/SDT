@@ -344,6 +344,15 @@ namespace SDT
                 _pc.SpoolerReset();
         }
 
+        private void RcServicesStart_Click(object sender, RoutedEventArgs e)
+        {
+            pcTextBox.Text = pcTextBox.Text.TrimStart().TrimEnd();
+
+            bool CS = _mainHelpers.CheckTextBoxPc();
+            if (CS)
+                _pc.ServicesStart();
+        }
+
         private void PopupBox_OnOpened(object sender, RoutedEventArgs e) {}
         private void PopupBox_OnClosed(object sender, RoutedEventArgs e) {}
 

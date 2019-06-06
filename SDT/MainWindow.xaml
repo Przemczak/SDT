@@ -208,6 +208,7 @@
                         <MenuItem Header="BitLocker" x:Name="bitLockerStatusButton" ToolTip="Sprawdzenie statusu szyfrowania" Click="BitLockerStatusButton_Click" />
                         <MenuItem Header="IE Fix" x:Name="ieFixButton" ToolTip="Zmiana w rejestrze by IE nie uruchamiał się przy starcie systemu" Click="IeFixButton_Click"/>
                         <MenuItem Header="Spooler restart" x:Name="spoolResetButton" ToolTip="Zdalnie restartuje Bufor Wydruku na stacji" Click="SpoolResetButton_Click"/>
+                        <MenuItem Header="Remote Control Services" x:Name="rcServicesStart" ToolTip="Uruchamia zdalnie procesy odpowiedzialne za połączenie zdalne" Click="RcServicesStart_Click" />
                     </ContextMenu>
                 </Button.ContextMenu>
             </Button>
@@ -259,7 +260,7 @@
             <TextBlock Text="Data aktualizacji systemu:" HorizontalAlignment="Left" Margin="448,327,0,0" VerticalAlignment="Top" FontSize="14"/>
 
         </Grid>
-        <Grid x:Name="printerGrid" Visibility="Visible" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="60,25,-0.4,-0.4" Background="{DynamicResource MaterialDesignPaper}">
+        <Grid x:Name="printerGrid" Visibility="Hidden" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="60,25,-0.4,-0.4" Background="{DynamicResource MaterialDesignPaper}">
 
             <Button Style="{StaticResource MaterialDesignFloatingActionButton}" ToolTip="Sprawdź drukarkę." Click="PrinterButton_Click"
                     Margin="264,5,400,495" Height="45" Width="45">
