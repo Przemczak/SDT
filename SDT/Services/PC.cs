@@ -132,6 +132,7 @@ namespace SDT.Services
             {
                 string address = _mainWindow.pcTextBox.Text;
                 _mainWindow.pcProgressBar.Visibility = Visibility.Visible;
+
                 try
                 {
                     IPAddress[] ip = await Task.Run(() =>
@@ -139,110 +140,184 @@ namespace SDT.Services
                         IPHostEntry hostname = Dns.GetHostEntry(address);
                         return hostname.AddressList;
                     });
-
                     _mainWindow.pcIpTextBox.Text = ip[0].ToString();
-
-                    ManagementScope Scope;
-                    Scope = new ManagementScope(string.Format("\\\\{0}\\root\\CIMV2", _mainWindow.pcTextBox.Text), null);
-                    Scope.Connect();
-
-                    ObjectQuery Query1 = new ObjectQuery("Select * From Win32_NetworkAdapterConfiguration where IPEnabled = 1");
-                    ManagementObjectSearcher Searcher1 = new ManagementObjectSearcher(Scope, Query1);
-                    foreach (ManagementObject WmiObject in Searcher1.Get())
-                    {
-                        _mainWindow.pcMacTextBox.Text = WmiObject["MacAddress"].ToString();
-                    }
-                    ObjectQuery Query2 = new ObjectQuery("Select * From Win32_BIOS");
-                    ManagementObjectSearcher Searcher2 = new ManagementObjectSearcher(Scope, Query2);
-                    foreach (ManagementObject WmiObject in Searcher2.Get())
-                    {
-                        _mainWindow.pcSerialTextBox.Text = (WmiObject["SerialNumber"].ToString());
-                    }
-                    ObjectQuery Query3 = new ObjectQuery("Select * From Win32_LogicalDisk where DeviceID = 'C:'");
-                    ManagementObjectSearcher Searcher3 = new ManagementObjectSearcher(Scope, Query3);
-                    foreach (ManagementObject WmiObject in Searcher3.Get())
-                    {
-                        ulong miejsce = ulong.Parse(WmiObject["FreeSpace"].ToString());
-                        ulong wolne = (miejsce / (1024 * 1024 * 1024));
-                        _mainWindow.pcSpaceTextBox.Text = wolne + " GB".ToString();
-                    }
-                    ObjectQuery Query4 = new ObjectQuery("Select * from Win32_ComputerSystem");
-                    ManagementObjectSearcher Searcher4 = new ManagementObjectSearcher(Scope, Query4);
-                    foreach (ManagementObject WmiObject in Searcher4.Get())
-                    {
-                        var userLogged = WmiObject["UserName"].ToString();
-                        _mainWindow.pcNetbiosTextBox.Text = WmiObject["Name"].ToString();
-                        if (string.IsNullOrWhiteSpace(userLogged))
-                        {
-                            _mainWindow.pcUserLoggedTextBox.Text = "Nikt nie jest zalogowany na stacji";
-                        }
-                        else
-                        {
-                            _mainWindow.pcUserLoggedTextBox.Text = userLogged.Substring(userLogged.IndexOf("\\") + 1);
-                        }
-                    }
-                    ObjectQuery Query5 = new ObjectQuery("Select * from Win32_OperatingSystem");
-                    ManagementObjectSearcher Searcher5 = new ManagementObjectSearcher(Scope, Query5);
-                    foreach (ManagementObject WmiObject in Searcher5.Get())
-                    {
-                        string os = WmiObject["Caption"].ToString();
-                        string osversion = WmiObject["Version"].ToString(); 
-                        _mainWindow.pcSystem.Text = os;
-
-                        if (string.IsNullOrWhiteSpace(osversion)) { _mainWindow.pcSystemVersion.Text = "Brak informacji"; }
-                        else if (osversion.Contains("10.0.10240")) { _mainWindow.pcSystemVersion.Text = "10.0.10240 - 1507"; }
-                        else if (osversion.Contains("10.0.10586")) { _mainWindow.pcSystemVersion.Text = "10.0.10586 - 1511"; }
-                        else if (osversion.Contains("10.0.14393")) { _mainWindow.pcSystemVersion.Text = "10.0.14393 - 1607"; }
-                        else if (osversion.Contains("10.0.15063")) { _mainWindow.pcSystemVersion.Text = "10.0.15063 - 1703"; }
-                        else if (osversion.Contains("10.0.16299")) { _mainWindow.pcSystemVersion.Text = "10.0.16299 - 1709"; }
-                        else if (osversion.Contains("10.0.17134")) { _mainWindow.pcSystemVersion.Text = "10.0.17134 - 1803"; }
-                        else if (osversion.Contains("10.0.17763")) { _mainWindow.pcSystemVersion.Text = "10.0.17763 - 1809"; }
-                        else if (osversion.Contains("10.0.18309")) { _mainWindow.pcSystemVersion.Text = "10.0.18309 - 1903"; }
-                    }
-
-                    List<string> output = await Task.Run(() =>
-                    {
-                        var ctx = new PrincipalContext(ContextType.Domain);
-                        ComputerPrincipal computer = ComputerPrincipal.FindByIdentity(ctx, address);
-
-                        return output = computer.GetGroups().Select(x => x.SamAccountName).ToList();
-                    });
-
-                    _mainWindow.joulex_CheckBox.IsChecked = output.Contains("Comp-Joulex-wyjatki-GD");
-                    _mainWindow.infonoc_CheckBox.IsChecked = output.Contains("Komp-Info-Noc-GD");
-                    _mainWindow.alterbrow_CheckBox.IsChecked = output.Contains("Comp-AlterBrow-GD");
-
-                    _mainWindow.printDenyCheckBox.IsChecked = output.Contains("ProxyBSTBlokada");
-
-                    if (output.Contains("ProxyBSTBlokada"))
-                    { _mainWindow.bstb_CheckBoxx.IsChecked = true; _mainWindow.bstb_CheckBoxx.Background = Brushes.Red; }
-
-                    _mainWindow.pcProgressBar.Visibility = Visibility.Hidden;
-
-
-                    ObjectQuery Query6 = new ObjectQuery("SELECT * FROM Win32_OperatingSystem");
-                    ManagementObjectSearcher Searcher6 = new ManagementObjectSearcher(Scope, Query6);
-                    foreach (ManagementObject WmiObject in Searcher6.Get())
-                    {
-                        DateTime updateTime = ManagementDateTimeConverter.ToDateTime(WmiObject["InstallDate"].ToString());
-                        _mainWindow.pcSystemVersionUpdate.Text = updateTime.ToString();
-                    }
-
                 }
                 catch (Exception e)
                 {
+                    _mainWindow.pcIpTextBox.Text = "Brak danych";
                     _mainWindow.popupText.Text = e.Message;
                     _mainWindow.mainPopupBox.IsPopupOpen = true;
-                    _mainWindow.pcProgressBar.Visibility = Visibility.Hidden;
-                    return;
                 }
-            }
-            else
-            {
-                _mainWindow.popupText.Text = "Stacja nie odpowiada w sieci.";
-                _mainWindow.mainPopupBox.IsPopupOpen = true;
-                _mainWindow.pcProgressBar.Visibility = Visibility.Hidden;
-                return;
+
+                ManagementScope Scope;
+                Scope = new ManagementScope(string.Format("\\\\{0}\\root\\CIMV2", _mainWindow.pcTextBox.Text), null);
+                Scope.Connect();
+
+                if (Scope != null)
+                {
+                    try
+                    {
+                        ObjectQuery Query1 = new ObjectQuery("Select * From Win32_NetworkAdapterConfiguration where IPEnabled = 1");
+                        ManagementObjectSearcher Searcher1 = new ManagementObjectSearcher(Scope, Query1);
+                        foreach (ManagementObject WmiObject in Searcher1.Get())
+                        {
+                            _mainWindow.pcMacTextBox.Text = WmiObject["MacAddress"].ToString();
+                        }
+                    }
+                    catch (Exception e1)
+                    {
+                        _mainWindow.pcMacTextBox.Text = "Brak danych";
+                        _mainWindow.popupText.Text = e1.Message;
+                        _mainWindow.mainPopupBox.IsPopupOpen = true;
+                    }
+
+                    try
+                    {
+                        ObjectQuery Query2 = new ObjectQuery("Select * From Win32_BIOS");
+                        ManagementObjectSearcher Searcher2 = new ManagementObjectSearcher(Scope, Query2);
+                        foreach (ManagementObject WmiObject in Searcher2.Get())
+                        {
+                            _mainWindow.pcSerialTextBox.Text = (WmiObject["SerialNumber"].ToString());
+                        }
+                    }
+                    catch (Exception e2)
+                    {
+                        _mainWindow.pcSerialTextBox.Text = "Brak danych";
+                        _mainWindow.popupText.Text = e2.Message;
+                        _mainWindow.mainPopupBox.IsPopupOpen = true;
+                    }
+
+                    try
+                    {
+                        ObjectQuery Query3 = new ObjectQuery("Select * From Win32_LogicalDisk where DeviceID = 'C:'");
+                        ManagementObjectSearcher Searcher3 = new ManagementObjectSearcher(Scope, Query3);
+                        foreach (ManagementObject WmiObject in Searcher3.Get())
+                        {
+                            ulong miejsce = ulong.Parse(WmiObject["FreeSpace"].ToString());
+                            ulong wolne = (miejsce / (1024 * 1024 * 1024));
+                            _mainWindow.pcSpaceTextBox.Text = wolne + " GB".ToString();
+                        }
+                    }
+                    catch (Exception e3)
+                    {
+                        _mainWindow.pcSpaceTextBox.Text = "Brak danych";
+                        _mainWindow.popupText.Text = e3.Message;
+                        _mainWindow.mainPopupBox.IsPopupOpen = true;
+                    }
+
+                    try
+                    {
+                        ObjectQuery Query4 = new ObjectQuery("Select * from Win32_ComputerSystem");
+                        ManagementObjectSearcher Searcher4 = new ManagementObjectSearcher(Scope, Query4);
+                        foreach (ManagementObject WmiObject in Searcher4.Get())
+                        {
+                            var userLogged = WmiObject["UserName"].ToString();
+                            _mainWindow.pcNetbiosTextBox.Text = WmiObject["Name"].ToString();
+                            if (string.IsNullOrWhiteSpace(userLogged))
+                            {
+                                _mainWindow.pcUserLoggedTextBox.Text = "Nikt nie jest zalogowany na stacji";
+                            }
+                            else
+                            {
+                                _mainWindow.pcUserLoggedTextBox.Text = userLogged.Substring(userLogged.IndexOf("\\") + 1);
+                            }
+                        }
+                    }
+                    catch (Exception e4)
+                    {
+                        _mainWindow.pcUserLoggedTextBox.Text = "Brak danych";
+                        _mainWindow.popupText.Text = e4.Message;
+                        _mainWindow.mainPopupBox.IsPopupOpen = true;
+                    }
+
+                    try
+                    {
+                        ObjectQuery Query5 = new ObjectQuery("Select * from Win32_OperatingSystem");
+                        ManagementObjectSearcher Searcher5 = new ManagementObjectSearcher(Scope, Query5);
+                        foreach (ManagementObject WmiObject in Searcher5.Get())
+                        {
+                            string os = WmiObject["Caption"].ToString();
+                            string osversion = WmiObject["Version"].ToString();
+                            _mainWindow.pcSystem.Text = os;
+
+                            if (string.IsNullOrWhiteSpace(osversion)) { _mainWindow.pcSystemVersion.Text = "Brak informacji"; }
+                            else if (osversion.Contains("10.0.10240")) { _mainWindow.pcSystemVersion.Text = "10.0.10240 - 1507"; }
+                            else if (osversion.Contains("10.0.10586")) { _mainWindow.pcSystemVersion.Text = "10.0.10586 - 1511"; }
+                            else if (osversion.Contains("10.0.14393")) { _mainWindow.pcSystemVersion.Text = "10.0.14393 - 1607"; }
+                            else if (osversion.Contains("10.0.15063")) { _mainWindow.pcSystemVersion.Text = "10.0.15063 - 1703"; }
+                            else if (osversion.Contains("10.0.16299")) { _mainWindow.pcSystemVersion.Text = "10.0.16299 - 1709"; }
+                            else if (osversion.Contains("10.0.17134")) { _mainWindow.pcSystemVersion.Text = "10.0.17134 - 1803"; }
+                            else if (osversion.Contains("10.0.17763")) { _mainWindow.pcSystemVersion.Text = "10.0.17763 - 1809"; }
+                            else if (osversion.Contains("10.0.18309")) { _mainWindow.pcSystemVersion.Text = "10.0.18309 - 1903"; }
+                        }
+                    }
+                    catch (Exception e5)
+                    {
+                        _mainWindow.pcSystemVersion.Text = "Brak danych";
+                        _mainWindow.popupText.Text = e5.Message;
+                        _mainWindow.mainPopupBox.IsPopupOpen = true;
+                    }
+
+                    try
+                    {
+                        ObjectQuery Query6 = new ObjectQuery("SELECT * FROM Win32_OperatingSystem");
+                        ManagementObjectSearcher Searcher6 = new ManagementObjectSearcher(Scope, Query6);
+                        foreach (ManagementObject WmiObject in Searcher6.Get())
+                        {
+                            DateTime updateTime = ManagementDateTimeConverter.ToDateTime(WmiObject["InstallDate"].ToString());
+                            _mainWindow.pcSystemVersionUpdate.Text = updateTime.ToString();
+                        }
+                    }
+                    catch (Exception e6)
+                    {
+                        _mainWindow.pcSystemVersionUpdate.Text = "Brak danych";
+                        _mainWindow.popupText.Text = e6.Message;
+                        _mainWindow.mainPopupBox.IsPopupOpen = true;
+                    }
+
+                    try
+                    {
+                        if(_mainWindow.pcNetbiosTextBox.Text == null || _mainWindow.pcNetbiosTextBox.Text.Contains("Brak danych"))
+                        {
+                            _mainWindow.popupText.Text = "Brak możliwości sprawdzenia grup AD";
+                            _mainWindow.mainPopupBox.IsPopupOpen = true;
+                        }
+                        else
+                        {
+                            var addressNetBios = _mainWindow.pcNetbiosTextBox.Text;
+
+                            List<string> output = await Task.Run(() =>
+                            {
+                                var ctx = new PrincipalContext(ContextType.Domain);
+                                ComputerPrincipal computer = ComputerPrincipal.FindByIdentity(ctx, addressNetBios);
+
+                                return output = computer.GetGroups().Select(x => x.SamAccountName).ToList();
+                            });
+
+                            _mainWindow.joulex_CheckBox.IsChecked = output.Contains("Comp-Joulex-wyjatki-GD");
+                            _mainWindow.infonoc_CheckBox.IsChecked = output.Contains("Komp-Info-Noc-GD");
+                            _mainWindow.alterbrow_CheckBox.IsChecked = output.Contains("Comp-AlterBrow-GD");
+
+                            if (output.Contains("ProxyBSTBlokada"))
+                            { _mainWindow.bstb_CheckBoxx.IsChecked = true; _mainWindow.bstb_CheckBoxx.Background = Brushes.Red; }
+                        }
+
+
+
+                    }
+                    catch (Exception e7)
+                    {
+                        _mainWindow.popupText.Text = e7.Message;
+                        _mainWindow.mainPopupBox.IsPopupOpen = true;
+                    }
+                    _mainWindow.pcProgressBar.Visibility = Visibility.Hidden;
+                }
+                else
+                {
+                    _mainWindow.popupText.Text = "Błąd pobierania danych";
+                    _mainWindow.mainPopupBox.IsPopupOpen = true;
+                    _mainWindow.pcProgressBar.Visibility = Visibility.Hidden;
+                }
             }
         }
 
@@ -466,7 +541,6 @@ namespace SDT.Services
             Process.Start("CMD.exe", cmdText);
         }
 
-
         /// <summary>
         /// Scripts
         /// </summary>
@@ -612,46 +686,31 @@ namespace SDT.Services
             try
             {
                 ServiceController sc1 = new ServiceController("CcmExec", ips);
-                if (sc1.Status == ServiceControllerStatus.Stopped || sc1.Status == ServiceControllerStatus.Paused)
-                {
-                    await Task.Run(() =>
-                    {
-                        sc1.Start();
-                    });
-                }
-
                 ServiceController sc2 = new ServiceController("CmRcService", ips);
-                if (sc2.Status == ServiceControllerStatus.Stopped || sc2.Status == ServiceControllerStatus.Paused)
-                {
-                    await Task.Run(() =>
-                    {
-                        sc2.Start();
-                    });
-                }
-                
                 ServiceController sc3 = new ServiceController("RemoteRegistry", ips);
-                if (sc3.Status == ServiceControllerStatus.Stopped || sc3.Status == ServiceControllerStatus.Paused)
-                {
-                    await Task.Run(() =>
-                    {
-                        sc3.Start();
-                    });
-                }
 
-                await Task.Run(() =>
+                Task ServiceStart = Task.Run(() =>
                 {
-                    Thread.Sleep(8000);
+                    if (sc1.Status == ServiceControllerStatus.Stopped || sc1.Status == ServiceControllerStatus.Paused)
+                    { sc1.Start(); }
+                    Task.Delay(3000).Wait();
+
+                    if (sc2.Status == ServiceControllerStatus.Stopped || sc2.Status == ServiceControllerStatus.Paused)
+                    { sc2.Start(); }
+                    Task.Delay(3000).Wait();
+
+                    if (sc3.Status == ServiceControllerStatus.Stopped || sc3.Status == ServiceControllerStatus.Paused)
+                    { sc3.Start(); }
+                    Task.Delay(3000).Wait();
                 });
 
-                ServiceController sc1a = new ServiceController("CcmExec", ips);
-                ServiceController sc2a = new ServiceController("CmRcService", ips);
-                ServiceController sc3a = new ServiceController("RemoteRegistry", ips);
+                await ServiceStart; sc1.Refresh(); sc2.Refresh(); sc3.Refresh();
 
                 _mainWindow.pcProgressBar.Visibility = Visibility.Hidden;
                 _mainWindow.popupText.Text = "Status procesów:"
-                    + Environment.NewLine + "CcmExec - " + sc1a.Status
-                    + Environment.NewLine + "CmRcService - " + sc2a.Status
-                    + Environment.NewLine + "RemoteRegistry - " + sc3a.Status;
+                    + Environment.NewLine + "CcmExec - " + sc1.Status
+                    + Environment.NewLine + "CmRcService - " + sc2.Status
+                    + Environment.NewLine + "RemoteRegistry - " + sc3.Status;
                 _mainWindow.mainPopupBox.IsPopupOpen = true;
                 return;
             }
@@ -663,6 +722,5 @@ namespace SDT.Services
                 return;
             }
         }
-
     }
 }

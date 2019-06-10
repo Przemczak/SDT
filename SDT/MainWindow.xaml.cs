@@ -109,14 +109,12 @@ namespace SDT
         /// </summary>
         private void InfoButton_Click(object sender, RoutedEventArgs e)
         {
-            Version version = Assembly.GetExecutingAssembly().GetName().Version;
-
-            popupText.Text = "SDT - Service Desk Tool" 
-                + Environment.NewLine + "Wersja:" + " " + version.Major + "." + version.Minor + "." + version.Build
-                + Environment.NewLine + ""
-                + Environment.NewLine + "Copyright © - Przemysław Wojtczak 2"
-                + Environment.NewLine + "";
-            mainPopupBox.IsPopupOpen = true;
+            Pages.Info _info = new Pages.Info
+            {
+                Owner = this,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+            _info.ShowDialog();
         }
 
         /// <summary>
