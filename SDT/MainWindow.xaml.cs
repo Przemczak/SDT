@@ -351,9 +351,6 @@ namespace SDT
                 _pc.ServicesStart();
         }
 
-        private void PopupBox_OnOpened(object sender, RoutedEventArgs e) {}
-        private void PopupBox_OnClosed(object sender, RoutedEventArgs e) {}
-
         /// <summary>
         /// printerGrid - Check printer
         /// </summary>

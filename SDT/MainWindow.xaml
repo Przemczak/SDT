@@ -37,7 +37,7 @@
                 </Grid>
             </materialDesign:PopupBox>
 
-        <Grid x:Name="topGrid" Height="25" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="60,25,0,0">
+        <Grid x:Name="topGrid" Height="25" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="60,0,0,0">
             <Button Height="25" Width="25" HorizontalAlignment="Right" VerticalAlignment="Top" Click="ExitButton_Click" Background="{x:Null}" Foreground="Gray"
                     Style="{StaticResource MaterialDesignFloatingActionMiniButton}" materialDesign:ShadowAssist.ShadowDepth="Depth0" BorderBrush="{x:Null}">
                 <materialDesign:PackIcon Kind="Close" Height="25" Width="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -180,13 +180,14 @@
                 <materialDesign:PackIcon Kind="InformationVariant" Height="30" Width="30"/>
             </Button>
 
-            <materialDesign:PopupBox Style="{StaticResource MaterialDesignMultiFloatingActionPopupBox}" Height="45" Width="45" PlacementMode="BottomAndAlignCentres"
-                    ToolTipService.Placement="Right" ToolTip="Dodatkowe funkcje" Opened="PopupBox_OnOpened" Closed="PopupBox_OnClosed" Margin="364,5,0,495.4">
-                <StackPanel>
-                    <Button ToolTip="Ping z parametrem -t" Click="PcPingTButton_Click">Ping -t</Button>
-                    <Button ToolTip="Sprawdzenie portów stacji" Click="PcPortsButton_Click">Porty</Button>
-                </StackPanel>
-            </materialDesign:PopupBox>
+            <Button Style="{StaticResource MaterialDesignFloatingActionButton}" ToolTip="Ping z parametrem -t" Click="PcPingTButton_Click"
+                Margin="398,5,267.4,495.4" Height="35" Width="35">
+                <materialDesign:PackIcon Kind="HelpNetwork" Height="20" Width="20"/>
+            </Button>
+            <Button Style="{StaticResource MaterialDesignFloatingActionButton}" ToolTip="Sprawdzenie portów stacji" Click="PcPortsButton_Click"
+                Margin="443,10,232.4,500.4" Height="35" Width="35">
+                <materialDesign:PackIcon Kind="SecurityNetwork" Height="20" Width="20"/>
+            </Button>
 
             <TextBox x:Name="pcTextBox" Height="50" Width="250" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="22" TextChanged="PcTextBox_TextChanged"
                 materialDesign:HintAssist.Hint="Adres stacji..." Style="{StaticResource MaterialDesignFloatingHintTextBox}" TextAlignment="Center"/>
