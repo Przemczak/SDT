@@ -28,6 +28,9 @@ namespace SDT.Pages
         {
             patchNotesTextBlock.Text = ""
                 + Environment.NewLine + "Wersja 1.4.4 (20.20.2010):"
+                + Environment.NewLine + "- Aktualizacja Material Design Themes 2.5.1"
+                + Environment.NewLine + ""
+                + Environment.NewLine + "Wersja 1.4.4 (20.20.2010):"
                 + Environment.NewLine + "- Dodano skrypt włączający usługi CcmExec/CmRcService/RemoteRegistry"
                 + Environment.NewLine + "- Dodano Listę Zmian"
                 + Environment.NewLine + "- Poprawiono sprawdzanie informacji o stacji"

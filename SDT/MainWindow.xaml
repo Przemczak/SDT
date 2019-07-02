@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Height="570" Width="770" WindowStyle="None" AllowsTransparency="True" ResizeMode="NoResize" 
+        Height="570" Width="770" WindowStyle="None" AllowsTransparency="False" ResizeMode="NoResize" 
         Background="{DynamicResource MaterialDesignPaper}"
         MouseDown="Window_MouseDown" 
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -37,7 +37,7 @@
                 </Grid>
             </materialDesign:PopupBox>
 
-        <Grid x:Name="topGrid" Height="25" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="60,0,0,0">
+        <Grid x:Name="topGrid" Height="25" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="60,25,0,0">
             <Button Height="25" Width="25" HorizontalAlignment="Right" VerticalAlignment="Top" Click="ExitButton_Click" Background="{x:Null}" Foreground="Gray"
                     Style="{StaticResource MaterialDesignFloatingActionMiniButton}" materialDesign:ShadowAssist.ShadowDepth="Depth0" BorderBrush="{x:Null}">
                 <materialDesign:PackIcon Kind="Close" Height="25" Width="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
