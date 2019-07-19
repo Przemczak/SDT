@@ -1,6 +1,6 @@
 ﻿using SDT.Helpers;
 using System;
-using System.Reflection;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -18,6 +18,9 @@ namespace SDT
         private readonly MainHelpers _mainHelpers;
         private readonly ClipboardHelpers _clipboardhelpers;
         private readonly Updater _updater;
+
+        private Pages.PasswordWindow _passwordWindow = null;
+        public string iDNumberPaste = null;
 
         public MainWindow()
         {
@@ -66,6 +69,26 @@ namespace SDT
             userGrid.Visibility = Visibility.Hidden;
             pcGrid.Visibility = Visibility.Hidden;
             printerGrid.Visibility = Visibility.Visible;
+        }
+        /// <summary>
+        /// Open password Window
+        /// </summary>
+        private void PassGenButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_passwordWindow == null)
+            {
+                _passwordWindow = new Pages.PasswordWindow();
+                _passwordWindow.Closed += PasswordWindow_Closed;
+                _passwordWindow.Owner = Application.Current.MainWindow;
+                _passwordWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                _passwordWindow.Show();
+            }
+            _passwordWindow.Show();
+        }
+
+        private void PasswordWindow_Closed(object sender, System.EventArgs e)
+        {
+            _passwordWindow = null;
         }
 
         /// <summary>
@@ -166,7 +189,7 @@ namespace SDT
         {
             bool update = _updater.CheckUpdateOnDemand();
 
-            if(update)
+            if (update)
             {
                 updatePopupBox.IsPopupOpen = true;
             }
@@ -373,6 +396,115 @@ namespace SDT
         private void PingPrinterButton_Click(object sender, RoutedEventArgs e)
         {
             _printer.PingPrinter();
+        }
+
+        private void IdNumberPasteTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string idNumber = idNumberPasteTextBox.Text;
+            var IDList = idNumber.Select(x => Convert.ToInt32(x.ToString())).ToArray();
+            var IDlistLast = idNumber.Skip(6).Take(5).ToArray();
+
+            if (_passwordWindow == null)
+            {
+                _passwordWindow = new Pages.PasswordWindow();
+                _passwordWindow.Closed += PasswordWindow_Closed;
+                _passwordWindow.Owner = Application.Current.MainWindow;
+                _passwordWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                _passwordWindow.Show();
+                _passwordWindow.Activate();
+            }
+            else
+            {
+                _passwordWindow.Activate();
+            }
+            _passwordWindow.idNumberTextBox.Text = idNumberPasteTextBox.Text;
+            
+
+
+            var random = new Random();
+            switch (random.Next(1, 10))
+            {
+                case 1:
+                    _passwordWindow.firstIDNumberTextBox.Text = IDlistLast[0].ToString();
+                    _passwordWindow.firstIDNumberOrderTextBox.Text = "7";
+
+                    _passwordWindow.secondIDNumberTextBox.Text = IDlistLast[1].ToString();
+                    _passwordWindow.secondIDNumberOrderTextBox.Text = "8";
+                    break;
+
+                case 2:
+                    _passwordWindow.firstIDNumberTextBox.Text = IDlistLast[0].ToString();
+                    _passwordWindow.firstIDNumberOrderTextBox.Text = "7";
+
+                    _passwordWindow.secondIDNumberTextBox.Text = IDlistLast[2].ToString();
+                    _passwordWindow.secondIDNumberOrderTextBox.Text = "9";
+                    break;
+
+                case 3:
+                    _passwordWindow.firstIDNumberTextBox.Text = IDlistLast[0].ToString();
+                    _passwordWindow.firstIDNumberOrderTextBox.Text = "7";
+
+                    _passwordWindow.secondIDNumberTextBox.Text = IDlistLast[3].ToString();
+                    _passwordWindow.secondIDNumberOrderTextBox.Text = "10";
+                    break;
+
+                case 4:
+                    _passwordWindow.firstIDNumberTextBox.Text = IDlistLast[0].ToString();
+                    _passwordWindow.firstIDNumberOrderTextBox.Text = "7";
+
+                    _passwordWindow.secondIDNumberTextBox.Text = IDlistLast[4].ToString();
+                    _passwordWindow.secondIDNumberOrderTextBox.Text = "11";
+                    break;
+
+                case 5:
+                    _passwordWindow.firstIDNumberTextBox.Text = IDlistLast[1].ToString();
+                    _passwordWindow.firstIDNumberOrderTextBox.Text = "8";
+
+                    _passwordWindow.secondIDNumberTextBox.Text = IDlistLast[2].ToString();
+                    _passwordWindow.secondIDNumberOrderTextBox.Text = "9";
+                    break;
+
+                case 6:
+                    _passwordWindow.firstIDNumberTextBox.Text = IDlistLast[1].ToString();
+                    _passwordWindow.firstIDNumberOrderTextBox.Text = "8";
+
+                    _passwordWindow.secondIDNumberTextBox.Text = IDlistLast[3].ToString();
+                    _passwordWindow.secondIDNumberOrderTextBox.Text = "10";
+                    break;
+
+                case 7:
+                    _passwordWindow.firstIDNumberTextBox.Text = IDlistLast[1].ToString();
+                    _passwordWindow.firstIDNumberOrderTextBox.Text = "8";
+
+                    _passwordWindow.secondIDNumberTextBox.Text = IDlistLast[4].ToString();
+                    _passwordWindow.secondIDNumberOrderTextBox.Text = "11";
+                    break;
+
+                case 8:
+                    _passwordWindow.firstIDNumberTextBox.Text = IDlistLast[2].ToString();
+                    _passwordWindow.firstIDNumberOrderTextBox.Text = "9";
+
+                    _passwordWindow.secondIDNumberTextBox.Text = IDlistLast[3].ToString();
+                    _passwordWindow.secondIDNumberOrderTextBox.Text = "10";
+                    break;
+
+                case 9:
+                    _passwordWindow.firstIDNumberTextBox.Text = IDlistLast[2].ToString();
+                    _passwordWindow.firstIDNumberOrderTextBox.Text = "9";
+
+                    _passwordWindow.secondIDNumberTextBox.Text = IDlistLast[4].ToString();
+                    _passwordWindow.secondIDNumberOrderTextBox.Text = "11";
+                    break;
+
+                case 10:
+                    _passwordWindow.firstIDNumberTextBox.Text = IDlistLast[3].ToString();
+                    _passwordWindow.firstIDNumberOrderTextBox.Text = "10";
+
+                    _passwordWindow.secondIDNumberTextBox.Text = IDlistLast[4].ToString();
+                    _passwordWindow.secondIDNumberOrderTextBox.Text = "11";
+                    break;
+  
+            }
         }
     }
 }

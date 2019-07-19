@@ -2,19 +2,13 @@
 
 namespace SDT.Helpers
 {
-    class ClipboardHelpers
+    public class ClipboardHelpers
     {
         private readonly MainWindow _mainWindow;
-        private readonly Services.PC _pc;
 
         public ClipboardHelpers(MainWindow MainWindows)
         {
             _mainWindow = MainWindows;
-        }
-
-        public ClipboardHelpers(Services.PC PC)
-        {
-            _pc = PC;
         }
 
         Regex REGEX_TP = new Regex(@"(TP[a-zA-Z0-9]{12})", RegexOptions.Compiled);
@@ -23,6 +17,7 @@ namespace SDT.Helpers
         Regex REGEX_WTG = new Regex(@"(WTG[a-zA-Z0-9]{12})", RegexOptions.Compiled);
         Regex REGEX_BHD = new Regex(@"(BHD[a-zA-Z0-9]{11})", RegexOptions.Compiled);
         Regex REGEX_IP = new Regex(@"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})", RegexOptions.Compiled);
+        Regex REGEX_ID = new Regex(@"(^\d{11}$)", RegexOptions.Compiled);
 
         void Process_TP(string value)
         {
@@ -47,6 +42,10 @@ namespace SDT.Helpers
         void Process_IP(string value)
         {
             _mainWindow.pcTextBox.Text = value;
+        }
+        void Process_ID(string value)
+        {
+            _mainWindow.idNumberPasteTextBox.Text = value;
         }
 
         /// <summary>
@@ -99,6 +98,14 @@ namespace SDT.Helpers
                 if (m.Success)
                 {
                     Process_IP(m.Groups[1].Value);
+                }
+            }
+
+            {
+                Match m = REGEX_ID.Match(clipboardContents);
+                if (m.Success)
+                {
+                    Process_ID(m.Groups[1].Value);
                 }
             }
         }

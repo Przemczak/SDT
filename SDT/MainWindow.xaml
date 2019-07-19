@@ -37,6 +37,9 @@
                 </Grid>
             </materialDesign:PopupBox>
 
+        <TextBox x:Name="idNumberPasteTextBox" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1" Visibility="Hidden"
+                     HorizontalAlignment="Left" Height="30" Margin="180,420,0,0" VerticalAlignment="Top" Width="340" FontSize="16" TextAlignment="Center" TextChanged="IdNumberPasteTextBox_TextChanged"/>
+
         <Grid x:Name="topGrid" Height="25" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="60,0,0,0">
             <Button Height="25" Width="25" HorizontalAlignment="Right" VerticalAlignment="Top" Click="ExitButton_Click" Background="{x:Null}" Foreground="Gray"
                     Style="{StaticResource MaterialDesignFloatingActionMiniButton}" materialDesign:ShadowAssist.ShadowDepth="Depth0" BorderBrush="{x:Null}">
@@ -60,6 +63,10 @@
             <Button Width="40" Height="40" HorizontalAlignment="Center" Margin="0,170,0,0" VerticalAlignment="Top" Click="PrinterGridButton_Click"
                     Style="{StaticResource MaterialDesignFloatingActionMiniButton}">
                 <materialDesign:PackIcon Kind="PrinterSettings" Height="24" Width="24"/>
+            </Button>
+            <Button Width="40" Height="40" HorizontalAlignment="Center" Margin="0,260,0,0" VerticalAlignment="Top" Click="PassGenButton_Click"
+                    Style="{StaticResource MaterialDesignFloatingActionMiniButton}">
+                <materialDesign:PackIcon Kind="LockReset" Height="24" Width="24"/>
             </Button>
             <Button x:Name="updateButton" Width="30" Height="30" Style="{StaticResource MaterialDesignFloatingActionButton}" Click="UpdateButton_Click" VerticalAlignment="Bottom"
                     Content="{materialDesign:PackIcon Download}" Margin="0,0,0,80" Visibility="Hidden"

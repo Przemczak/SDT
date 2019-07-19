@@ -1,0 +1,162 @@
+﻿<mah:MetroWindow x:Class="SDT.Pages.DataWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+        mc:Ignorable="d"
+        Height="480" Width="650" 
+        WindowTitleBrush="{DynamicResource PrimaryHueMidBrush}" TitlebarHeight="20"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}" TextElement.FontWeight="SemiBold"
+        WindowStyle="SingleBorderWindow" ResizeMode="CanMinimize"
+        GlowBrush="Black" BorderThickness="0" WindowTransitionsEnabled="False">
+    
+    <Grid Background="{DynamicResource MaterialDesignPaper}">
+        <Grid x:Name="pcDataGrid" Visibility="Hidden">
+            <TextBox x:Name="pcIpTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="30" Margin="10,79,0,0" VerticalAlignment="Top" Width="170" FontSize="15" TextAlignment="Center"/>
+            <TextBox x:Name="pcNetbiosTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="30" Margin="10,27,0,0" VerticalAlignment="Top" Width="170" FontSize="15" TextAlignment="Center"/>
+            <TextBox x:Name="pcSpaceTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="30" Margin="195,131,0,0" VerticalAlignment="Top" Width="170" FontSize="15" TextAlignment="Center"/>
+            <TextBox x:Name="pcMacTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="30" Margin="10,131,0,0" VerticalAlignment="Top" Width="170" FontSize="15" TextAlignment="Center"/>
+            <TextBox x:Name="pcSerialTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="30" Margin="195,27,0,0" VerticalAlignment="Top" Width="170" FontSize="15" TextAlignment="Center"/>
+            <TextBox x:Name="pcUserLoggedTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="30" Margin="195,79,0,0" VerticalAlignment="Top" Width="170" FontSize="15" TextAlignment="Center"/>
+            <TextBox x:Name="pcSystem" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="30" Margin="63,193,0,0" VerticalAlignment="Top" Width="250" FontSize="15" TextAlignment="Center"/>
+            <TextBox x:Name="pcSystemVersion" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="30" Margin="63,245,0,0" VerticalAlignment="Top" Width="250" FontSize="15" TextAlignment="Center"/>
+            <TextBox x:Name="pcSystemVersionUpdate" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                Height="30" Margin="63,297,0,0" VerticalAlignment="Top" Width="250" FontSize="15" TextAlignment="Center"/>
+
+            <CheckBox x:Name="port135_CheckBox" Content="Port 135" HorizontalAlignment="Left" Margin="405,10,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="port445_CheckBox" Content="Port 445" HorizontalAlignment="Left" Margin="502,10,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="port2701_CheckBox" Content="Port 2701" HorizontalAlignment="Left" Margin="502,36,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="port8081_CheckBox" Content="Port 8081" HorizontalAlignment="Left" Margin="405,36,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+
+            <CheckBox x:Name="joulex_CheckBox" Content="Comp-Joulex-wyjatki-GD" HorizontalAlignment="Left" Margin="405,176,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"
+                      ToolTip="Odstępstwo od polityk schematu zasilania"/>
+            <CheckBox x:Name="infonoc_CheckBox" Content="Komp-Info-Noc-GD" HorizontalAlignment="Left" Margin="405,202,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"
+                      ToolTip="Odstępsto od usypiania stacji"/>
+            <CheckBox x:Name="alterbrow_CheckBox" Content="Comp-AlterBrow-GD" HorizontalAlignment="Left" Margin="405,228,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"
+                      ToolTip="Dostęp do alternatywnych przeglądarek"/>
+            <CheckBox x:Name="bstb_CheckBoxx" Content="ProxyBSTBlokada" HorizontalAlignment="Left" Margin="431,450,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"
+                      ToolTip="Blokada dostępu do internetu (SOC)"/>
+
+            <TextBlock Text="Netbios:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="13" Margin="10,10,0,0"/>
+            <TextBlock Text="Adres IP:" HorizontalAlignment="Left" Margin="10,62,0,0" VerticalAlignment="Top" FontSize="13"/>
+            <TextBlock Text="MAC:" HorizontalAlignment="Left" Margin="10,114,0,0" VerticalAlignment="Top" FontSize="13"/>
+            <TextBlock Text="Numer seryjny:" HorizontalAlignment="Left" Margin="195,10,0,0" VerticalAlignment="Top" FontSize="13" />
+            <TextBlock Text="Zalogowany:" HorizontalAlignment="Left" Margin="195,61,0,0" VerticalAlignment="Top" FontSize="13"/>
+            <TextBlock Text="Wolne miejsce na C:" HorizontalAlignment="Left" Margin="195,114,0,0" VerticalAlignment="Top" FontSize="13"/>
+            <TextBlock Text="System operacyjny:" HorizontalAlignment="Left" Margin="131,176,0,0" VerticalAlignment="Top" FontSize="13"/>
+            <TextBlock Text="Wersja systemu operacyjnego:" HorizontalAlignment="Left" Margin="91,228,0,0" VerticalAlignment="Top" FontSize="13"/>
+            <TextBlock Text="Data aktualizacji systemu:" HorizontalAlignment="Left" Margin="118,280,0,0" VerticalAlignment="Top" FontSize="13"/>
+        </Grid>
+        <Grid x:Name="userDataGrid" Visibility="Visible">
+            <TextBox x:Name="userLastPassSetTextBox" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     HorizontalAlignment="Left" Height="30" Margin="5,104,0,0" VerticalAlignment="Top" Width="230" FontSize="15" TextAlignment="Center"/>
+            <TextBox x:Name="userPassExpireTextBox" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     HorizontalAlignment="Left" Height="30" Margin="5,52,0,0" VerticalAlignment="Top" Width="230" FontSize="15" TextAlignment="Center"/>
+            <TextBox x:Name="userAccExpireTextBox" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     HorizontalAlignment="Left" Height="30" Margin="254,52,0,0" VerticalAlignment="Top" Width="230" FontSize="15" TextAlignment="Center"/>
+            <TextBox x:Name="userManagerTextBox" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     HorizontalAlignment="Left" Height="30" Margin="127,156,0,0" VerticalAlignment="Top" Width="240" FontSize="15" TextAlignment="Center"/>
+            <TextBox x:Name="userAccCreated" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     HorizontalAlignment="Left" Height="30" Margin="254,104,0,0" VerticalAlignment="Top" Width="230" FontSize="15" TextAlignment="Center"/>
+            <TextBox x:Name="userFunctionalTextBox" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     HorizontalAlignment="Left" Height="30" Margin="127,208,0,0" VerticalAlignment="Top" Width="240" FontSize="15" TextAlignment="Center"/>
+            <TextBox x:Name="userIfsTextBox" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     HorizontalAlignment="Left" Height="30" Margin="5,156,0,0" VerticalAlignment="Top" Width="110" FontSize="15" TextAlignment="Center"/>
+            <TextBox x:Name="userEmploymentTextBox" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     HorizontalAlignment="Left" Height="30" Margin="5,208,0,0" VerticalAlignment="Top" Width="110" FontSize="15" TextAlignment="Center"/>
+            <TextBox x:Name="userMailAddressTextBox" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     HorizontalAlignment="Left" Height="30" Margin="127,260,0,0" VerticalAlignment="Top" Width="330" FontSize="15" TextAlignment="Center"/>
+            <TextBox x:Name="userSipTextBox" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     HorizontalAlignment="Left" Height="30" Margin="127,312,0,0" VerticalAlignment="Top" Width="330" FontSize="15" TextAlignment="Center"/>
+            <TextBox x:Name="userMailClassTextBox" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     HorizontalAlignment="Left" Height="30" Margin="5,260,0,0" VerticalAlignment="Top" Width="110" FontSize="15" TextAlignment="Center"/>
+            <TextBox x:Name="userMailQuotaTextBox" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     HorizontalAlignment="Left" Height="30" Margin="5,312,0,0" VerticalAlignment="Top" Width="110" FontSize="15" TextAlignment="Center"/>
+            <TextBox x:Name="userBptpTextBox" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     HorizontalAlignment="Left" Height="30" Margin="5,364,0,0" VerticalAlignment="Top" Width="330" FontSize="15" TextAlignment="Center"/>
+            <TextBox x:Name="userDeveloperTextBox" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" TextWrapping="Wrap" BorderThickness="1"
+                     HorizontalAlignment="Left" Height="70" Margin="383,161,0,0" VerticalAlignment="Top" Width="180" FontSize="15" TextAlignment="Center"/>
+
+            <CheckBox x:Name="blockedAccCheckbox" Content="Blokada konta" HorizontalAlignment="Left" Margin="127,0,0,0" VerticalAlignment="Top" Height="30" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="AdStatusCheckbox" Content="Konto aktywne" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" Height="30" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="mailAccCheckBox" Content="Skrzynka aktywna" HorizontalAlignment="Left" Margin="245,0,0,0" VerticalAlignment="Top" Height="30" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="printDenyCheckBox" Content="Blokada wydruku" HorizontalAlignment="Left" Margin="512,7,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="printColorCheckBox" Content="Wydruk kolor" HorizontalAlignment="Left" Margin="512,28,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="internetCheckBox" Content="Internet" HorizontalAlignment="Left" Margin="512,70,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="lyncPcCheckBox" Content="Lync PC" HorizontalAlignment="Left" Margin="512,91,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="devicesCheckBox" Content="Nośniki zew" HorizontalAlignment="Left" Margin="512,49,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="airnetCheckBox" Content="Airnet" HorizontalAlignment="Left" Margin="512,113,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="developerCheckBox" Content="Developer" HorizontalAlignment="Left" Margin="425,140,0,0" VerticalAlignment="Top" Height="20" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="byodCitrixCheckBox" Content="BYOD Citrix" HorizontalAlignment="Left" Margin="351,357,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="byodHddCheckBox" Content="BYOD HDD" HorizontalAlignment="Left" Margin="351,378,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="byodWtgCheckBox" Content="BYOD WTG" HorizontalAlignment="Left" Margin="351,399,0,0" VerticalAlignment="Top" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False" FontSize="14"/>
+            <CheckBox x:Name="lvmW7CheckBox" Content="BYOD LVM W7" HorizontalAlignment="Left" Margin="351,420,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="lvm10CheckBox" Content="BYOD LVM W10" HorizontalAlignment="Left" Margin="470,357,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="byodTestCitrixCheckBox" Content="BYOD Citrix Test" HorizontalAlignment="Left" Margin="470,378,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="lvm7TestCheckBox" Content="BYOD LVM W7 Test" HorizontalAlignment="Left" Margin="470,399,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="lvm10TestCheckBox" Content="BYOD LVM W10 Test" HorizontalAlignment="Left" Margin="471,420,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="airwatchBasicCheckBox" Content="AirWatch podstawowy" HorizontalAlignment="Left" Margin="470,243,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="airwatchExpCheckBox" Content="AirWatch rozszerzony" HorizontalAlignment="Left" Margin="470,264,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="airwatchVipCheckBox" Content="AirWatch VIP" HorizontalAlignment="Left" Margin="470,306,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="airwatchLyncCheckBox" Content="AirWatch Lync" HorizontalAlignment="Left" Margin="470,325,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="airwatchSkypeCheckbox" Content="AirWatch Skype" HorizontalAlignment="Left" Margin="470,285,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+
+            <TextBlock HorizontalAlignment="Left" Margin="5,87,0,0" Text="Ostatnia zmiana hasła:" VerticalAlignment="Top" FontSize="13"/>
+            <TextBlock HorizontalAlignment="Left"  Margin="5,35,0,0" Text="Hasło wygasa:" VerticalAlignment="Top" FontSize="13"/>
+            <TextBlock HorizontalAlignment="Left"  Margin="254,35,0,0" Text="Konto wygasa:" VerticalAlignment="Top" FontSize="13"/>
+            <TextBlock HorizontalAlignment="Left"  Margin="254,87,0,0" Text="Konto utworzono:" VerticalAlignment="Top" FontSize="13"/>
+            <TextBlock HorizontalAlignment="Left"  Margin="5,191,0,0" Text="Zatrudnienie:" VerticalAlignment="Top" FontSize="13"/>
+            <TextBlock HorizontalAlignment="Left"  Margin="127,139,0,0" Text="Przełożony kadrowy:" VerticalAlignment="Top" FontSize="13"/>
+            <TextBlock HorizontalAlignment="Left"  Margin="5,139,0,0" Text="IFS:" VerticalAlignment="Top" FontSize="13"/>
+            <TextBlock HorizontalAlignment="Left"  Margin="127,191,0,0" Text="Przełożony funkcyjny:" VerticalAlignment="Top" FontSize="13"/>
+            <TextBlock HorizontalAlignment="Left"  Margin="127,243,0,0" Text="Adres e-mail:" VerticalAlignment="Top" FontSize="13"/>
+            <TextBlock HorizontalAlignment="Left"  Margin="127,295,0,0" Text="SIP:" VerticalAlignment="Top" FontSize="13"/>
+            <TextBlock HorizontalAlignment="Left"  Margin="5,243,0,0" Text="Klasa skrzynki:" VerticalAlignment="Top" FontSize="13"/>
+            <TextBlock HorizontalAlignment="Left"  Margin="5,295,0,0" Text="Wielkość skrzynki:" VerticalAlignment="Top" FontSize="13"/>
+            <TextBlock HorizontalAlignment="Left"  Margin="5,347,0,0" Text="Adres BPTP:" VerticalAlignment="Top" FontSize="13"/>
+            
+        </Grid>
+        <Grid x:Name="printerDataGrid" Visibility="Hidden">
+            <TextBox x:Name="printerIpTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="30" Margin="10,71,0,0" VerticalAlignment="Top" Width="170" FontSize="15" TextAlignment="Center" TextChanged="PrinterIpTextBox_TextChanged"/>
+            <TextBox x:Name="printerNsTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="30" Margin="198,71,0,0" VerticalAlignment="Top" Width="170" FontSize="15" TextAlignment="Center"/>
+            <TextBox x:Name="printerServerTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="30" Margin="10,175,0,0" VerticalAlignment="Top" Width="170" FontSize="15" TextAlignment="Center"/>
+            <TextBox x:Name="printerModelTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="30" Margin="10,123,0,0" VerticalAlignment="Top" Width="170" FontSize="15" TextAlignment="Center"/>
+            <TextBox x:Name="printerConnectionTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="30" Margin="198,123,0,0" VerticalAlignment="Top" Width="170" FontSize="15" TextAlignment="Center"/>
+            <TextBox x:Name="printerLocationTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="80" Margin="11,356,0,0" VerticalAlignment="Top" Width="570" FontSize="14" TextAlignment="Center" TextWrapping="Wrap"/>
+            <TextBox x:Name="printerStatusTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="30" Margin="198,175,0,0" VerticalAlignment="Top" Width="170" FontSize="15" TextAlignment="Center"/>
+            <TextBox x:Name="printerShareTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="55" Margin="11,279,0,0" VerticalAlignment="Top" Width="570" FontSize="14" TextAlignment="Center" TextWrapping="Wrap"/>
+            <TextBox x:Name="printerGuardianTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignTextBox}" IsReadOnly="True" BorderThickness="1"
+                     Height="30" Margin="10,227,0,0" VerticalAlignment="Top" Width="172" FontSize="15" TextAlignment="Center" ToolTip="Podana osoba otrzymuje ME z Proaktywności w danym miesiącu"/>
+            <CheckBox x:Name="terminalCheckBox" Content="Terminal" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="salonCheckBox" Content="Salon" HorizontalAlignment="Left" Margin="103,10,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+            <CheckBox x:Name="faxCheckBox" Content="Fax" HorizontalAlignment="Left" Margin="180,10,0,0" VerticalAlignment="Top" FontSize="14" Style="{StaticResource MaterialDesignCheckBox}" IsHitTestVisible="False"/>
+
+            <TextBlock Text="Adres IP:" HorizontalAlignment="Left" Margin="10,54,0,0" VerticalAlignment="Top" FontSize="13"/>
+            <TextBlock Text="Numer seryjny:" HorizontalAlignment="Left" Margin="198,54,0,0"  VerticalAlignment="Top" FontSize="13"/>
+            <TextBlock Text="Model:" HorizontalAlignment="Left" Margin="10,106,0,0" VerticalAlignment="Top" FontSize="13"/>
+            <TextBlock Text="Podłączenie:" HorizontalAlignment="Left" Margin="198,106,0,0" VerticalAlignment="Top" FontSize="13"/>
+            <TextBlock Text="Lokalizacja:" HorizontalAlignment="Left" Margin="11,339,0,0" VerticalAlignment="Top" FontSize="13"/>
+            <TextBlock Text="Serwer:" HorizontalAlignment="Left" Margin="10,158,0,0" VerticalAlignment="Top" FontSize="13"/>
+            <TextBlock Text="Status" HorizontalAlignment="Left" Margin="198,158,0,0" VerticalAlignment="Top" FontSize="13"/>
+            <TextBlock Text="Udział:" HorizontalAlignment="Left" Margin="11,262,0,0" VerticalAlignment="Top" FontSize="13"/>
+            <TextBlock Text="Login opiekuna:" HorizontalAlignment="Left" Margin="10,210,0,0" VerticalAlignment="Top" FontSize="13"/>
+        </Grid>
+    </Grid>
+</mah:MetroWindow>
