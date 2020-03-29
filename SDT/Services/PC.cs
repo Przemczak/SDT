@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.DirectoryServices.AccountManagement;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Management;
 using System.Net;
@@ -15,6 +16,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using System.Xml;
 
 namespace SDT.Services
 {
@@ -248,7 +250,8 @@ namespace SDT.Services
                             else if (osversion.Contains("10.0.16299")) { _mainWindow.pcSystemVersion.Text = "10.0.16299 - 1709"; }
                             else if (osversion.Contains("10.0.17134")) { _mainWindow.pcSystemVersion.Text = "10.0.17134 - 1803"; }
                             else if (osversion.Contains("10.0.17763")) { _mainWindow.pcSystemVersion.Text = "10.0.17763 - 1809"; }
-                            else if (osversion.Contains("10.0.18309")) { _mainWindow.pcSystemVersion.Text = "10.0.18309 - 1903"; }
+                            else if (osversion.Contains("10.0.18362")) { _mainWindow.pcSystemVersion.Text = "10.0.18362 - 1903"; }
+                            else if (osversion.Contains("10.0.18363")) { _mainWindow.pcSystemVersion.Text = "10.0.18363 - 1909"; }
                         }
                     }
                     catch (Exception e5)
@@ -417,9 +420,24 @@ namespace SDT.Services
             }
             else
             {
-                _mainWindow.popupText.Text = "Brak zainstalowanego narzędzia RCV";
-                _mainWindow.mainPopupBox.IsPopupOpen = true;
-                return;
+                if (File.Exists(@"C:\Program Files (x86)\Microsoft Endpoint Manager\AdminConsole\bin\i386\CmRcViewer.exe"))
+                {
+                    var pingcheck = await Ping();
+                    if (pingcheck)
+                        Process.Start(@"C:\Program Files (x86)\Microsoft Endpoint Manager\AdminConsole\bin\i386\CmRcViewer.exe", _mainWindow.pcTextBox.Text);
+                    else
+                    {
+                        _mainWindow.popupText.Text = "Stacja nie odpowiada w sieci.";
+                        _mainWindow.mainPopupBox.IsPopupOpen = true;
+                        return;
+                    }
+                }
+                else
+                {
+                    _mainWindow.popupText.Text = "Brak zainstalowanego narzędzia RCV";
+                    _mainWindow.mainPopupBox.IsPopupOpen = true;
+                    return;
+                }
             }
         }
 
@@ -720,6 +738,87 @@ namespace SDT.Services
                 _mainWindow.mainPopupBox.IsPopupOpen = true;
                 _mainWindow.pcProgressBar.Visibility = Visibility.Hidden;
                 return;
+            }
+        }
+
+        public async void CertificatesFix()
+        {
+            _mainWindow.pcProgressBar.Visibility = Visibility.Visible;
+            string ips = _mainWindow.pcTextBox.Text;
+
+            try
+            {
+                await Task.Run(() =>
+                {
+                    XmlDocument xmlDocument = new XmlDocument();
+                    xmlDocument.Load(@"\\" + ips + @"\c$\ProgramData\Cisco\Cisco AnyConnect Secure Mobility Client\Profile\PC_USER_PROFILE.xml");
+                    xmlDocument.GetElementsByTagName("AutomaticCertSelection")[0].InnerText = "false";
+                    xmlDocument.Save(@"\\" + ips + @"\c$\ProgramData\Cisco\Cisco AnyConnect Secure Mobility Client\Profile\PC_USER_PROFILE.xml");
+                });
+
+                _mainWindow.pcProgressBar.Visibility = Visibility.Hidden;
+
+                _mainWindow.popupText.Text = "Zmieniono konfigurację Cisco.";
+                _mainWindow.mainPopupBox.IsPopupOpen = true;
+                return;
+            }
+            catch (Exception ex)
+            {
+                _mainWindow.popupText.Text = ex.Message;
+                _mainWindow.mainPopupBox.IsPopupOpen = true;
+                _mainWindow.pcProgressBar.Visibility = Visibility.Hidden;
+                return;
+            }
+        }
+
+        public async void TPMRepair()
+        {
+            var pingcheck = await PingInstaller();
+                if(pingcheck)
+            {
+                try
+                {
+                    _mainWindow.pcProgressBar.Visibility = Visibility.Visible;
+                    string ips = _mainWindow.pcTextBox.Text;
+
+                    if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Naprawa_TPM")))
+                    {
+                        await Task.Run(() =>
+                        {
+                            File.WriteAllBytes(Directory.GetCurrentDirectory() + "\\Naprawa_TPM.zip", Resources.Naprawa_TPM);
+                            ZipFile.ExtractToDirectory(Directory.GetCurrentDirectory() + "\\Naprawa_TPM.zip", "Naprawa_TPM");
+                            File.Delete(Directory.GetCurrentDirectory() + "\\Naprawa_TPM.zip");
+                        });
+
+                        await Task.Run(() =>
+                        {
+                            foreach (string dirPath in Directory.GetDirectories(Directory.GetCurrentDirectory() + "\\Naprawa_TPM", "*",
+                            SearchOption.AllDirectories))
+                                Directory.CreateDirectory(dirPath.Replace(Directory.GetCurrentDirectory() + "\\Naprawa_TPM", @"\\" + ips + @"\c$\TEMP\Naprawa_TPM"));
+                        });
+
+                        await Task.Run(() =>
+                        {
+                            foreach (string newPath in Directory.GetFiles(Directory.GetCurrentDirectory() + "\\Naprawa_TPM", "*",
+                            SearchOption.AllDirectories))
+                                File.Copy(newPath, newPath.Replace(Directory.GetCurrentDirectory() + "\\Naprawa_TPM", @"\\" + ips + @"\c$\TEMP\Naprawa_TPM"));
+                        });
+
+                        Process process = new Process();
+                        process.StartInfo.FileName = @"C:\Windows\System32\cmd.exe";
+                        process.StartInfo.Arguments = String.Format(@"/k ""C:\My Program Files\PsExec64.exe"" \\{0} {1}", ips, @" C:\TEMP\Naprawa_TPM\install.cmd");
+                        process.EnableRaisingEvents = true;
+                        process.Start();
+
+                        _mainWindow.pcProgressBar.Visibility = Visibility.Hidden;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _mainWindow.popupText.Text = ex.Message;
+                    _mainWindow.mainPopupBox.IsPopupOpen = true;
+                    _mainWindow.pcProgressBar.Visibility = Visibility.Hidden;
+                }
             }
         }
     }

@@ -217,6 +217,8 @@
                         <MenuItem Header="IE Fix" x:Name="ieFixButton" ToolTip="Zmiana w rejestrze by IE nie uruchamiał się przy starcie systemu" Click="IeFixButton_Click"/>
                         <MenuItem Header="Spooler restart" x:Name="spoolResetButton" ToolTip="Zdalnie restartuje Bufor Wydruku na stacji" Click="SpoolResetButton_Click"/>
                         <MenuItem Header="Remote Control Services" x:Name="rcServicesStart" ToolTip="Uruchamia zdalnie procesy odpowiedzialne za połączenie zdalne" Click="RcServicesStart_Click" />
+                        <MenuItem Header="Certyfikaty" x:Name="certificatesFix" ToolTip="Naprawa okna certyfikatów w Cisco" Click="CertificatesFix_Click" />
+                        <MenuItem Header="Naprawa TPM" x:Name="TPMRepair" ToolTip="Naprawa modułu TPM" Click="TMPRepair_Click" />
                     </ContextMenu>
                 </Button.ContextMenu>
             </Button>

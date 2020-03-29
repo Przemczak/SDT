@@ -374,6 +374,24 @@ namespace SDT
                 _pc.ServicesStart();
         }
 
+        private void CertificatesFix_Click(object sender, RoutedEventArgs e)
+        {
+            pcTextBox.Text = pcTextBox.Text.TrimStart().TrimEnd();
+
+            bool CS = _mainHelpers.CheckTextBoxPc();
+            if (CS)
+                _pc.CertificatesFix();
+        }
+
+        private void TMPRepair_Click(object sender, RoutedEventArgs e)
+        {
+            pcTextBox.Text = pcTextBox.Text.TrimStart().TrimEnd();
+
+            bool CS = _mainHelpers.CheckTextBoxPc();
+            if (CS)
+                _pc.TPMRepair();
+        }
+
         /// <summary>
         /// printerGrid - Check printer
         /// </summary>

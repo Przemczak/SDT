@@ -23,9 +23,9 @@ namespace SDT.Helpers
             {
                 await Task.Run(() =>
                 {
-                    System.Threading.Thread.Sleep(5000); // 5s
+                    System.Threading.Thread.Sleep(5000);
                 });
-                if (!_webClient.DownloadString(@"\\Dsb192\sdt_resources$\app_version.txt").Contains("1.5.1.0"))
+                if (!_webClient.DownloadString(@"\\Dsb192\sdt_resources$\app_version.txt").Contains("1.5.3.0"))
                 {
                     _mainWindow.updateButton.Visibility = Visibility.Visible;
                     _mainWindow.checkUpdateButton.Visibility = Visibility.Hidden;
@@ -43,7 +43,7 @@ namespace SDT.Helpers
 
         public bool CheckUpdateOnDemand()
         {
-            if (!_webClient.DownloadString(@"\\Dsb192\sdt_resources$\app_version.txt").Contains("1.5.1.0"))
+            if (!_webClient.DownloadString(@"\\Dsb192\sdt_resources$\app_version.txt").Contains("1.5.3.0"))
             {
                 _mainWindow.updateButton.Visibility = Visibility.Visible;
                 _mainWindow.checkUpdateButton.Visibility = Visibility.Hidden;
