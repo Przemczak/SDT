@@ -1,16 +1,105 @@
-﻿<Application x:Class="SDT.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             StartupUri="MainWindow.xaml">
-    <Application.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Dark.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
-
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Red.xaml" />
-            </ResourceDictionary.MergedDictionaries>
+<Application x:Class="SDT.App" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls" 
+             StartupUri="Views/MainWindow.xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" d1p1:Ignorable="d" 
+             xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006">
+  <Application.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <!-- MahApps.Metro resource dictionaries. Make sure that all file names are Case Sensitive! -->
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml">
         </ResourceDictionary>
-    </Application.Resources>
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml">
+        </ResourceDictionary>
+        <!-- Theme setting -->
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml">
+                </ResourceDictionary>
+      </ResourceDictionary.MergedDictionaries>
+      <!-- Global Main TextBox Style Override -->
+      <Style x:Key="MainTextBox" TargetType="{x:Type TextBox}" BasedOn="{StaticResource MahApps.Styles.TextBox}">
+        <Setter Property="Text" Value="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" />
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="FontWeight" Value="DemiBold" />
+        <Setter Property="TextAlignment" Value="Center" />
+        <Setter Property="Margin" Value="4" />
+        <Setter Property="Width" Value="220" />
+        <Setter Property="Height" Value="35" />
+      </Style>
+      <!-- Global Main ProgressBar Style Override -->
+      <Style x:Key="MainProgressBar" TargetType="ProgressBar" BasedOn="{StaticResource MahApps.Styles.ProgressBar}">
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="ProgressBar">
+              <ProgressBar Visibility="{TemplateBinding Visibility}" IsIndeterminate="True" Width="220" Height="35" Opacity="0.4" />
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+      <!-- Global Main Button Style Override -->
+      <Style x:Key="MainButton" TargetType="{x:Type Button}">
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="Button">
+              <Button Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" Width="90" Height="35" Content="{TemplateBinding Tag}" Command="{TemplateBinding Command}" />
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+      <!-- Global Button Style Override -->
+      <Style x:Key="SecondButton" TargetType="{x:Type Button}">
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="Button">
+              <Button Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" Width="110" Height="35" Margin="10,0,0,0" Content="{TemplateBinding Tag}" Command="{TemplateBinding Command}" />
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+      <!-- Global TextBox Style Override -->
+      <Style x:Key="WatermarkTextBox" TargetType="{x:Type TextBox}">
+        <Setter Property="IsReadOnly" Value="True" />
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="TextBox">
+              <Grid Margin="15,0,0,0">
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="13" />
+                  <RowDefinition Height="26" />
+                </Grid.RowDefinitions>
+                <TextBlock Foreground="#CC119EDA" FontWeight="DemiBold" FontSize="11" Text="{TemplateBinding Tag}" Margin="2,0,0,0" Grid.Row="0" />
+                <TextBox Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" Background="{TemplateBinding Background}" VerticalContentAlignment="Bottom" Foreground="{TemplateBinding Foreground}" FontSize="13" TextAlignment="Center" FontWeight="DemiBold" Grid.Row="1" />
+              </Grid>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+      <!-- Developer TextBox Style Override -->
+      <Style x:Key="DeveloperTextBox" TargetType="{x:Type TextBox}">
+        <Setter Property="IsReadOnly" Value="True" />
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="TextBox">
+              <Grid Margin="15,0,0,0">
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="13" />
+                  <RowDefinition Height="75" />
+                </Grid.RowDefinitions>
+                <TextBlock Foreground="#CC119EDA" FontWeight="DemiBold" FontSize="11" Text="{TemplateBinding Tag}" Margin="2,0,0,0" Grid.Row="0" />
+                <TextBox Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" Background="{TemplateBinding Background}" VerticalContentAlignment="Bottom" Foreground="{TemplateBinding Foreground}" FontSize="13" TextAlignment="Center" FontWeight="DemiBold" Grid.Row="1" />
+              </Grid>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+      <!-- Global CheckBox Style Override -->
+      <Style x:Key="CustomCheckBox" TargetType="{x:Type CheckBox}">
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="CheckBox">
+              <CheckBox Margin="2" IsHitTestVisible="False" Content="{TemplateBinding Tag}" FontWeight="DemiBold" FontSize="11" Foreground="#CC119EDA" IsChecked="{TemplateBinding IsChecked}" />
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+    </ResourceDictionary>
+  </Application.Resources>
 </Application>

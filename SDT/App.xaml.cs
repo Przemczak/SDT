@@ -17,32 +17,32 @@ namespace SDT
         /// </summary>
         protected override void OnStartup(StartupEventArgs e)
         {
-            if (!IsRunAsAdministrator())
-            {
-                var processInfo = new ProcessStartInfo(Assembly.GetExecutingAssembly().CodeBase);
+            //if (!IsRunAsAdministrator())
+            //{
+            //    var processInfo = new ProcessStartInfo(Assembly.GetExecutingAssembly().CodeBase);
 
-                processInfo.UseShellExecute = true;
-                processInfo.Verb = "runas";
+            //    processInfo.UseShellExecute = true;
+            //    processInfo.Verb = "runas";
 
-                try
-                {
-                    Process.Start(processInfo);
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("Aplikacja musi być uruchomiona jako administrator.");
-                }
-                Current.Shutdown();
-            }
+            //    try
+            //    {
+            //        Process.Start(processInfo);
+            //    }
+            //    catch (Exception)
+            //    {
+            //        MessageBox.Show("Aplikacja musi być uruchomiona jako administrator.");
+            //    }
+            //    Current.Shutdown();
+            //}
 
-            bool IsRunAsAdministrator()
-            {
-                var wi = WindowsIdentity.GetCurrent();
-                var wp = new WindowsPrincipal(wi);
+            //bool IsRunAsAdministrator()
+            //{
+            //    var wi = WindowsIdentity.GetCurrent();
+            //    var wp = new WindowsPrincipal(wi);
 
-                return wp.IsInRole(WindowsBuiltInRole.Administrator);
-            }
-            base.OnStartup(e);
+            //    return wp.IsInRole(WindowsBuiltInRole.Administrator);
+            //}
+            //base.OnStartup(e);
         }
     }
 }

@@ -1,0 +1,249 @@
+﻿<mah:MetroWindow x:Class="SDT.Views.MainWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+                 xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+                 mc:Ignorable="d"
+                 Title="SDT - Service Desk Tool"
+                 BorderThickness="0" GlowBrush="Black"
+                 Height="600" Width="700" ResizeMode="CanMinimize"
+                 TextElement.FontFamily="Segoue UI" Dialog:DialogParticipation.Register="{Binding}">
+
+    <Grid>
+        <Controls:MetroAnimatedTabControl>
+            <TabItem Header="Użytkownik">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="55"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="230"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Text="{Binding UserModel.UserLogin}" Controls:TextBoxHelper.Watermark="Login" Style="{StaticResource MainTextBox}" Grid.Column="1"/>
+                        <Button Command="{Binding UserCheckCommand}" Style="{StaticResource MainButton}" Grid.Column="2" Tag="SPRAWDŹ"/>
+                    </Grid>
+
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="150"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="120"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                                <TextBox Text="{Binding UserModel.AccountStatus, UpdateSourceTrigger=PropertyChanged}" Tag="Status konta AD:" Style="{StaticResource WatermarkTextBox}" Width="170"/>
+                                <TextBox Text="{Binding UserModel.MailStatus, UpdateSourceTrigger=PropertyChanged}" Tag="Status konta e-mail:" Style="{StaticResource WatermarkTextBox}" Width="170"/>
+                                <TextBox Text="{Binding UserModel.PasswordExpire, UpdateSourceTrigger=PropertyChanged}" Tag="Hasło wygasa:" Style="{StaticResource WatermarkTextBox}" Width="170"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                                <TextBox Text="{Binding UserModel.PasswordLastSet, UpdateSourceTrigger=PropertyChanged}" Tag="Ostatnia zmiana hasła:" Style="{StaticResource WatermarkTextBox}" Width="170" />
+                                <TextBox Text="{Binding UserModel.AccountCreated, UpdateSourceTrigger=PropertyChanged}" Tag="Konto utworzono:" Style="{StaticResource WatermarkTextBox}" Width="170"/>
+                                <TextBox Text="{Binding UserModel.AccountExpire, UpdateSourceTrigger=PropertyChanged}" Tag="Konto wygasa:" Style="{StaticResource WatermarkTextBox}" Width="170"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="3" Orientation="Horizontal">
+                                <TextBox Text="{Binding UserModel.FirstName, UpdateSourceTrigger=PropertyChanged}" Tag="Imię:" Style="{StaticResource WatermarkTextBox}" Width="170"/>
+                                <TextBox Text="{Binding UserModel.LastName, UpdateSourceTrigger=PropertyChanged}" Tag="Nazwisko:" Style="{StaticResource WatermarkTextBox}" Width="170"/>
+                                <TextBox Text="{Binding UserModel.Manager, UpdateSourceTrigger=PropertyChanged}" Tag="Przełożony:" Style="{StaticResource WatermarkTextBox}" Width="200"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="4" Orientation="Horizontal">
+                                <TextBox Text="{Binding UserModel.Company, UpdateSourceTrigger=PropertyChanged}" Tag="Firma:" Style="{StaticResource WatermarkTextBox}" Width="170"/>
+                                <TextBox Text="{Binding UserModel.Employment, UpdateSourceTrigger=PropertyChanged}" Tag="Zatrudnienie:" Style="{StaticResource WatermarkTextBox}" Width="85"/>
+                                <TextBox Text="{Binding UserModel.IFS, UpdateSourceTrigger=PropertyChanged}" Tag="IFS:" Style="{StaticResource WatermarkTextBox}" Width="85"/>
+                                <TextBox Text="{Binding UserModel.FunctionalManager, UpdateSourceTrigger=PropertyChanged}" Tag="Przełożony funkcyjny:" Style="{StaticResource WatermarkTextBox}" Width="200"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="6" Orientation="Horizontal">
+                                <TextBox Text="{Binding UserModel.Mail, UpdateSourceTrigger=PropertyChanged}" Tag="Adres e-mail:" Style="{StaticResource WatermarkTextBox}" Width="300"/>
+                                <TextBox Text="{Binding UserModel.MailClass, UpdateSourceTrigger=PropertyChanged}" Tag="Klasa:" Style="{StaticResource WatermarkTextBox}" Width="100"/>
+                                <TextBox Text="{Binding UserModel.MailQuota, UpdateSourceTrigger=PropertyChanged}" Tag="Wielkość:" Style="{StaticResource WatermarkTextBox}" Width="100"/>
+                            </StackPanel>
+                            <Grid Grid.Row="7">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="300"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <TextBox Text="{Binding UserModel.MailSIP, UpdateSourceTrigger=PropertyChanged}" Tag="Adres SIP:" Style="{StaticResource WatermarkTextBox}" Width="300" Margin="0,0,0,10"/>
+                                    <TextBox Text="{Binding UserModel.MailBPTP, UpdateSourceTrigger=PropertyChanged}" Tag="Adres BPTP:" Style="{StaticResource WatermarkTextBox}" Width="300"/>
+                                </StackPanel>
+                                <TextBox Text="{Binding UserModel.DeveloperPCList, UpdateSourceTrigger=PropertyChanged}" Tag="Lista stacji (Developer):" Style="{StaticResource DeveloperTextBox}" Width="200" Grid.Column="1" HorizontalAlignment="Left"/>
+                            </Grid>
+                        </Grid>
+
+                        <StackPanel Grid.Column="1">
+                            <CheckBox IsChecked="{Binding UserModel.PrintDeny}" Tag="Blokada wydruku" Style="{StaticResource CustomCheckBox}"/>
+                            <CheckBox IsChecked="{Binding UserModel.PrintColor}" Tag="Wydruk kolor"  Style="{StaticResource CustomCheckBox}"/>
+                            <CheckBox IsChecked="{Binding UserModel.Devices}" Tag="Nośnik zew." Style="{StaticResource CustomCheckBox}"/>
+                            <CheckBox IsChecked="{Binding UserModel.Lync}" Tag="Lync PC" Style="{StaticResource CustomCheckBox}"/>
+                            <CheckBox IsChecked="{Binding UserModel.AirNet}" Tag="AirNet" Style="{StaticResource CustomCheckBox}"/>
+                            <CheckBox IsChecked="{Binding UserModel.Internet}" Tag="Internet" Style="{StaticResource CustomCheckBox}"/>
+                            <CheckBox IsChecked="{Binding UserModel.Developer}" Tag="Developer" Style="{StaticResource CustomCheckBox}" Margin="0,0,0,12" />
+                            <CheckBox IsChecked="{Binding UserModel.BYODCitrix}" Tag="BYOD Citrix" Style="{StaticResource CustomCheckBox}" />
+                            <CheckBox IsChecked="{Binding UserModel.BYODHDD}" Tag="BYOD HDD" Style="{StaticResource CustomCheckBox}"/>
+                            <CheckBox IsChecked="{Binding UserModel.BYODWTG}" Tag="BYOD WTG" Style="{StaticResource CustomCheckBox}"/>
+                            <CheckBox IsChecked="{Binding UserModel.BYODLVMW7}" Tag="BYOD LVM W7" Style="{StaticResource CustomCheckBox}"/>
+                            <CheckBox IsChecked="{Binding UserModel.BYODLVM10}" Tag="BYOD LVM W10" Style="{StaticResource CustomCheckBox}"/>
+                            <CheckBox IsChecked="{Binding UserModel.BYODCitrixTest}" Tag="BYOD Citrix Test" Style="{StaticResource CustomCheckBox}"/>
+                            <CheckBox IsChecked="{Binding UserModel.BYODLVM7Test}" Tag="BYOD LVM W7 Test" Style="{StaticResource CustomCheckBox}"/>
+                            <CheckBox IsChecked="{Binding UserModel.BYODLVM10Test}" Tag="BYOD LVM W10 Test" Style="{StaticResource CustomCheckBox}" Margin="0,0,0,12"/>
+                            <CheckBox IsChecked="{Binding UserModel.AirWatchBasic}" Tag="AirWatch podst." Style="{StaticResource CustomCheckBox}"/>
+                            <CheckBox IsChecked="{Binding UserModel.AirWatchExpanded}" Tag="AirWatch rozsz." Style="{StaticResource CustomCheckBox}"/>
+                            <CheckBox IsChecked="{Binding UserModel.AirWatchVip}" Tag="AirWatch VIP" Style="{StaticResource CustomCheckBox}"/>
+                            <CheckBox IsChecked="{Binding UserModel.AirWatchLync}" Tag="AirWatch Lync" Style="{StaticResource CustomCheckBox}"/>
+                            <CheckBox IsChecked="{Binding UserModel.AirWatchSkype}" Tag="AirWatch Skype" Style="{StaticResource CustomCheckBox}"/>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Stacja">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="55"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="230"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Text="{Binding PCModel.PcName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Controls:TextBoxHelper.Watermark="IP/Netbios" Style="{StaticResource MainTextBox}" Grid.Column="1"/>
+                        <Button Command="{Binding PcCheckCommand}" Style="{StaticResource MainButton}" Grid.Column="2" Tag="SPRAWDŹ"/>
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="15"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="60"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="150"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Command="{Binding RunRCVCommand}" Style="{StaticResource SecondButton}" Tag="RCV"/>
+                            <Button Command="{Binding RunSharingCommand}" Style="{StaticResource SecondButton}" Tag="SHARING"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Command="{Binding RunPsExecCommand}" Style="{StaticResource SecondButton}" Tag="PSEXEC"/>
+                            <Button Command="{Binding RunPingTCommand}" Style="{StaticResource SecondButton}" Tag="PING -t"/>
+                            <Button Click="ScriptButton_Click" Style="{StaticResource SecondButton}" Tag="SKRYPTY">
+                                <Button.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Command="{Binding RunGPUUpdateCommand}" Header="GPUpdate" ToolTip="Odświeżenie uprawnień na stacji"/>
+                                        <MenuItem Command="{Binding CheckBitLockerCommand}" Header="BitLocker" ToolTip="Sprawdzenie statusu szyfrowania"/>
+                                        <MenuItem Command="{Binding RunSpoolResetCommand}" Header="Spooler restart" ToolTip="Zdalnie restartuje Bufor Wydruku na stacji"/>
+                                    </ContextMenu>
+                                </Button.ContextMenu>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <CheckBox IsChecked="{Binding PCModel.PcPort135}" Tag="Port 135" Style="{StaticResource CustomCheckBox}"/>
+                            <CheckBox IsChecked="{Binding PCModel.PcPort445}" Tag="Port 445" Style="{StaticResource CustomCheckBox}"/>
+                            <CheckBox IsChecked="{Binding PCModel.PcPort2701}" Tag="Port 2701" Style="{StaticResource CustomCheckBox}"/>
+                            <CheckBox IsChecked="{Binding PCModel.PcPort8081}" Tag="Port 8081" Style="{StaticResource CustomCheckBox}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <CheckBox IsChecked="{Binding PCModel.PcJoulex}" Tag="Comp-Joulex-wyjatki-GD" Style="{StaticResource CustomCheckBox}"/>
+                            <CheckBox IsChecked="{Binding PCModel.PcInfoNoc}" Tag="Komp-Info-Noc-GD" Style="{StaticResource CustomCheckBox}"/>
+                            <CheckBox IsChecked="{Binding PCModel.PcAlterBrowser}" Tag="Comp-AlterBrow-GD" Style="{StaticResource CustomCheckBox}"/>
+                            <CheckBox IsChecked="{Binding PCModel.PcProxyBSTB}" Tag="ProxyBSTBlokada" Style="{StaticResource CustomCheckBox}"/>
+                            <CheckBox IsChecked="{Binding PCModel.PcIntBSTB}" Tag="IntBSTBlokada" Style="{StaticResource CustomCheckBox}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBox Text="{Binding PCModel.PcIP, UpdateSourceTrigger=PropertyChanged}" Tag="IP:" Style="{StaticResource WatermarkTextBox}" Width="150"/>
+                            <TextBox Text="{Binding PCModel.PcMAC, UpdateSourceTrigger=PropertyChanged}" Tag="MAC:" Style="{StaticResource WatermarkTextBox}" Width="150"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBox Text="{Binding PCModel.PcNS, UpdateSourceTrigger=PropertyChanged}" Tag="Numer Seryjny:" Style="{StaticResource WatermarkTextBox}" Width="150"/>
+                            <TextBox Text="{Binding PCModel.PcLoggedUser, UpdateSourceTrigger=PropertyChanged}" Tag="Zalogowany użytkownik:" Style="{StaticResource WatermarkTextBox}" Width="150"/>
+                            <TextBox Text="{Binding PCModel.PcFreeSpace, UpdateSourceTrigger=PropertyChanged}" Tag="Wolne miejsce:" Style="{StaticResource WatermarkTextBox}" Width="150"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="7" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBox Text="{Binding PCModel.PcSystem, UpdateSourceTrigger=PropertyChanged}" Tag="System:" Style="{StaticResource WatermarkTextBox}" Width="200" Margin="6"/>
+                            <TextBox Text="{Binding PCModel.PcSystemVersion, UpdateSourceTrigger=PropertyChanged}" Tag="Wersja systemu:" Style="{StaticResource WatermarkTextBox}" Width="200" Margin="3"/>
+                            <TextBox Text="{Binding PCModel.PcSystemUpdate, UpdateSourceTrigger=PropertyChanged}" Tag="Data aktualizacji systemu:" Style="{StaticResource WatermarkTextBox}" Width="200" Margin="3"/>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Drukarka">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="55"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="182"/>
+                            <ColumnDefinition Width="230"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Text="{Binding PrinterModel.PrinterName}" Controls:TextBoxHelper.Watermark="IP/NS" Style="{StaticResource MainTextBox}" Grid.Column="1"/>
+                        <Button Command="{Binding PrinterCheckCommand}" Style="{StaticResource MainButton}" Grid.Column="2" Tag="SPRAWDŹ"/>
+                    </Grid>
+
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="0" Orientation="Horizontal">
+                            <TextBox Text="{Binding PrinterModel.PrinterIP, UpdateSourceTrigger=PropertyChanged}" Tag="Adres IP:" Style="{StaticResource WatermarkTextBox}" Width="150"/>
+                            <TextBox Text="{Binding PrinterModel.PrinterNS, UpdateSourceTrigger=PropertyChanged}" Tag="Numer Seryjny:" Style="{StaticResource WatermarkTextBox}" Width="150"/>
+                            <TextBox Text="{Binding PrinterModel.PrinterModel, UpdateSourceTrigger=PropertyChanged}" Tag="Model:" Style="{StaticResource WatermarkTextBox}" Width="150"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                            <TextBox Text="{Binding PrinterModel.PrinterStatus, UpdateSourceTrigger=PropertyChanged}" Tag="Status:" Style="{StaticResource WatermarkTextBox}" Width="150"/>
+                            <TextBox Text="{Binding PrinterModel.PrinterLan, UpdateSourceTrigger=PropertyChanged}" Tag="Podłączenie:" Style="{StaticResource WatermarkTextBox}" Width="150"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="2" Orientation="Horizontal">
+                            <TextBox Text="{Binding PrinterModel.PrinterServer, UpdateSourceTrigger=PropertyChanged}" Tag="Serwer:" Style="{StaticResource WatermarkTextBox}" Width="150"/>
+                            <TextBox Text="{Binding PrinterModel.PrinterShare, UpdateSourceTrigger=PropertyChanged}" Tag="Udział:" Style="{StaticResource WatermarkTextBox}" Width="350"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="3" Orientation="Horizontal">
+                            <TextBox Text="{Binding PrinterModel.PrinterGuardian, UpdateSourceTrigger=PropertyChanged}" Tag="Login opiekuna:" Style="{StaticResource WatermarkTextBox}" Width="150"/>
+                            <TextBox Text="{Binding PrinterModel.PrinterAddress, UpdateSourceTrigger=PropertyChanged}" Tag="Lokalizacja:" Style="{StaticResource WatermarkTextBox}" Width="350"/>
+                        </StackPanel>
+                    </Grid>
+
+                </Grid>
+            </TabItem>
+        </Controls:MetroAnimatedTabControl>
+    </Grid>
+
+
+</mah:MetroWindow>
