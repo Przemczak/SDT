@@ -16,6 +16,7 @@ namespace SDT.Views
         public MainWindow()
         {
             InitializeComponent();
+
             appViewModel = new ApplicationViewModel(DialogCoordinator.Instance);
             DataContext = appViewModel;
         }

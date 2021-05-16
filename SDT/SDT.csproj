@@ -147,6 +147,7 @@
     </Compile>
     <Compile Include="Services\PCService.cs" />
     <Compile Include="Services\PrinterService.cs" />
+    <Compile Include="Services\TrayIconService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="ViewModel\ApplicationViewModel.cs" />
     <Compile Include="App.xaml.cs">

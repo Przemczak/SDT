@@ -1,4 +1,5 @@
 ﻿using SDT.Helpers;
+using SDT.Services;
 using System;
 using System.Diagnostics;
 using System.Reflection;
@@ -12,11 +13,16 @@ namespace SDT
     /// </summary>
     public partial class App : Application
     {
-        /// <summary>
-        /// Check if a process is running as administrator
-        /// </summary>
+        private readonly TrayIconService trayIconService;
+
+        public App()
+        {
+            trayIconService = new TrayIconService(this);
+        }
+
         protected override void OnStartup(StartupEventArgs e)
         {
+
             //if (!IsRunAsAdministrator())
             //{
             //    var processInfo = new ProcessStartInfo(Assembly.GetExecutingAssembly().CodeBase);
@@ -43,6 +49,12 @@ namespace SDT
             //    return wp.IsInRole(WindowsBuiltInRole.Administrator);
             //}
             //base.OnStartup(e);
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            trayIconService.DisposeTrayIcon();
+            base.OnExit(e);
         }
     }
 }
