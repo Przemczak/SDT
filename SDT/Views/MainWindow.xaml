@@ -87,7 +87,6 @@
                                     <TextBox Text="{Binding UserModel.MailSIP, UpdateSourceTrigger=PropertyChanged}" Tag="Adres SIP:" Style="{StaticResource WatermarkTextBox}" Width="300" Margin="0,0,0,10"/>
                                     <TextBox Text="{Binding UserModel.MailBPTP, UpdateSourceTrigger=PropertyChanged}" Tag="Adres BPTP:" Style="{StaticResource WatermarkTextBox}" Width="300"/>
                                 </StackPanel>
-                                <TextBox Text="{Binding UserModel.DeveloperPCList, UpdateSourceTrigger=PropertyChanged}" Tag="Lista stacji (Developer):" Style="{StaticResource DeveloperTextBox}" Width="200" Grid.Column="1" HorizontalAlignment="Left"/>
                             </Grid>
                         </Grid>
 
@@ -104,14 +103,9 @@
                             <CheckBox IsChecked="{Binding UserModel.BYODWTG}" Tag="BYOD WTG" Style="{StaticResource CustomCheckBox}"/>
                             <CheckBox IsChecked="{Binding UserModel.BYODLVMW7}" Tag="BYOD LVM W7" Style="{StaticResource CustomCheckBox}"/>
                             <CheckBox IsChecked="{Binding UserModel.BYODLVM10}" Tag="BYOD LVM W10" Style="{StaticResource CustomCheckBox}"/>
-                            <CheckBox IsChecked="{Binding UserModel.BYODCitrixTest}" Tag="BYOD Citrix Test" Style="{StaticResource CustomCheckBox}"/>
-                            <CheckBox IsChecked="{Binding UserModel.BYODLVM7Test}" Tag="BYOD LVM W7 Test" Style="{StaticResource CustomCheckBox}"/>
-                            <CheckBox IsChecked="{Binding UserModel.BYODLVM10Test}" Tag="BYOD LVM W10 Test" Style="{StaticResource CustomCheckBox}" Margin="0,0,0,12"/>
                             <CheckBox IsChecked="{Binding UserModel.AirWatchBasic}" Tag="AirWatch podst." Style="{StaticResource CustomCheckBox}"/>
                             <CheckBox IsChecked="{Binding UserModel.AirWatchExpanded}" Tag="AirWatch rozsz." Style="{StaticResource CustomCheckBox}"/>
                             <CheckBox IsChecked="{Binding UserModel.AirWatchVip}" Tag="AirWatch VIP" Style="{StaticResource CustomCheckBox}"/>
-                            <CheckBox IsChecked="{Binding UserModel.AirWatchLync}" Tag="AirWatch Lync" Style="{StaticResource CustomCheckBox}"/>
-                            <CheckBox IsChecked="{Binding UserModel.AirWatchSkype}" Tag="AirWatch Skype" Style="{StaticResource CustomCheckBox}"/>
                         </StackPanel>
                     </Grid>
                 </Grid>
@@ -175,7 +169,6 @@
                             <CheckBox IsChecked="{Binding PCModel.PcInfoNoc}" Tag="Komp-Info-Noc-GD" Style="{StaticResource CustomCheckBox}"/>
                             <CheckBox IsChecked="{Binding PCModel.PcAlterBrowser}" Tag="Comp-AlterBrow-GD" Style="{StaticResource CustomCheckBox}"/>
                             <CheckBox IsChecked="{Binding PCModel.PcProxyBSTB}" Tag="ProxyBSTBlokada" Style="{StaticResource CustomCheckBox}"/>
-                            <CheckBox IsChecked="{Binding PCModel.PcIntBSTB}" Tag="IntBSTBlokada" Style="{StaticResource CustomCheckBox}"/>
                         </StackPanel>
                         <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                             <TextBox Text="{Binding PCModel.PcIP, UpdateSourceTrigger=PropertyChanged}" Tag="IP:" Style="{StaticResource WatermarkTextBox}" Width="150"/>

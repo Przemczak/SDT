@@ -94,9 +94,6 @@ namespace SDT.Services
                         userModel.MailBPTP = (searchResult.GetDirectoryEntry().Properties["userPrincipalName"].Value ?? "").ToString();
                         userModel.AccountCreated = Convert.ToDateTime(searchResult.GetDirectoryEntry().Properties["whenCreated"].Value ?? "").ToString("dd/MM/yyyy HH:mm:ss");
 
-                        userModel.DeveloperPCList = string.Join("\n", ((IEnumerable)searchResult.GetDirectoryEntry().Properties["workstationAdmin"])
-                                .Cast<object>().Select(x => x.ToString()).ToArray());
-
                         long tempPwdLastSet = (long)searchResult.Properties["pwdLastSet"][0];
                         userModel.PasswordLastSet = DateTime.FromFileTimeUtc(tempPwdLastSet).ToString("dd/MM/yyyy HH:mm:ss");
                     }
@@ -165,16 +162,11 @@ namespace SDT.Services
                             userModel.AirWatchBasic = groupsList.Contains("AirWatch_view");
                             userModel.AirWatchExpanded = groupsList.Contains("AirWatch_edit");
                             userModel.AirWatchVip = groupsList.Contains("Airwatch_VIP");
-                            userModel.AirWatchLync = groupsList.Contains("# Lync Dostęp z Urządzeń Mobilnych");
-                            userModel.AirWatchSkype = groupsList.Contains("# S4B 2015");
                             userModel.BYODCitrix = groupsList.Contains("BYOD-Pulpit-Standard");
                             userModel.BYODHDD = groupsList.Contains("BYOD_HDD_users");
                             userModel.BYODWTG = groupsList.Contains("EBU-Users-WTG");
                             userModel.BYODLVMW7 = groupsList.Contains("BYODVM_W7_users");
                             userModel.BYODLVM10 = groupsList.Contains("BYODVM_W10_users");
-                            userModel.BYODCitrixTest = groupsList.Contains("BYOD-Pulpit-Standard-Test");
-                            userModel.BYODLVM7Test = groupsList.Contains("BYODVM_W7_manual");
-                            userModel.BYODLVM10Test = groupsList.Contains("BYODVM_W10_manual");
                         };
                     };
                 });

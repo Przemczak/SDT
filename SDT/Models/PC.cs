@@ -11,7 +11,6 @@
         public bool PcInfoNoc { get; set; }
         public bool PcAlterBrowser { get; set; }
         public bool PcProxyBSTB { get; set; }
-        public bool PcIntBSTB { get; set; }
         public string PcIP { get; set; }
         public string PcMAC { get; set; }
         public string PcNS { get; set; }

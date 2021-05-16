@@ -160,7 +160,6 @@ namespace SDT.Services
                                 pcModel.PcInfoNoc = groupsList.Contains("Komp-Info-Noc-GD");
                                 pcModel.PcAlterBrowser = groupsList.Contains("Comp-AlterBrow-GD");
                                 pcModel.PcProxyBSTB = groupsList.Contains("ProxyBSTBlokada");
-                                pcModel.PcIntBSTB = groupsList.Contains("IntBSTBlokada");
                             };
                         });
                     }
